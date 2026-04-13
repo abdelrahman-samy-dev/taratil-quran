@@ -812,10 +812,13 @@ h2 {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
     max-width: 100%;
 }
-.azkar-tabs::-webkit-scrollbar { display: none; }
+
+.azkar-tabs::-webkit-scrollbar {
+    display: none;
+}
 
 .azkar-tab {
     padding: 0.7rem 1.5rem;
@@ -859,12 +862,12 @@ h2 {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: var(--radius-lg);
-    box-shadow: 0 8px 16px -4px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.1);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .zekr-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px -6px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .zekr-card.completed {
@@ -950,7 +953,7 @@ h2 {
     font-size: 1.3rem;
     font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 2;
     -webkit-tap-highlight-color: transparent;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s, color 0.3s;
@@ -963,9 +966,12 @@ h2 {
 .counter-btn::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.3s;
 }
@@ -1900,12 +1906,14 @@ input[type=range]::-moz-range-thumb {
     }
 
     .player-content {
-        height: auto;
-        padding: 0.75rem 1rem;
-        flex-wrap: nowrap;
+        height: 90px;
+        padding: 0 1rem;
+        flex-wrap: nowrap !important;
+        flex-direction: row !important;
         gap: 0.5rem;
         justify-content: space-between;
         align-items: center;
+        overflow: hidden;
     }
 
     .track-info {
@@ -1941,12 +1949,13 @@ input[type=range]::-moz-range-thumb {
         width: auto;
         flex-shrink: 0;
         justify-content: flex-end;
-        gap: 0.5rem;
+        align-items: center;
+        gap: 0.25rem;
     }
 
     .play-btn {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
     }
 
     .ctrl-btn {
@@ -2518,15 +2527,16 @@ input[type=range]::-moz-range-thumb {
 /* ── Mode Toggle Bar ─────────────────────────────────────────────── */
 .mushaf-mode-bar {
     display: flex;
-    gap: 0;
+    gap: 1rem;
     padding: 0.75rem 1.5rem;
     background: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 20;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
+
 .mushaf-mode-btn {
     flex: 1;
     display: flex;
@@ -2544,20 +2554,24 @@ input[type=range]::-moz-range-thumb {
     transition: all 0.3s ease;
     border-radius: 0;
 }
+
 .mushaf-mode-btn:first-child {
     border-radius: var(--radius-md) 0 0 var(--radius-md);
     border-right-width: 1px;
 }
+
 .mushaf-mode-btn:last-child {
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
     border-left-width: 1px;
 }
+
 .mushaf-mode-btn.active {
     background: var(--primary);
     border-color: var(--primary);
     color: white;
-    box-shadow: 0 4px 14px rgba(45,122,79,0.35);
+    box-shadow: 0 4px 14px rgba(45, 122, 79, 0.35);
 }
+
 .mushaf-mode-btn:hover:not(.active) {
     background: var(--primary-light);
     color: var(--primary);
@@ -2601,8 +2615,9 @@ input[type=range]::-moz-range-thumb {
     flex-direction: column;
     gap: 0.5rem;
     transition: opacity 0.4s ease, transform 0.4s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
+
 .mushaf-controls-overlay.controls-hidden {
     opacity: 0;
     transform: translateY(-100%);
@@ -2616,6 +2631,7 @@ input[type=range]::-moz-range-thumb {
     justify-content: space-between;
     gap: 0.75rem;
 }
+
 .mushaf-surah-area {
     display: flex;
     flex-direction: column;
@@ -2623,12 +2639,14 @@ input[type=range]::-moz-range-thumb {
     flex: 1;
     min-width: 0;
 }
+
 .mushaf-surah-select-wrap {
     position: relative;
     display: flex;
     align-items: center;
     gap: 0.3rem;
 }
+
 .mushaf-surah-search {
     flex: 1;
     padding: 0.4rem 0.8rem;
@@ -2644,8 +2662,10 @@ input[type=range]::-moz-range-thumb {
     right: 0;
     width: 100%;
     z-index: 2;
-    display: none; /* shown only on focus of select via JS if needed */
+    display: none;
+    /* shown only on focus of select via JS if needed */
 }
+
 .mushaf-surah-native-select {
     flex: 1;
     padding: 0.45rem 2rem 0.45rem 0.8rem;
@@ -2663,12 +2683,14 @@ input[type=range]::-moz-range-thumb {
     width: 100%;
     max-width: 280px;
 }
-.mushaf-surah-select-wrap > svg {
+
+.mushaf-surah-select-wrap>svg {
     position: absolute;
     left: 8px;
     pointer-events: none;
     color: var(--text-muted);
 }
+
 .mushaf-surah-info {
     display: flex;
     align-items: center;
@@ -2676,12 +2698,14 @@ input[type=range]::-moz-range-thumb {
     flex-wrap: wrap;
     font-size: 0.8rem;
 }
+
 .mushaf-surah-name {
     font-weight: 800;
     color: var(--primary);
     font-family: 'Amiri', serif;
     font-size: 1rem;
 }
+
 .mushaf-surah-badge {
     background: var(--primary-light);
     color: var(--primary);
@@ -2690,6 +2714,7 @@ input[type=range]::-moz-range-thumb {
     font-size: 0.75rem;
     font-weight: 700;
 }
+
 .mushaf-surah-pages {
     color: var(--text-muted);
     font-size: 0.78rem;
@@ -2702,6 +2727,7 @@ input[type=range]::-moz-range-thumb {
     gap: 0.5rem;
     flex-shrink: 0;
 }
+
 .mushaf-session-timer {
     font-size: 0.75rem;
     color: var(--text-muted);
@@ -2709,6 +2735,7 @@ input[type=range]::-moz-range-thumb {
     font-weight: 600;
     direction: ltr;
 }
+
 .mushaf-icon-btn {
     width: 36px;
     height: 36px;
@@ -2723,16 +2750,19 @@ input[type=range]::-moz-range-thumb {
     transition: all 0.2s ease;
     position: relative;
 }
+
 .mushaf-icon-btn:hover {
     background: var(--primary-light);
     border-color: var(--primary);
     color: var(--primary);
 }
+
 .mushaf-icon-btn.bookmarked {
     background: var(--accent);
     border-color: var(--accent);
     color: white;
 }
+
 .mushaf-icon-btn.bookmarked svg {
     fill: white;
 }
@@ -2741,6 +2771,7 @@ input[type=range]::-moz-range-thumb {
 .mushaf-panel-dropdown {
     position: relative;
 }
+
 .mushaf-dropdown-content {
     position: absolute;
     top: calc(100% + 8px);
@@ -2751,7 +2782,7 @@ input[type=range]::-moz-range-thumb {
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
     z-index: 50;
     opacity: 0;
     transform: translateY(-6px) scale(0.97);
@@ -2761,11 +2792,13 @@ input[type=range]::-moz-range-thumb {
     overflow-y: auto;
     scrollbar-width: thin;
 }
+
 .mushaf-panel-dropdown.open .mushaf-dropdown-content {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: all;
 }
+
 .mushaf-dropdown-header {
     padding: 0.75rem 1rem;
     font-weight: 800;
@@ -2773,12 +2806,14 @@ input[type=range]::-moz-range-thumb {
     border-bottom: 1px solid var(--border-color);
     font-size: 0.9rem;
 }
+
 .mushaf-bm-label-btns {
     display: flex;
     gap: 0.4rem;
     padding: 0.6rem 0.75rem;
     border-bottom: 1px solid var(--border-color);
 }
+
 .mushaf-bm-label-btn {
     flex: 1;
     padding: 0.35rem;
@@ -2793,17 +2828,20 @@ input[type=range]::-moz-range-thumb {
     transition: all 0.2s;
     text-align: center;
 }
+
 .mushaf-bm-label-btn:hover {
     background: var(--primary-light);
     border-color: var(--primary);
     color: var(--primary);
 }
+
 .mushaf-bookmarks-list {
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
 }
+
 .mushaf-bookmark-item {
     display: flex;
     align-items: center;
@@ -2814,26 +2852,34 @@ input[type=range]::-moz-range-thumb {
     cursor: pointer;
     transition: background 0.2s;
 }
-.mushaf-bookmark-item:hover { background: var(--primary-light); }
+
+.mushaf-bookmark-item:hover {
+    background: var(--primary-light);
+}
+
 .mushaf-bm-info {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
 }
+
 .mushaf-bm-label {
     font-weight: 700;
     font-size: 0.85rem;
     color: var(--text-main);
 }
+
 .mushaf-bm-page {
     font-size: 0.78rem;
     color: var(--primary);
     font-weight: 700;
 }
+
 .mushaf-bm-date {
     font-size: 0.7rem;
     color: var(--text-muted);
 }
+
 .mushaf-bm-delete {
     background: transparent;
     border: none;
@@ -2844,10 +2890,12 @@ input[type=range]::-moz-range-thumb {
     border-radius: 50%;
     transition: all 0.2s;
 }
+
 .mushaf-bm-delete:hover {
-    background: rgba(255,59,48,0.15);
+    background: rgba(255, 59, 48, 0.15);
     color: #ff3b30;
 }
+
 .mushaf-empty-msg {
     text-align: center;
     color: var(--text-muted);
@@ -2862,6 +2910,7 @@ input[type=range]::-moz-range-thumb {
     justify-content: center;
     gap: 0.75rem;
 }
+
 .mushaf-nav-btn {
     width: 42px;
     height: 42px;
@@ -2873,21 +2922,27 @@ input[type=range]::-moz-range-thumb {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(45,122,79,0.35);
+    box-shadow: 0 4px 12px rgba(45, 122, 79, 0.35);
     transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     -webkit-tap-highlight-color: transparent;
 }
+
 .mushaf-nav-btn:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 18px rgba(45,122,79,0.45);
+    box-shadow: 0 6px 18px rgba(45, 122, 79, 0.45);
 }
-.mushaf-nav-btn:active { transform: scale(0.94); }
+
+.mushaf-nav-btn:active {
+    transform: scale(0.94);
+}
+
 .mushaf-page-indicator-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.3rem;
 }
+
 .mushaf-page-indicator {
     font-family: 'Amiri', serif;
     font-size: 1.05rem;
@@ -2895,11 +2950,13 @@ input[type=range]::-moz-range-thumb {
     color: var(--text-main);
     white-space: nowrap;
 }
+
 .mushaf-jump-wrap {
     display: flex;
     align-items: center;
     gap: 0.3rem;
 }
+
 .mushaf-jump-input {
     width: 72px;
     padding: 0.3rem 0.5rem;
@@ -2914,8 +2971,12 @@ input[type=range]::-moz-range-thumb {
     -moz-appearance: textfield;
     appearance: textfield;
 }
+
 .mushaf-jump-input::-webkit-inner-spin-button,
-.mushaf-jump-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.mushaf-jump-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
 .mushaf-jump-btn {
     padding: 0.32rem 0.8rem;
     background: var(--accent);
@@ -2928,7 +2989,10 @@ input[type=range]::-moz-range-thumb {
     cursor: pointer;
     transition: all 0.2s;
 }
-.mushaf-jump-btn:hover { filter: brightness(1.1); }
+
+.mushaf-jump-btn:hover {
+    filter: brightness(1.1);
+}
 
 /* ── Page Container & Image ──────────────────────────────────────── */
 .mushaf-page-container {
@@ -2942,40 +3006,45 @@ input[type=range]::-moz-range-thumb {
     background: var(--bg-main);
     /* Paper texture effect */
     background-image:
-        radial-gradient(ellipse at 30% 20%, rgba(255,250,240,0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(255,250,240,0.05) 0%, transparent 40%);
+        radial-gradient(ellipse at 30% 20%, rgba(255, 250, 240, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255, 250, 240, 0.05) 0%, transparent 40%);
 }
+
 [data-theme="dark"] .mushaf-page-container,
 [data-theme="amoled"] .mushaf-page-container {
     background: #0d0d0d;
     background-image: none;
 }
+
 .mushaf-page-img {
     max-width: min(100%, 680px);
     width: 100%;
     height: auto;
     border-radius: 6px;
     box-shadow:
-        0 2px 4px rgba(0,0,0,0.08),
-        0 8px 24px rgba(0,0,0,0.12),
-        0 24px 48px rgba(0,0,0,0.08),
-        inset 0 0 0 1px rgba(0,0,0,0.06);
+        0 2px 4px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(0, 0, 0, 0.12),
+        0 24px 48px rgba(0, 0, 0, 0.08),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.06);
     display: block;
     transform-origin: center center;
     transition: transform 0.3s ease, opacity 0.4s ease;
     cursor: zoom-in;
     /* Subtle inner border to look like a real page */
-    outline: 1px solid rgba(150,120,80,0.15);
+    outline: 1px solid rgba(150, 120, 80, 0.15);
 }
-.mushaf-page-img:active { cursor: grabbing; }
+
+.mushaf-page-img:active {
+    cursor: grabbing;
+}
 
 [data-theme="dark"] .mushaf-page-img,
 [data-theme="amoled"] .mushaf-page-img {
     /* Warm hue shift for dark mode reading comfort */
     filter: sepia(8%) contrast(1.02) brightness(0.95);
     box-shadow:
-        0 2px 4px rgba(0,0,0,0.3),
-        0 12px 32px rgba(0,0,0,0.4);
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
 /* ── Skeleton Loader ─────────────────────────────────────────────── */
@@ -2992,24 +3061,30 @@ input[type=range]::-moz-range-thumb {
     gap: 1rem;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
+
 .mushaf-skeleton-shine {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        110deg,
-        transparent 25%,
-        rgba(255,255,255,0.12) 37%,
-        transparent 63%
-    );
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.12) 37%,
+            transparent 63%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
 }
+
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
+
 .mushaf-skeleton-lines {
     display: flex;
     flex-direction: column;
@@ -3017,14 +3092,22 @@ input[type=range]::-moz-range-thumb {
     width: 75%;
     margin-top: 2rem;
 }
+
 .mushaf-skeleton-lines div {
     height: 14px;
-    background: rgba(150,150,150,0.15);
+    background: rgba(150, 150, 150, 0.15);
     border-radius: 7px;
     animation: shimmer 1.5s infinite;
 }
-.mushaf-skeleton-lines div:nth-child(odd) { width: 100%; }
-.mushaf-skeleton-lines div:nth-child(even) { width: 85%; margin: 0 auto; }
+
+.mushaf-skeleton-lines div:nth-child(odd) {
+    width: 100%;
+}
+
+.mushaf-skeleton-lines div:nth-child(even) {
+    width: 85%;
+    margin: 0 auto;
+}
 
 /* ── Error State ─────────────────────────────────────────────────── */
 .mushaf-error {
@@ -3035,21 +3118,45 @@ input[type=range]::-moz-range-thumb {
     text-align: center;
     color: var(--text-muted);
 }
-.mushaf-error svg { color: var(--text-muted); opacity: 0.5; }
-.mushaf-error p { font-size: 1rem; }
+
+.mushaf-error svg {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.mushaf-error p {
+    font-size: 1rem;
+}
 
 /* ── Page Animations ─────────────────────────────────────────────── */
 @keyframes pageFadeIn {
-    from { opacity: 0; transform: scale(0.98); }
-    to   { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
+
 @keyframes pageSlideIn {
-    from { opacity: 0; transform: translateX(40px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
+
 .page-fade-in .mushaf-page-img {
     animation: pageFadeIn 0.45s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
+
 .page-transition-out {
     opacity: 0.5;
     transform: scale(0.99);
@@ -3070,13 +3177,15 @@ input[type=range]::-moz-range-thumb {
     flex-direction: column;
     gap: 0.4rem;
     transition: opacity 0.4s ease, transform 0.4s ease;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
 }
+
 .mushaf-controls-footer.controls-hidden {
     opacity: 0;
     transform: translateY(100%);
     pointer-events: none;
 }
+
 .mushaf-footer-row {
     display: flex;
     align-items: center;
@@ -3084,6 +3193,7 @@ input[type=range]::-moz-range-thumb {
     gap: 0.5rem;
     flex-wrap: wrap;
 }
+
 .mushaf-footer-btn {
     display: flex;
     align-items: center;
@@ -3099,6 +3209,7 @@ input[type=range]::-moz-range-thumb {
     cursor: pointer;
     transition: all 0.2s;
 }
+
 .mushaf-footer-btn:hover {
     background: var(--primary-light);
     border-color: var(--primary);
@@ -3112,12 +3223,14 @@ input[type=range]::-moz-range-thumb {
     gap: 0.4rem;
     color: var(--text-muted);
 }
+
 .mushaf-night-slider {
     width: 80px !important;
     height: 4px !important;
     padding: 0;
     accent-color: #5856d6;
 }
+
 .mushaf-night-slider::-webkit-slider-thumb {
     background: #5856d6 !important;
 }
@@ -3129,6 +3242,7 @@ input[type=range]::-moz-range-thumb {
     gap: 0.3rem;
     color: var(--text-muted);
 }
+
 .mushaf-delay-btn {
     padding: 0.2rem 0.45rem;
     border: 1px solid var(--border-color);
@@ -3141,6 +3255,7 @@ input[type=range]::-moz-range-thumb {
     cursor: pointer;
     transition: all 0.2s;
 }
+
 .mushaf-delay-btn.active,
 .mushaf-delay-btn:hover {
     background: var(--primary);
@@ -3155,6 +3270,7 @@ input[type=range]::-moz-range-thumb {
     gap: 0.4rem;
     color: var(--text-muted);
 }
+
 .mushaf-werd-select {
     padding: 0.25rem 0.5rem;
     border: 1px solid var(--border-color);
@@ -3175,6 +3291,7 @@ input[type=range]::-moz-range-thumb {
     overflow: hidden;
     margin-top: 0.2rem;
 }
+
 .mushaf-werd-fill {
     height: 100%;
     width: 0%;
@@ -3182,15 +3299,17 @@ input[type=range]::-moz-range-thumb {
     border-radius: var(--radius-full);
     transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
 .mushaf-werd-label {
     font-size: 0.75rem;
     color: var(--text-muted);
     font-weight: 700;
     text-align: center;
 }
+
 /* Completed state */
 .mushaf-werd-fill[style*="width: 100"] {
-    box-shadow: 0 0 10px rgba(52,199,89,0.5);
+    box-shadow: 0 0 10px rgba(52, 199, 89, 0.5);
 }
 
 /* ── Continue Reading Modal ──────────────────────────────────────── */
@@ -3205,6 +3324,7 @@ input[type=range]::-moz-range-thumb {
     justify-content: center;
     animation: fadeIn 0.3s ease;
 }
+
 .mushaf-continue-card {
     max-width: 380px;
     width: 90%;
@@ -3216,23 +3336,27 @@ input[type=range]::-moz-range-thumb {
     position: relative;
     background: var(--bg-surface);
     border-radius: var(--radius-xl);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
+
 .mushaf-continue-icon {
     font-size: 3.5rem;
     line-height: 1;
 }
+
 .mushaf-continue-card h3 {
     color: var(--primary);
     font-size: 1.4rem;
     font-weight: 800;
 }
+
 .mushaf-continue-btns {
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
     margin-top: 0.5rem;
 }
+
 .mushaf-modal-close {
     position: absolute;
     top: 0.75rem;
@@ -3250,6 +3374,7 @@ input[type=range]::-moz-range-thumb {
     justify-content: center;
     transition: all 0.2s;
 }
+
 .mushaf-modal-close:hover {
     background: var(--bg-elevated);
     color: var(--text-main);
@@ -3272,11 +3397,26 @@ input[type=range]::-moz-range-thumb {
     animation: toastPop 2s ease forwards;
     pointer-events: none;
 }
+
 @keyframes toastPop {
-    0%   { opacity: 0; transform: translateX(-50%) translateY(10px); }
-    20%  { opacity: 1; transform: translateX(-50%) translateY(0);    }
-    75%  { opacity: 1; }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-6px);
+    }
 }
 
 /* ── Werd Complete Banner ────────────────────────────────────────── */
@@ -3295,16 +3435,34 @@ input[type=range]::-moz-range-thumb {
     align-items: center;
     gap: 0.75rem;
     z-index: 200;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     animation: bannerBounce 4s ease forwards;
     white-space: nowrap;
 }
+
 @keyframes bannerBounce {
-    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    15%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-    25%  { transform: translate(-50%, -50%) scale(1); }
-    75%  { opacity: 1; }
-    100% { opacity: 0; transform: translate(-50%, -60%); }
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    25% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
 }
 
 /* ── Fullscreen Adaptations ──────────────────────────────────────── */
@@ -3313,14 +3471,16 @@ input[type=range]::-moz-range-thumb {
     min-height: 100vh;
     background: #0a0a0a;
 }
+
 :fullscreen .mushaf-page-container,
 :-webkit-full-screen .mushaf-page-container {
     background: #0a0a0a;
     padding: 0.5rem;
 }
+
 :fullscreen .mushaf-controls-overlay,
 :-webkit-full-screen .mushaf-controls-overlay {
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 /* ── View Mode: Horizontal ───────────────────────────────────────── */
@@ -3340,45 +3500,56 @@ input[type=range]::-moz-range-thumb {
     .mushaf-mode-bar {
         padding: 0.6rem 1rem;
     }
+
     .mushaf-mode-btn {
         font-size: 0.85rem;
         padding: 0.6rem 0.8rem;
     }
+
     .mushaf-header-row {
         gap: 0.4rem;
     }
+
     .mushaf-surah-native-select {
         max-width: 160px;
         font-size: 0.88rem;
     }
+
     .mushaf-session-timer {
         display: none;
     }
+
     .mushaf-page-container {
         padding: 0.5rem;
     }
+
     .mushaf-page-img {
         border-radius: 3px;
         box-shadow:
-            0 4px 12px rgba(0,0,0,0.15),
-            0 12px 32px rgba(0,0,0,0.1);
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            0 12px 32px rgba(0, 0, 0, 0.1);
     }
+
     .mushaf-footer-row {
         gap: 0.35rem;
         font-size: 0.78rem;
     }
+
     .mushaf-dropdown-content {
         left: auto;
         right: 0;
         width: 260px;
     }
+
     .mushaf-nav-btn {
         width: 38px;
         height: 38px;
     }
+
     .mushaf-continue-card {
         padding: 2rem 1.25rem;
     }
+
     .mushaf-werd-complete-banner {
         font-size: 1rem;
         max-width: 90%;
@@ -3387,9 +3558,15 @@ input[type=range]::-moz-range-thumb {
 
 /* ── Very small screens ──────────────────────────────────────────── */
 @media (max-width: 380px) {
+
     .mushaf-night-control,
-    .mushaf-delay-control { display: none; }
-    .mushaf-footer-row { justify-content: space-between; }
+    .mushaf-delay-control {
+        display: none;
+    }
+
+    .mushaf-footer-row {
+        justify-content: space-between;
+    }
 }
 
 /* ── Reading Focus Mode (when controls hidden) ───────────────────── */
@@ -3400,14 +3577,16 @@ input[type=range]::-moz-range-thumb {
 /* ── Dark theme refinements ──────────────────────────────────────── */
 [data-theme="dark"] .mushaf-surah-native-select,
 [data-theme="amoled"] .mushaf-surah-native-select {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
+
 [data-theme="amoled"] .mushaf-controls-overlay,
 [data-theme="amoled"] .mushaf-controls-footer {
-    background: rgba(0,0,0,0.92);
-    border-color: rgba(255,255,255,0.07);
+    background: rgba(0, 0, 0, 0.92);
+    border-color: rgba(255, 255, 255, 0.07);
 }
+
 [data-theme="amoled"] .mushaf-reader-panel {
     background: #000;
 }
@@ -3455,7 +3634,8 @@ input[type=range]::-moz-range-thumb {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     z-index: 9999;
-    display: flex !important; /* Override JS inline display:block if any */
+    display: flex !important;
+    /* Override JS inline display:block if any */
     align-items: center;
     justify-content: center;
     padding: 1rem;
@@ -3508,7 +3688,8 @@ input[type=range]::-moz-range-thumb {
     align-items: center;
     justify-content: center;
     margin: 0 auto 1.5rem;
-    box-shadow: 0 0 0 8px rgba(45, 122, 79, 0.05); /* Soft primary glow */
+    box-shadow: 0 0 0 8px rgba(45, 122, 79, 0.05);
+    /* Soft primary glow */
     color: var(--primary);
     transition: transform 0.3s ease;
 }
@@ -3610,4 +3791,157 @@ input[type=range]::-moz-range-thumb {
 
 .mushaf-bm-label-btn:hover svg {
     color: var(--primary-hover);
+}
+
+@media (max-width: 425px) {
+    .text-muted {
+        display: none;
+    }
+
+    .track-info {
+        gap: 0.1rem;
+    }
+
+    .track-info h3 {
+        font-size: 0.8rem;
+    }
+
+    .mushaf-header-row {
+        flex-direction: column;
+    }
+
+    .mushaf-surah-info {
+        justify-content: center;
+    }
+
+    .fp-badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-size: 12px;
+    }
+
+    .prayer-hero .prayer-date-card,
+    .prayer-hero .prayer-countdown-card {
+        padding: 0.5rem;
+    }
+
+    .prayer-hero .prayer-date-card span,
+    .prayer-hero .prayer-countdown-card span {
+        font-size: 14px;
+    }
+}
+
+/* Full Screen Player Mobile Adjustments */
+@media (max-width: 768px) {
+    .fp-header {
+        padding: 1rem 1.2rem;
+    }
+
+    .fp-icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .fp-icon-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    #fpSurahName {
+        font-size: 1.6rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .fp-badge {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.6rem;
+    }
+
+    .fp-body {
+        padding: 1rem;
+    }
+
+    .fp-cc-container {
+        padding: 2rem 0;
+        line-height: 2.2;
+    }
+
+    .fp-cc-verse {
+        font-size: 1.5rem;
+        margin-left: 0.5rem;
+    }
+
+    .fp-ayah-symbol {
+        font-size: 1.8rem;
+    }
+
+    .fp-ayah-num {
+        font-size: 0.65rem;
+    }
+
+    .fp-footer {
+        padding: 1rem 1rem 1.5rem 1rem;
+    }
+
+    .fp-reciter-name {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+
+    .fp-progress-container {
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .fp-progress-container .fp-time {
+        font-size: 0.8rem;
+        min-width: 35px;
+    }
+
+    .fp-controls {
+        gap: 1.25rem;
+    }
+
+    .fp-ctrl-btn {
+        width: 24px;
+        height: 24px;
+    }
+
+    .fp-ctrl-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .fp-ctrl-play {
+        width: 54px;
+        height: 54px;
+    }
+
+    .fp-ctrl-play svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .fp-speed-btn {
+        font-size: 0.8rem;
+        padding: 0.15rem 0.4rem;
+    }
+
+    .fp-sync-controls {
+        padding: 0.5rem 0.8rem;
+        gap: 0.6rem;
+    }
+
+    .fp-offset-label {
+        font-size: 0.75rem;
+    }
+
+    .fp-offset-value {
+        font-size: 0.75rem;
+    }
 }
