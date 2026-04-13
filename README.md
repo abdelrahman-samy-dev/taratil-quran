@@ -4,7 +4,7 @@
   <p><b>التطبيق الإسلامي الشامل والمتكامل - تجربة إيمانية بروح عصرية</b></p>
   
   <p>
-    <a href="[https://taratil-quran.vercel.app/]">
+    <a href="https://taratil-quran.vercel.app/" target="_blank">
       <img src="https://img.shields.io/badge/Live_Demo-Click_Here-blue.svg?style=for-the-badge" alt="Live Demo">
     </a>
   </p>
