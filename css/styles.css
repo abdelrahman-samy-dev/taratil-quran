@@ -1888,6 +1888,7 @@ input[type=range]::-moz-range-thumb {
 
     .main-content {
         padding: 1rem;
+        padding-bottom: 100px;
     }
 
     .dashboard-grid {
@@ -3884,8 +3885,18 @@ input[type=range]::-moz-range-thumb {
         font-size: 0.65rem;
     }
 
+    .full-player-overlay {
+        height: 100dvh;
+        top: 100dvh;
+    }
+
+    .full-player-overlay.active {
+        transform: translateY(-100dvh);
+    }
+
     .fp-footer {
-        padding: 1rem 1rem 1.5rem 1rem;
+        padding: 1rem 1rem calc(1.5rem + env(safe-area-inset-bottom, 20px)) 1rem;
+        background: var(--bg-surface);
     }
 
     .fp-reciter-name {
