@@ -1,0 +1,30 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+
+# Audio files (large, should be added manually)
+# Uncomment if you don't want to track audio files in Git
+# audio/*.mp3
+# audio/*.ogg
+# audio/*.wav
+
+# Icons (if generated)
+# icons/*.png
+# icons/*.ico
+

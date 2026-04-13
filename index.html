@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تراتيل | التطبيق الإسلامي الشامل</title>
+
+    <!-- SEO and Meta Tags -->
+    <meta name="description"
+        content="تراتيل - تطبيق إسلامي شامل للقرآن الكريم، التفسير، الأذكار، مواقيت الصلاة، الأحاديث وراديو القرآن">
+    <meta name="keywords"
+        content="قرآن, إسلام, أذكار, مواقيت الصلاة, أحاديث, راديو القرآن, تفسير, تراتيل, تطبيق إسلامي">
+    <meta name="author" content="تراتيل">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="تراتيل | التطبيق الإسلامي الشامل">
+    <meta property="og:description"
+        content="تراتيل - تطبيق إسلامي شامل للقرآن الكريم، التفسير، الأذكار، مواقيت الصلاة، الأحاديث وراديو القرآن">
+    <meta property="og:image" content="icons/icon.svg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="تراتيل | التطبيق الإسلامي الشامل">
+    <meta name="twitter:description"
+        content="تراتيل - تطبيق إسلامي شامل للقرآن الكريم، التفسير، الأذكار، مواقيت الصلاة، الأحاديث وراديو القرآن">
+    <meta name="twitter:image" content="icons/icon.svg">
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2D7A4F">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="تراتيل">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Fonts Preload & Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap">
+    </noscript>
+
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="shape-rounded">
+    <div class="bg-pattern"></div>
+
+    <div class="app-layout">
+
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="mobile-brand" style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="width: 28px; height: 28px; color: var(--primary); filter: drop-shadow(0 0 8px rgba(45, 122, 79, 0.4));">
+                    <path d="M3 13.5h4a4 4 0 0 1 4 4v4a3 3 0 0 0-3-3H3z"></path>
+                    <path d="M21 13.5h-4a4 4 0 0 0-4 4v4a3 3 0 0 1 3-3h4z"></path>
+                    <path d="M12 11.5 V3"></path>
+                    <path d="M8.5 11.5 V6.5"></path>
+                    <path d="M15.5 11.5 V6.5"></path>
+                    <path d="M5 11.5 V9"></path>
+                    <path d="M19 11.5 V9"></path>
+                </svg>
+                <h1>تراتيل</h1>
+            </div>
+            <button class="icon-btn" id="btnNotifications" aria-label="الإشعارات">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Desktop Sidebar Navigation -->
+        <nav class="sidebar glass-card">
+            <div class="brand">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="brand-icon"
+                    style="color: var(--primary); filter: drop-shadow(0 0 8px rgba(45, 122, 79, 0.4));">
+                    <path d="M3 13.5h4a4 4 0 0 1 4 4v4a3 3 0 0 0-3-3H3z"></path>
+                    <path d="M21 13.5h-4a4 4 0 0 0-4 4v4a3 3 0 0 1 3-3h4z"></path>
+                    <path d="M12 11.5 V3"></path>
+                    <path d="M8.5 11.5 V6.5"></path>
+                    <path d="M15.5 11.5 V6.5"></path>
+                    <path d="M5 11.5 V9"></path>
+                    <path d="M19 11.5 V9"></path>
+                </svg>
+                <h1>تراتيل</h1>
+            </div>
+            <ul class="nav-links">
+                <li><button class="nav-btn active" data-target="view-player"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                            <path
+                                d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                            </path>
+                        </svg> <span>الاستماع</span></button></li>
+                <li><button class="nav-btn" data-target="view-tafsir"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg> <span>المصحف والتفسير</span></button></li>
+                <li><button class="nav-btn" data-target="view-azkar"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg> <span>الأذكار</span></button></li>
+                <li><button class="nav-btn" data-target="view-prayer"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg> <span>مواقيت الصلاة</span></button></li>
+                <li><button class="nav-btn" data-target="view-radio"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        </svg> <span>راديو القرآن</span></button></li>
+                <li><button class="nav-btn" data-target="view-hadith"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg> <span>الأحاديث</span></button></li>
+                <li><button class="nav-btn" data-target="view-werd"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                            </path>
+                        </svg> <span>الورد والإنجازات</span></button></li>
+                <li><button class="nav-btn" data-target="view-quotes"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg> <span>حكم ومواعظ</span></button></li>
+                <li><button class="nav-btn" data-target="view-settings"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg> <span>الإعدادات</span></button></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- View: Player (Quran Audio) -->
+            <section id="view-player" class="view-section active">
+                <header class="section-header">
+                    <h2>الاستماع للقرآن</h2>
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="surahSearch" placeholder="ابحث عن سورة...">
+                    </div>
+                </header>
+
+                <div class="player-controls-top"
+                    style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="premium-reciter-select" id="reciterDropdownWrapper">
+                        <div class="prs-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <line x1="12" y1="19" x2="12" y2="23"></line>
+                                <line x1="8" y1="23" x2="16" y2="23"></line>
+                            </svg>
+                        </div>
+                        <div id="reciterSelectedText" class="prs-selected-text">جاري تحميل القراء...</div>
+                        <select id="reciterSelect" aria-label="اختر القارئ" style="display:none;"></select>
+                        <div class="prs-arrow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="prs-glow"></div>
+
+                        <!-- Custom Dropdown Menu -->
+                        <div id="reciterMenu" class="prs-menu">
+                            <div class="prs-search-box">
+                                <input type="text" id="reciterSearchInput" placeholder="ابحث عن قارئ..."
+                                    autocomplete="off">
+                            </div>
+                            <div id="reciterOptions" class="prs-options-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="surahsGrid" class="cards-grid">
+                    <div class="loading-state">جاري التحميل...</div>
+                </div>
+            </section>
+
+            <!-- View: Azkar -->
+            <section id="view-azkar" class="view-section hidden">
+                <header class="section-header" style="flex-wrap: wrap; gap: 1rem;">
+                    <h2>أذكار المسلم</h2>
+                    <div class="azkar-toolbar">
+                        <button id="btnCompleteAzkar" class="btn-primary azkar-toolbar-btn">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" class="azkar-toolbar-icon">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            إتمام الكل
+                        </button>
+                        <button id="btnResetAzkar" class="btn-secondary azkar-toolbar-btn btn-reset">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2" class="azkar-toolbar-icon">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                <path d="M3 3v5h5"></path>
+                            </svg>
+                            تصفير
+                        </button>
+                    </div>
+                </header>
+                <div class="azkar-tabs-wrapper">
+                    <div class="azkar-tabs">
+                        <button class="azkar-tab active" data-category="morning">الصباح</button>
+                        <button class="azkar-tab" data-category="evening">المساء</button>
+                        <button class="azkar-tab" data-category="post_prayer">بعد الصلاة</button>
+                        <button class="azkar-tab" data-category="sleep">قبل النوم</button>
+                        <button class="azkar-tab" data-category="wakeup">الاستيقاظ</button>
+                        <button class="azkar-tab" data-category="quranic">أدعية قرآنية</button>
+                        <button class="azkar-tab" data-category="prophets">أدعية الأنبياء</button>
+                        <button class="azkar-tab" data-category="general">أذكار عامة</button>
+                    </div>
+                </div>
+                <div id="azkarContainer" class="azkar-container">
+                    <!-- Azkar cards injected here via JS -->
+                </div>
+            </section>
+
+            <!-- View: Prayer Times -->
+            <section id="view-prayer" class="view-section hidden">
+                <header class="section-header">
+                    <h2>مواقيت الصلاة</h2>
+                </header>
+
+                <!-- Date & Countdown -->
+                <div class="prayer-hero">
+                    <div class="prayer-date-card glass-card">
+                        <div class="prayer-date-hijri">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                height="20">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                            <span id="hijriDate">--</span>
+                        </div>
+                        <div class="prayer-date-gregorian">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                height="20">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span id="gregorianDate">--</span>
+                        </div>
+                    </div>
+                    <div class="prayer-countdown-card glass-card">
+                        <div class="countdown-label">الصلاة القادمة</div>
+                        <div class="countdown-prayer-name" id="nextPrayerName">--</div>
+                        <div class="countdown-timer" id="prayerCountdown">--:--:--</div>
+                        <div class="countdown-dot-active"></div>
+                    </div>
+                </div>
+
+                <!-- Prayer Cards Grid -->
+                <div class="prayer-grid" id="prayerGrid">
+                    <!-- Injected via JS -->
+                    <div class="loading-state">جاري تحميل المواقيت...</div>
+                </div>
+
+                <!-- Location Settings -->
+                <div class="prayer-location-settings glass-card">
+                    <h3 class="settings-group-title">إعدادات الموقع</h3>
+                    <div class="prayer-location-row">
+                        <div class="prayer-input-group">
+                            <label for="prayerCity">المدينة</label>
+                            <input type="text" id="prayerCity" placeholder="القاهرة" value="">
+                        </div>
+                        <div class="prayer-input-group">
+                            <label for="prayerCountry">الدولة</label>
+                            <input type="text" id="prayerCountry" placeholder="مصر" value="">
+                        </div>
+                        <button class="btn-primary" id="btnSaveLocation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                                height="18">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            حفظ
+                        </button>
+                    </div>
+                    <p class="prayer-location-hint text-muted" id="locationStatus">سيتم تحديد الموقع تلقائياً عبر GPS
+                    </p>
+                </div>
+            </section>
+
+            <!-- View: Radio -->
+            <section id="view-radio" class="view-section hidden">
+                <header class="section-header">
+                    <h2>راديو القرآن الكريم</h2>
+                    <div class="live-badge-header">
+                        <span class="live-indicator"></span>
+                        بث مباشر
+                    </div>
+                </header>
+                <div id="radioGrid" class="radio-grid">
+                    <div class="loading-state">جاري تحميل الإذاعات...</div>
+                </div>
+            </section>
+
+            <!-- View: Hadith -->
+            <section id="view-hadith" class="view-section hidden">
+                <header class="section-header">
+                    <h2>الأحاديث النبوية</h2>
+                    <div class="custom-select w-auto">
+                        <select id="hadithBookSelect">
+                            <option value="ara-bukhari">صحيح البخاري</option>
+                            <option value="ara-muslim">صحيح مسلم</option>
+                            <option value="ara-abudawud">سنن أبو داود</option>
+                            <option value="ara-nasai">سنن النسائي</option>
+                            <option value="ara-ibnmajah">سنن ابن ماجه</option>
+                            <option value="ara-malik">موطأ مالك</option>
+                        </select>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </header>
+
+                <!-- Featured Hadith -->
+                <div class="hadith-featured glass-card" id="hadithFeatured">
+                    <div class="hadith-featured-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                            height="18">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                            </path>
+                        </svg>
+                        حديث مميز
+                    </div>
+                    <div class="hadith-featured-text" id="featuredHadithText">جاري التحميل...</div>
+                    <button class="icon-btn" id="btnRefreshHadith" aria-label="حديث آخر" style="align-self: flex-end;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18"
+                            height="18">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Hadith List -->
+                <div id="hadithList" class="hadith-list">
+                    <div class="loading-state">اختر كتاباً لعرض الأحاديث...</div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="hadith-pagination" id="hadithPagination" style="display:none;">
+                    <button class="btn-primary" id="btnHadithPrev" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
+                            height="16">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                        السابق
+                    </button>
+                    <span class="hadith-page-info" id="hadithPageInfo">صفحة 1 من 1</span>
+                    <button class="btn-primary" id="btnHadithNext">
+                        التالي
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
+                            height="16">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- View: Mushaf & Tafsir (Dual Mode) -->
+            <section id="view-tafsir" class="view-section hidden" style="padding:0;">
+
+                <!-- ── Mode Toggle Bar ─────────────────────────────────── -->
+                <div class="mushaf-mode-bar">
+                    <button id="btnModeMushaf" class="mushaf-mode-btn active">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                        </svg>
+                        المصحف
+                    </button>
+                    <button id="btnModeTafsir" class="mushaf-mode-btn">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                        </svg>
+                        التفسير
+                    </button>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- ██  MUSHAF PANEL  ████████████████████████████████████ -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div id="mushafReaderPanel" class="mushaf-reader-panel">
+
+                    <!-- Night mode overlay -->
+                    <div id="mushafNightOverlay" class="mushaf-night-overlay"></div>
+
+                    <!-- ── Top Controls Overlay ──────────────────────── -->
+                    <div id="mushafControlsOverlay" class="mushaf-controls-overlay">
+
+                        <!-- Row 1: Surah info + page indicator + actions -->
+                        <div class="mushaf-header-row">
+                            <div class="mushaf-surah-area">
+                                <!-- Surah search + select -->
+                                <!-- Surah select -->
+                                <div class="premium-reciter-select" id="mushafSurahDropdownWrapper" style="flex: 1; min-width: 200px; max-width: 250px; font-size: 0.95rem;">
+                                    <div class="prs-icon" style="color: var(--primary);">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div id="mushafSurahSelectedText" class="prs-selected-text" style="text-align: right; font-family: 'Amiri', serif; font-size: 1.15rem;">اختر سورة...</div>
+                                    <select id="mushafSurahSelect" aria-label="اختر السورة" style="display:none;"></select>
+                                    <div class="prs-arrow">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="prs-glow"></div>
+
+                                    <!-- Custom Dropdown Menu -->
+                                    <div id="mushafSurahMenu" class="prs-menu">
+                                        <div class="prs-search-box">
+                                            <input type="text" id="mushafSurahSearchInput" placeholder="ابحث عن سورة..." autocomplete="off">
+                                        </div>
+                                        <div id="mushafSurahOptions" class="prs-options-list"></div>
+                                    </div>
+                                </div>
+                                <div id="mushafSurahInfo" class="mushaf-surah-info"></div>
+                            </div>
+
+                            <div class="mushaf-header-actions">
+                                <span id="mushafSessionTimer" class="mushaf-session-timer"></span>
+                                <button id="mushafBtnBookmark" class="mushaf-icon-btn" title="إضافة إشارة"
+                                    aria-label="إشارة مرجعية">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </button>
+                                <!-- Bookmarks panel toggle -->
+                                <div class="mushaf-panel-dropdown" id="mushafBookmarksPanel">
+                                    <button class="mushaf-icon-btn" id="mushafBtnToggleBookmarks"
+                                        aria-label="قائمة الإشارات">
+                                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path d="M3 3h18v4H3z" />
+                                            <path d="M3 10h18v4H3z" />
+                                            <path d="M3 17h11v4H3z" />
+                                        </svg>
+                                    </button>
+                                    <div class="mushaf-dropdown-content" id="mushafBookmarkDropdown">
+                                        <div class="mushaf-dropdown-header">الإشارات المرجعية</div>
+                                        <div class="mushaf-bm-label-btns">
+                                            <button class="mushaf-bm-label-btn" data-label="حفظ">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                                </svg> حفظ
+                                            </button>
+                                            <button class="mushaf-bm-label-btn" data-label="تدبر">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M9 18h6"></path>
+                                                    <path d="M10 22h4"></path>
+                                                    <path d="M12 2a5 5 0 0 0-5 5c0 1.5 1.2 3.8 2 5v4h6v-4c.8-1.2 2-3.5 2-5a5 5 0 0 0-5-5z"></path>
+                                                </svg> تدبر
+                                            </button>
+                                            <button class="mushaf-bm-label-btn" data-label="مراجعة">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                                </svg> مراجعة
+                                            </button>
+                                        </div>
+                                        <div id="mushafBookmarksList" class="mushaf-bookmarks-list"></div>
+                                    </div>
+                                </div>
+                                <button id="mushafBtnFullscreen" class="mushaf-icon-btn" title="ملء الشاشة"
+                                    aria-label="ملء الشاشة">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Navigation bar -->
+                        <div class="mushaf-nav-row">
+                            <button id="mushafBtnNext" class="mushaf-nav-btn" aria-label="الصفحة التالية">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <polyline points="9 18 15 12 9 6" />
+                                </svg>
+                            </button>
+
+
+                            <div class="mushaf-page-indicator-wrap">
+                                <span id="mushafPageIndicator" class="mushaf-page-indicator">صفحة ١ من ٦٠٤</span>
+                                <div class="mushaf-jump-wrap">
+                                    <input type="number" id="mushafJumpInput" class="mushaf-jump-input" min="1"
+                                        max="604" placeholder="رقم..." aria-label="الانتقال إلى صفحة">
+                                    <button id="mushafBtnJump" class="mushaf-jump-btn">انتقال</button>
+                                </div>
+                            </div>
+
+                            <button id="mushafBtnPrev" class="mushaf-nav-btn" aria-label="الصفحة السابقة">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <polyline points="15 18 9 12 15 6" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- ── END Top Controls Overlay ──────────────────── -->
+
+                    <!-- ── Page Viewer ──────────────────────────────── -->
+                    <div id="mushafPageContainer" class="mushaf-page-container" data-view-mode="vertical">
+                        <!-- Skeleton loader -->
+                        <div id="mushafSkeleton" class="mushaf-skeleton">
+                            <div class="mushaf-skeleton-shine"></div>
+                            <div class="mushaf-skeleton-lines">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <!-- The actual Mushaf page image -->
+                        <img id="mushafPageImg" class="mushaf-page-img" alt="صفحة المصحف" loading="eager"
+                            draggable="false" style="display:none; opacity:0; transition: opacity 0.4s ease;">
+                        <!-- Error state -->
+                        <div id="mushafErrorMsg" class="mushaf-error" style="display:none;">
+                            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            <p>تعذر تحميل الصفحة</p>
+                            <button id="mushafBtnRetry" class="btn-primary">إعادة المحاولة</button>
+                        </div>
+                    </div>
+                    <!-- ── END Page Viewer ──────────────────────────── -->
+
+                    <!-- ── Bottom Controls Overlay ───────────────────── -->
+                    <div id="mushafControlsFooter" class="mushaf-controls-footer">
+                        <div class="mushaf-footer-row">
+                            <!-- View mode toggle -->
+                            <button id="mushafBtnViewMode" class="mushaf-footer-btn">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <line x1="12" y1="3" x2="12" y2="21" />
+                                </svg>
+                                عمودي
+                            </button>
+
+                            <!-- Night mode -->
+                            <div class="mushaf-night-control">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                                </svg>
+                                <input type="range" id="mushafNightSlider" class="mushaf-night-slider" min="0" max="0.7"
+                                    step="0.05" value="0" aria-label="إضاءة القراءة">
+                            </div>
+
+                            <!-- Auto-hide delay -->
+                            <div class="mushaf-delay-control">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                                <button class="mushaf-delay-btn active" data-delay="3">3ث</button>
+                                <button class="mushaf-delay-btn" data-delay="5">5ث</button>
+                                <button class="mushaf-delay-btn" data-delay="10">10ث</button>
+                            </div>
+
+                            <!-- Werd goal -->
+                            <div class="mushaf-werd-goal-wrap">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                </svg>
+                                <select id="mushafWerdGoal" class="mushaf-werd-select" aria-label="هدف الورد">
+                                    <option value="2">٢ صفحات</option>
+                                    <option value="5">٥ صفحات</option>
+                                    <option value="10" selected>١٠ صفحات</option>
+                                    <option value="20">٢٠ صفحة (جزء)</option>
+                                    <option value="30">٣٠ صفحة</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Werd progress bar -->
+                        <div id="mushafWerdBar" class="mushaf-werd-bar">
+                            <div id="mushafWerdFill" class="mushaf-werd-fill"></div>
+                        </div>
+                        <span id="mushafWerdLabel" class="mushaf-werd-label">الورد: ٠ / ١٠ صفحة</span>
+                    </div>
+                    <!-- ── END Bottom Controls ────────────────────────── -->
+
+                </div>
+                <!-- ── END MUSHAF PANEL ──────────────────────────────── -->
+
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- ██  TAFSIR PANEL  ████████████████████████████████████ -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div id="tafsirReader" style="display:none; padding: 1.5rem; flex-direction: column; gap: 1rem;">
+
+                    <!-- Tafsir header controls -->
+                    <div class="section-header" style="padding:0;">
+                        <h2>التفسير والتلاوة</h2>
+                        <div class="custom-select w-auto">
+                            <select id="tafsirSelect" class="custom-select w-auto">
+                                <option value="ar.muyassar">التفسير الميسر</option>
+                                <option value="ar.jalalayn">تفسير الجلالين</option>
+                                <option value="ar.qurtubi">تفسير القرطبي</option>
+                                <option value="ar.miqbas">تنوير المقباس (ابن عباس)</option>
+                                <option value="ar.baghawi">تفسير البغوي</option>
+                                <option value="ar.waseet">الوسيط لطنطاوي</option>
+                            </select>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="tafsir-layout">
+                        <div class="tafsir-actions">
+                            <div class="custom-select" style="max-width:300px;">
+                                <select id="tafsirSurahSelect">
+                                    <option value="">اختر السورة...</option>
+                                </select>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <button class="btn-primary" id="btnHifzMode">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                                    height="20">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                وضع التسميع
+                            </button>
+                        </div>
+                        <div id="tafsirContent" class="tafsir-content-area glass-card">
+                            <div class="placeholder-text text-center text-muted"
+                                style="text-align:center; padding: 3rem 0;">اختر سورة لعرض الآيات والتفسير</div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- ── END TAFSIR PANEL ──────────────────────────────── -->
+
+                <!-- ── Continue Reading Modal ─────────────────────────── -->
+                <div id="mushafContinueModal" class="mushaf-continue-modal" style="display:none;" role="dialog"
+                    aria-modal="true">
+                    <div class="mushaf-continue-card glass-card">
+                        <div class="mushaf-continue-icon">
+                            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </div>
+                        <h3>استكمال القراءة</h3>
+                        <p id="mushafContinueInfo" class="text-muted">لديك جلسة قراءة سابقة</p>
+                        <div class="mushaf-continue-btns">
+                            <button id="mushafBtnContinue" class="btn-primary">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                استكمال من حيث توقفت
+                            </button>
+                            <button id="mushafBtnStartFresh" class="btn-secondary">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                    <path d="M3 3v5h5"></path>
+                                </svg>
+                                البدء من الصفحة الأولى
+                            </button>
+                        </div>
+                        <button id="mushafBtnCloseModal" class="mushaf-modal-close" aria-label="إغلاق">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- View: Werd & Gamification -->
+            <section id="view-werd" class="view-section hidden">
+                <header class="section-header">
+                    <h2>الورد والإنجازات</h2>
+                </header>
+
+                <div class="dashboard-grid">
+                    <div class="stat-card glass-card">
+                        <span class="stat-label">أيام متتالية </span>
+                        <div class="stat-value" id="streakCount">0</div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <span class="stat-label">أذكار مقروءة اليوم</span>
+                        <div class="stat-value" id="azkarTodayCount">0</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom:1rem; color:var(--primary);">الورد اليومي</h3>
+                <div class="werd-plans glass-card" style="padding: 1.5rem;">
+                    <div class="custom-select" style="margin-bottom:1.5rem; max-width:100%;">
+                        <select id="werdSelect">
+                            <option value="">اختر هدفك اليومي للورد...</option>
+                            <!-- Injected via JS -->
+                        </select>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <button class="btn-primary" id="btnCompleteWerd" style="width:100%; justify-content:center;">إتمام
+                        ورد اليوم</button>
+                </div>
+
+                <h3 style="margin-bottom:1rem; color:var(--primary); margin-top:2rem;">الإنجازات المكتسبة</h3>
+                <div id="achievementsGrid" class="achievements-grid">
+                    <!-- Badges injected here via JS -->
+                </div>
+            </section>
+
+            <!-- View: Quotes -->
+            <section id="view-quotes" class="view-section hidden">
+                <header class="section-header">
+                    <h2>حكم ومواعظ</h2>
+                </header>
+                <div id="quotesContainer" class="quotes-grid">
+                    <!-- Quotes injected here -->
+                </div>
+            </section>
+
+            <!-- View: Settings -->
+            <section id="view-settings" class="view-section hidden">
+                <header class="section-header">
+                    <h2>الإعدادات</h2>
+                </header>
+
+                <div class="settings-grid">
+                    <div class="settings-group glass-card">
+                        <h3 class="settings-group-title">المظهر</h3>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div>
+                                    <h3>المظهر (Theme)</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="picker-group" id="themePicker">
+                            <button class="picker-btn active" data-theme="light">فاتح</button>
+                            <button class="picker-btn" data-theme="dark">داكن</button>
+                            <button class="picker-btn" data-theme="amoled">أسود (AMOLED)</button>
+                        </div>
+
+                        <div class="setting-item" style="margin-top:1rem;">
+                            <div class="setting-info">
+                                <div>
+                                    <h3>شكل الواجهة (Shape)</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="picker-group" id="shapePicker">
+                            <button class="picker-btn active" data-shape="shape-rounded">دائري</button>
+                            <button class="picker-btn" data-shape="shape-sharp">حاد</button>
+                            <button class="picker-btn" data-shape="shape-minimal">مسطح</button>
+                        </div>
+
+                        <div class="setting-item" style="margin-top:1rem;">
+                            <div class="setting-info">
+                                <div>
+                                    <h3>حجم الخط</h3>
+                                </div>
+                            </div>
+                            <input type="range" id="fontSizeSlider" min="0.8" max="1.5" step="0.1" value="1">
+                        </div>
+                    </div>
+
+                    <div class="settings-group glass-card">
+                        <h3 class="settings-group-title">التشغيل والإشعارات</h3>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                                <div>
+                                    <h3>الإشعارات الذكية</h3>
+                                    <p>تنبيهات الأذكار والورد</p>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="notificationToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                <div>
+                                    <h3>التشغيل التلقائي</h3>
+                                    <p>الانتقال للسورة التالية</p>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="autoplayToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                                </svg>
+                                <div>
+                                    <h3>مؤثرات التفاعل</h3>
+                                    <p>الاهتزاز والصوت عند التسبيح</p>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="hapticsToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation (single instance, 6 items) -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-target="view-player">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                <path
+                    d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                </path>
+            </svg>
+            <span>قرآن</span>
+        </button>
+        <button class="nav-btn" data-target="view-azkar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>أذكار</span>
+        </button>
+        <button class="nav-btn" data-target="view-prayer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"></path>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>مواقيت</span>
+        </button>
+        <button class="nav-btn" data-target="view-radio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path>
+                <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"></path>
+                <circle cx="12" cy="12" r="2"></circle>
+                <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"></path>
+                <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"></path>
+            </svg>
+            <span>راديو</span>
+        </button>
+        <button class="nav-btn" data-target="view-hadith">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span>أحاديث</span>
+        </button>
+        <button class="nav-btn" data-target="view-tafsir">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            <span>تفسير</span>
+        </button>
+    </nav>
+
+    <!-- Global Persistent Audio Player UI -->
+    <div class="global-player" id="globalPlayer">
+        <div class="progress-bar-container" id="progressBarContainer">
+            <div class="progress-fill" id="progressFill"></div>
+            <input type="range" class="progress-bar" id="audioProgress" min="0" max="100" value="0"
+                aria-label="شريط تقدم التلاوة">
+        </div>
+
+        <!-- Live Badge (hidden by default, shown in radio mode) -->
+        <div class="player-live-badge" id="playerLiveBadge" style="display:none;">
+            <span class="live-indicator"></span>
+            بث مباشر
+        </div>
+
+        <div class="player-content">
+            <div class="track-info">
+                <div class="track-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </div>
+                <div class="track-text">
+                    <h3 id="nowPlayingTitle">لم يتم الاختيار</h3>
+                    <span id="nowPlayingReciter" class="text-muted">اختر سورة للبدء</span>
+                </div>
+                <div class="expand-hint"
+                    style="color:var(--text-muted); opacity:0.6; display:flex; margin-right:1rem; align-items:center;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="controls-main">
+                <button class="ctrl-btn" id="btnLoop" aria-label="تكرار السورة">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="17 1 21 5 17 9"></polyline>
+                        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                        <polyline points="7 23 3 19 7 15"></polyline>
+                        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                </button>
+                <button class="ctrl-btn" id="btnPrev" aria-label="السابق">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polygon points="13 19 22 12 13 5 13 19"></polygon>
+                        <polygon points="2 19 11 12 2 5 2 19"></polygon>
+                    </svg>
+                </button>
+                <button class="ctrl-btn play-btn" id="btnPlayPause" aria-label="تشغيل/إيقاف">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3" class="play-icon"></polygon>
+                        <rect x="6" y="4" width="4" height="16" class="pause-icon" style="display:none"></rect>
+                        <rect x="14" y="4" width="4" height="16" class="pause-icon" style="display:none"></rect>
+                    </svg>
+                </button>
+                <button class="ctrl-btn" id="btnNext" aria-label="التالي">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polygon points="11 19 2 12 11 5 11 19"></polygon>
+                        <polygon points="22 19 13 12 22 5 22 19"></polygon>
+                    </svg>
+                </button>
+                <button class="ctrl-btn" id="btnSleepTimer" aria-label="مؤقت النوم">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="extra-controls">
+                <button id="btnSpeed" class="speed-btn">1x</button>
+                <div class="time-display">
+                    <span id="timeCurrent">0:00</span> / <span id="timeTotal">0:00</span>
+                </div>
+            </div>
+        </div>
+        <audio id="audioElement"></audio>
+    </div>
+
+    <!-- Sleep Timer Modal -->
+    <div id="sleepModal" class="modal-overlay">
+        <div class="modal-card glass-card">
+            <button class="modal-close" id="closeSleepModal">&times;</button>
+            <h3 style="color:var(--primary); margin-bottom:1rem;">مؤقت النوم</h3>
+            <p class="text-muted">سيتم إيقاف التلاوة تلقائياً بعد الوقت المحدد.</p>
+            <div class="timer-options" id="timerOptions">
+                <button class="picker-btn" data-time="15">15 دقيقة</button>
+                <button class="picker-btn" data-time="30">30 دقيقة</button>
+                <button class="picker-btn" data-time="60">60 دقيقة</button>
+                <button class="picker-btn" data-time="0">إيقاف المؤقت</button>
+            </div>
+            <p id="activeTimerStatus" style="margin-top:1rem; font-weight:bold; color:var(--accent); display:none;">
+                المؤقت مفعل: باقي <span id="timeRemaining">--</span></p>
+        </div>
+    </div>
+
+    <!-- Full Screen Advanced Player -->
+    <div id="fullPlayerOverlay" class="full-player-overlay">
+        <div class="full-player-bg"></div>
+        <div class="fp-header">
+            <button id="fpCloseBtn" class="fp-icon-btn" aria-label="أغلق المشغل">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+            </button>
+            <div class="fp-surah-info">
+                <h2 id="fpSurahName">سورة الفاتحة</h2>
+                <div class="fp-badges">
+                    <span id="fpRevelationType" class="fp-badge">مكية</span>
+                    <span id="fpAyahsCount" class="fp-badge">7 آيات</span>
+                    <span id="fpSyncBadge" class="fp-badge fp-sync-badge sync-tier3" title="نوع المزامنة"><svg
+                            viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="display:inline-block; vertical-align:middle; margin-left:4px;">
+                            <path d="M21 2v6h-6"></path>
+                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                            <path d="M3 22v-6h6"></path>
+                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                        </svg> مزامنة تقريبية</span>
+                </div>
+            </div>
+            <button id="fpDownloadBtn" class="fp-icon-btn" aria-label="تحميل السورة">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="fp-body">
+            <!-- Smart CC Interactive Mushaf -->
+            <div id="fpCCContainer" class="fp-cc-container">
+                <div class="cc-placeholder">جاري التحميل...</div>
+            </div>
+        </div>
+
+        <div class="fp-footer">
+            <p id="fpReciterName" class="fp-reciter-name">المقرئ</p>
+
+            <div class="fp-progress-container">
+                <span id="fpTimeCurrent" class="fp-time">0:00</span>
+                <input type="range" id="fpProgressBar" min="0" max="100" value="0">
+                <span id="fpTimeTotal" class="fp-time">0:00</span>
+            </div>
+
+            <!-- Sync Offset Control -->
+            <div class="fp-sync-controls" id="fpSyncControls">
+                <div class="fp-offset-row">
+                    <label class="fp-offset-label" for="fpOffsetSlider">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        ضبط التوقيت
+                    </label>
+                    <span class="fp-offset-value" id="fpOffsetValue">0.0 ث</span>
+                </div>
+                <input type="range" id="fpOffsetSlider" class="fp-offset-slider" min="-10" max="10" step="0.5"
+                    value="0">
+                <button class="fp-reset-sync-btn" id="fpResetSync" aria-label="إعادة ضبط المزامنة">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    إعادة ضبط
+                </button>
+            </div>
+
+            <div class="fp-controls">
+                <button id="fpBtnSpeed" class="fp-speed-btn">1x</button>
+                <button class="fp-ctrl-btn" id="fpBtnPrev" aria-label="السابق">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 19 22 12 13 5 13 19"></polygon>
+                        <polygon points="4 19 13 12 4 5 4 19"></polygon>
+                    </svg>
+                </button>
+                <button class="fp-ctrl-play" id="fpBtnPlayPause" aria-label="تشغيل">
+                    <svg id="fpPlayIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <svg id="fpPauseIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="display:none">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button class="fp-ctrl-btn" id="fpBtnNext" aria-label="التالي">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 19 2 12 11 5 11 19"></polygon>
+                        <polygon points="22 19 13 12 22 5 22 19"></polygon>
+                    </svg>
+                </button>
+                <button class="fp-ctrl-btn" id="fpBtnLoop" aria-label="تكرار">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="17 1 21 5 17 9"></polyline>
+                        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                        <polyline points="7 23 3 19 7 15"></polyline>
+                        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js" defer></script>
+    <script src="js/sync-engine.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/mushaf.js" defer></script>
+</body>
+
+</html>

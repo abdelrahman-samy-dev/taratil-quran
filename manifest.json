@@ -1,0 +1,37 @@
+{
+  "name": "تراتيل - التطبيق الإسلامي الشامل",
+  "short_name": "تراتيل",
+  "description": "تطبيق إسلامي شامل للقرآن الكريم (تلاوة وتفسير)، الأذكار والورد المستمر.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF7F0",
+  "theme_color": "#2D7A4F",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "أذكار الصباح",
+      "short_name": "الصباح",
+      "description": "قراءة أذكار الصباح",
+      "url": "./index.html#view-azkar"
+    },
+    {
+      "name": "أذكار المساء",
+      "short_name": "المساء",
+      "description": "قراءة أذكار المساء",
+      "url": "./index.html#view-azkar"
+    },
+    {
+      "name": "الورد اليومي",
+      "short_name": "الورد",
+      "description": "متابعة الورد القرآني",
+      "url": "./index.html#view-werd"
+    }
+  ]
+}
