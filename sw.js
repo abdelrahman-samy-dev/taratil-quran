@@ -1,6 +1,6 @@
-const CACHE_NAME = 'taratil-pwa-v4';
+const CACHE_NAME = 'taratil-pwa-v5';
 const MUSHAF_CACHE = 'mushaf-pages-v1';
-const API_CACHE = 'taratil-api-cache-v4';
+const API_CACHE = 'taratil-api-cache-v5';
 const MAX_MUSHAF_PAGES = 160;
 
 const CORE_ASSETS = [
@@ -77,8 +77,10 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // ── Skip audio files (too large, streaming preferred) ────────
+    // ── Skip audio/radio streams (too large, streaming preferred) ──
     if (url.pathname.endsWith('.mp3')) return;
+    if (url.hostname.includes('qurango.net')) return;
+    if (url.hostname.includes('radiojar.com')) return;
 
     // ── Core assets (Cache-first) ─────────────────────────────────
     event.respondWith(

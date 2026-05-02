@@ -720,6 +720,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchend', () => { isDraggingProgress = false; });
 
     audioEl.addEventListener('error', () => {
+        // In radio mode, the playRadioStation retry logic handles errors
+        if (window.isRadioMode) return;
         nowPlayingTitle.textContent = 'نعتذر، خطأ في التشغيل';
         nowPlayingReciter.textContent = 'تحقق من اتصال الإنترنت أو حدث الصفحة';
         updatePlayBtn(false);
@@ -1413,10 +1415,38 @@ document.addEventListener('DOMContentLoaded', () => {
     let filteredRadioData = [];
 
     // Featured / Pinned stations (always shown at top)
+    // Using multiple fallback URLs per station for reliability
     const featuredStations = [
-        { name: 'إذاعة القرآن الكريم - مصر', url: 'https://stream.radiojar.com/8s5u5tpdtwzuv', category: 'featured', countryCode: 'EG' },
-        { name: 'إذاعة القرآن الكريم - السعودية', url: 'https://stream.radiojar.com/0tpy1h0kxtzuv', category: 'featured', countryCode: 'SA' },
-        { name: 'إذاعة السنة النبوية - السعودية', url: 'https://stream.radiojar.com/4wqre23fytzuv', category: 'featured', countryCode: 'SA' },
+        {
+            name: 'إذاعة القرآن الكريم - مصر',
+            url: 'https://stream.radiojar.com/8s5u5tpdtwzuv',
+            fallbackUrls: [
+                'https://n0a.radiojar.com/8s5u5tpdtwzuv',
+                'https://n0b.radiojar.com/8s5u5tpdtwzuv',
+            ],
+            category: 'featured',
+            countryCode: 'EG'
+        },
+        {
+            name: 'إذاعة القرآن الكريم - السعودية',
+            url: 'https://stream.radiojar.com/0tpy1h0kxtzuv',
+            fallbackUrls: [
+                'https://n0a.radiojar.com/0tpy1h0kxtzuv',
+                'https://n0b.radiojar.com/0tpy1h0kxtzuv',
+            ],
+            category: 'featured',
+            countryCode: 'SA'
+        },
+        {
+            name: 'إذاعة السنة النبوية - السعودية',
+            url: 'https://stream.radiojar.com/4wqre23fytzuv',
+            fallbackUrls: [
+                'https://n0a.radiojar.com/4wqre23fytzuv',
+                'https://n0b.radiojar.com/4wqre23fytzuv',
+            ],
+            category: 'featured',
+            countryCode: 'SA'
+        },
     ];
 
     // Category mapping for radios from MP3Quran API
@@ -1429,6 +1459,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (specialCategoryIds.includes(id)) return 'special';
         if (id >= 109038 && id <= 109059) return 'translation'; // translations
         return 'quran';
+    }
+
+    /**
+     * Normalize and generate alternative stream URLs for a radio station.
+     * The backup.qurango.net streams can be unreliable on mobile,
+     * so we try multiple mirrors.
+     */
+    function getStreamUrls(station) {
+        const primary = station.url || station.URL || station.stream || '';
+        const urls = [primary];
+
+        // Add explicit fallback URLs if provided
+        if (station.fallbackUrls && Array.isArray(station.fallbackUrls)) {
+            urls.push(...station.fallbackUrls);
+        }
+
+        // For qurango streams, try multiple mirror domains
+        if (primary.includes('backup.qurango.net')) {
+            const path = primary.replace('https://backup.qurango.net', '');
+            // Try the primary domain and additional mirrors
+            urls.push('https://qurango.net' + path);
+            urls.push('https://backup.qurango.net' + path); // ensure it's in the list
+        } else if (primary.includes('qurango.net')) {
+            const path = primary.replace(/https?:\/\/[^/]+/, '');
+            urls.push('https://backup.qurango.net' + path);
+        }
+
+        // For radiojar, try alternative subdomains
+        if (primary.includes('stream.radiojar.com')) {
+            const streamId = primary.replace('https://stream.radiojar.com/', '');
+            urls.push('https://n0a.radiojar.com/' + streamId);
+            urls.push('https://n0b.radiojar.com/' + streamId);
+        }
+
+        // Deduplicate
+        return [...new Set(urls)].filter(u => u);
     }
 
     async function loadRadio() {
@@ -1527,11 +1593,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Play a radio station with robust retry logic.
+     * Tries multiple stream URLs if the primary one fails.
+     */
     function playRadioStation(idx, station) {
         window.isRadioMode = true;
 
         document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('radio-card--playing'));
-        document.getElementById(`radio-card-${idx}`).classList.add('radio-card--playing');
+        const activeCard = document.getElementById(`radio-card-${idx}`);
+        if (activeCard) activeCard.classList.add('radio-card--playing');
 
         audioEl.pause();
         // remove playing styling from surah
@@ -1541,11 +1612,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         playingIndex = -1;
 
-        audioEl.src = station.url || station.URL || station.stream;
-        audioEl.play().catch(e => console.error("Radio autoplay blocked"));
+        // Get all possible stream URLs
+        const streamUrls = getStreamUrls(station);
+        let currentUrlIndex = 0;
+        let connectionTimeout = null;
+        let hasConnected = false;
 
+        // Show connecting state
         document.getElementById('nowPlayingTitle').textContent = station.name || station.title || 'إذاعة القرآن';
-        document.getElementById('nowPlayingReciter').innerHTML = '<span class="live-indicator" style="display:inline-block;width:8px;height:8px;margin-left:6px;"></span> بث مباشر';
+        document.getElementById('nowPlayingReciter').innerHTML = '<span class="live-indicator" style="display:inline-block;width:8px;height:8px;margin-left:6px;"></span> جاري الاتصال...';
 
         const pb = document.getElementById('progressBarContainer');
         if (pb) pb.style.display = 'none';
@@ -1560,14 +1635,92 @@ document.addEventListener('DOMContentLoaded', () => {
         const eh = document.querySelector('.expand-hint');
         if (eh) eh.style.display = 'none';
 
-        updatePlayBtn(true);
+        function tryNextUrl() {
+            if (currentUrlIndex >= streamUrls.length) {
+                // All URLs failed
+                document.getElementById('nowPlayingTitle').textContent = 'تعذر تشغيل الإذاعة';
+                document.getElementById('nowPlayingReciter').textContent = 'جرب إذاعة أخرى أو تحقق من الإنترنت';
+                updatePlayBtn(false);
+                return;
+            }
+
+            const url = streamUrls[currentUrlIndex];
+            console.log(`[Radio] Trying URL ${currentUrlIndex + 1}/${streamUrls.length}: ${url}`);
+
+            // Clear previous timeout
+            if (connectionTimeout) clearTimeout(connectionTimeout);
+
+            // Remove previous event listeners
+            audioEl.removeEventListener('playing', onPlaying);
+            audioEl.removeEventListener('error', onError);
+            audioEl.removeEventListener('stalled', onStalled);
+
+            // Set the source and try to play
+            audioEl.src = url;
+            audioEl.load();
+
+            // Set connection timeout (12 seconds)
+            connectionTimeout = setTimeout(() => {
+                if (!hasConnected) {
+                    console.warn(`[Radio] Connection timeout for: ${url}`);
+                    currentUrlIndex++;
+                    tryNextUrl();
+                }
+            }, 12000);
+
+            // Listen for successful connection
+            audioEl.addEventListener('playing', onPlaying);
+            audioEl.addEventListener('error', onError);
+            audioEl.addEventListener('stalled', onStalled);
+
+            audioEl.play().catch(e => {
+                console.warn(`[Radio] Play failed for: ${url}`, e.message);
+                // On mobile, autoplay might be blocked — don't retry for autoplay policy
+                if (e.name === 'NotAllowedError') {
+                    clearTimeout(connectionTimeout);
+                    hasConnected = true; // Source is valid, just needs user interaction
+                    document.getElementById('nowPlayingReciter').innerHTML = '<span class="live-indicator" style="display:inline-block;width:8px;height:8px;margin-left:6px;"></span> اضغط ▶ للتشغيل';
+                    updatePlayBtn(false);
+                } else {
+                    // Network error — try next URL
+                    currentUrlIndex++;
+                    tryNextUrl();
+                }
+            });
+        }
+
+        function onPlaying() {
+            hasConnected = true;
+            if (connectionTimeout) clearTimeout(connectionTimeout);
+            document.getElementById('nowPlayingReciter').innerHTML = '<span class="live-indicator" style="display:inline-block;width:8px;height:8px;margin-left:6px;"></span> بث مباشر';
+            updatePlayBtn(true);
+            console.log('[Radio] ✓ Connected successfully');
+        }
+
+        function onError(e) {
+            if (hasConnected) return; // Ignore errors after successful connection
+            console.warn(`[Radio] Error on URL: ${streamUrls[currentUrlIndex]}`, audioEl.error?.message || '');
+            if (connectionTimeout) clearTimeout(connectionTimeout);
+            currentUrlIndex++;
+            tryNextUrl();
+        }
+
+        function onStalled() {
+            if (hasConnected) return;
+            // Stalled usually means the stream is buffering — give it more time
+            console.log('[Radio] Stream stalled, waiting...');
+        }
+
+        // Start trying URLs
+        tryNextUrl();
     }
 
     function leaveRadioMode() {
         if (!window.isRadioMode) return;
         window.isRadioMode = false;
         audioEl.pause();
-        audioEl.src = '';
+        audioEl.removeAttribute('src');
+        audioEl.load(); // Reset the audio element
         updatePlayBtn(false);
         document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('radio-card--playing'));
 
