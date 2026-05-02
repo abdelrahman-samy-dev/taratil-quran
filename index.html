@@ -58,10 +58,9 @@
 
         <!-- Mobile Header -->
         <header class="mobile-header">
-            <div class="mobile-brand" style="display: flex; align-items: center; gap: 0.5rem;">
+            <div class="mobile-brand">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round"
-                    style="width: 28px; height: 28px; color: var(--primary); filter: drop-shadow(0 0 8px rgba(45, 122, 79, 0.4));">
+                    stroke-linejoin="round" class="mobile-brand-icon">
                     <path d="M3 13.5h4a4 4 0 0 1 4 4v4a3 3 0 0 0-3-3H3z"></path>
                     <path d="M21 13.5h-4a4 4 0 0 0-4 4v4a3 3 0 0 1 3-3h4z"></path>
                     <path d="M12 11.5 V3"></path>
@@ -72,12 +71,14 @@
                 </svg>
                 <h1>تراتيل</h1>
             </div>
-            <button class="icon-btn" id="btnNotifications" aria-label="الإشعارات">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-            </button>
+            <div class="mobile-header-actions">
+                <button class="mobile-settings-btn" id="btnMobileSettings" aria-label="الإعدادات" data-target="view-settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
+            </div>
         </header>
 
         <!-- Desktop Sidebar Navigation -->
@@ -319,6 +320,27 @@
                         بث مباشر
                     </div>
                 </header>
+
+                <!-- Radio Search -->
+                <div class="search-box" style="margin-bottom: 1rem;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="radioSearch" placeholder="ابحث عن إذاعة..." autocomplete="off">
+                </div>
+
+                <!-- Radio Category Tabs -->
+                <div class="radio-tabs-wrapper" style="margin-bottom: 1rem;">
+                    <div class="azkar-tabs" id="radioTabs">
+                        <button class="azkar-tab active" data-radio-cat="all">الكل</button>
+                        <button class="azkar-tab" data-radio-cat="featured"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-left:4px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg> مميزة</button>
+                        <button class="azkar-tab" data-radio-cat="quran"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-left:4px;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg> قرآن</button>
+                        <button class="azkar-tab" data-radio-cat="sunnah"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-left:4px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> سنة</button>
+                        <button class="azkar-tab" data-radio-cat="special"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-left:4px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg> متنوعة</button>
+                    </div>
+                </div>
+
                 <div id="radioGrid" class="radio-grid">
                     <div class="loading-state">جاري تحميل الإذاعات...</div>
                 </div>
@@ -881,16 +903,21 @@
         </main>
     </div>
 
-    <!-- Mobile Bottom Navigation (single instance, 6 items) -->
+    <!-- Mobile Bottom Navigation (5 main items + More) -->
     <nav class="bottom-nav">
         <button class="nav-btn active" data-target="view-player">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                <path
-                    d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
-                </path>
+                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
             </svg>
             <span>قرآن</span>
+        </button>
+        <button class="nav-btn" data-target="view-tafsir">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            <span>المصحف</span>
         </button>
         <button class="nav-btn" data-target="view-azkar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -901,36 +928,63 @@
         </button>
         <button class="nav-btn" data-target="view-prayer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"></path>
-                <polyline points="12 6 12 12 16 14"></polyline>
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
             </svg>
             <span>مواقيت</span>
         </button>
-        <button class="nav-btn" data-target="view-radio">
+        <button class="nav-btn" id="btnMoreMenu" aria-label="المزيد">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path>
-                <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4"></path>
-                <circle cx="12" cy="12" r="2"></circle>
-                <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4"></path>
-                <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"></path>
+                <circle cx="12" cy="5" r="1.5"></circle>
+                <circle cx="12" cy="12" r="1.5"></circle>
+                <circle cx="12" cy="19" r="1.5"></circle>
             </svg>
-            <span>راديو</span>
-        </button>
-        <button class="nav-btn" data-target="view-hadith">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-            <span>أحاديث</span>
-        </button>
-        <button class="nav-btn" data-target="view-tafsir">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-            </svg>
-            <span>تفسير</span>
+            <span>المزيد</span>
         </button>
     </nav>
+
+    <!-- Mobile "More" Bottom Sheet Drawer -->
+    <div class="more-drawer-overlay" id="moreDrawerOverlay"></div>
+    <div class="more-drawer" id="moreDrawer">
+        <div class="more-drawer-handle"></div>
+        <h3 class="more-drawer-title">أقسام أخرى</h3>
+        <div class="more-drawer-items">
+            <button class="more-drawer-item nav-btn" data-target="view-radio">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                <span>راديو القرآن</span>
+            </button>
+            <button class="more-drawer-item nav-btn" data-target="view-hadith">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>الأحاديث النبوية</span>
+            </button>
+            <button class="more-drawer-item nav-btn" data-target="view-werd">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+                <span>الورد والإنجازات</span>
+            </button>
+            <button class="more-drawer-item nav-btn" data-target="view-quotes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>حكم ومواعظ</span>
+            </button>
+            <button class="more-drawer-item nav-btn" data-target="view-settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>الإعدادات</span>
+            </button>
+        </div>
+    </div>
 
     <!-- Global Persistent Audio Player UI -->
     <div class="global-player" id="globalPlayer">

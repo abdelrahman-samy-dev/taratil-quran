@@ -3,17 +3,13 @@
     --font-scale: 1;
 
     /* Premium Light Theme Tokens */
-    --primary: #047857;
-    /* Emerald 700 */
-    --primary-hover: #065f46;
+    --primary: #059669;
+    --primary-hover: #047857;
     --primary-light: #ecfdf5;
-    /* Emerald 50 */
-    --accent: #b45309;
-    /* Amber 700 */
-    --accent-hover: #92400e;
+    --accent: #d97706;
+    --accent-hover: #b45309;
 
     --bg-base: #f8fafc;
-    /* Clean slate 50 */
     --bg-surface: #ffffff;
     --bg-elevated: #f1f5f9;
 
@@ -24,46 +20,46 @@
     --border-color: #e2e8f0;
     --border-color-light: #f8fafc;
 
-    --glass-bg: rgba(255, 255, 255, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.08);
 
     /* UI Shapes - Default Rounded */
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
-    --radius-lg: 1rem;
+    --radius-lg: 1.25rem;
     --radius-full: 9999px;
 
-    --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-theme="dark"] {
     --primary: #10b981;
     --primary-hover: #34d399;
-    --primary-light: rgba(16, 185, 129, 0.1);
+    --primary-light: rgba(16, 185, 129, 0.15);
     --accent: #fbbf24;
     --accent-hover: #fcd34d;
 
-    --bg-base: #0f172a;
-    --bg-surface: #1e293b;
-    --bg-elevated: #334155;
+    --bg-base: #09090b;
+    --bg-surface: #18181b;
+    --bg-elevated: #27272a;
 
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-inverse: #0f172a;
+    --text-main: #fafafa;
+    --text-muted: #a1a1aa;
+    --text-inverse: #09090b;
 
-    --border-color: #334155;
-    --border-color-light: #1e293b;
+    --border-color: #27272a;
+    --border-color-light: #18181b;
 
-    --glass-bg: rgba(30, 41, 59, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-bg: rgba(24, 24, 27, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.08);
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="amoled"] {
@@ -116,11 +112,12 @@ body {
     font-family: 'Cairo', sans-serif;
     background-color: var(--bg-base);
     color: var(--text-main);
-    line-height: 1.6;
-    transition: background-color 0.4s, color 0.4s;
-    overflow: hidden;
-    /* App feel */
+    line-height: 1.7;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow-x: hidden;
+    /* Allow vertical scroll on mobile; desktop scroll handled by .main-content */
     font-size: calc(16px * var(--font-scale));
+    letter-spacing: 0.01em;
 }
 
 /* Beautiful Smooth Background Gradient overlay */
@@ -160,8 +157,9 @@ h6 {
 }
 
 h2 {
-    font-size: calc(1.5rem * var(--font-scale));
-    margin-bottom: 1rem;
+    font-size: calc(1.75rem * var(--font-scale));
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
 }
 
 .text-muted {
@@ -178,17 +176,19 @@ h2 {
 /* Glassmorphism utility */
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Layout Grid */
 .app-layout {
     display: flex;
     height: 100vh;
+    overflow: hidden;
     padding-bottom: 90px;
     /* Space for advanced global player */
     position: relative;
@@ -210,6 +210,212 @@ h2 {
 /* Mobile Top Header */
 .mobile-header {
     display: none;
+}
+
+.mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-brand-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
+    filter: drop-shadow(0 0 8px rgba(45, 122, 79, 0.4));
+}
+
+.mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-settings-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mobile-settings-btn:hover,
+.mobile-settings-btn:active {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ═══════════ Search Dropdown Suggestions ═══════════ */
+.search-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    max-height: 320px;
+    overflow-y: auto;
+    animation: dropdownSlide 0.2s ease;
+    z-index: 1000;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.search-dropdown-item:hover {
+    background: var(--primary-light);
+}
+
+.search-dropdown-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.search-dropdown-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-main);
+}
+
+.search-dropdown-en {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-right: auto;
+}
+
+/* ═══════════ Featured Radio Cards ═══════════ */
+.radio-card--featured {
+    border: 1.5px solid var(--primary) !important;
+    background: linear-gradient(135deg, var(--primary-light), var(--glass-bg)) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.radio-card--featured::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+}
+
+.radio-flag {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.radio-country-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 22px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.radio-icon-svg {
+    flex-shrink: 0;
+    color: var(--primary);
+}
+
+.radio-live-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    background: #e53935;
+    padding: 0.15rem 0.5rem;
+    border-radius: 99px;
+    animation: livePulse 2s ease-in-out infinite;
+}
+
+.radio-live-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: blink 1.2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
 }
 
 .brand {
@@ -550,24 +756,24 @@ h2 {
     background: linear-gradient(135deg, var(--primary), var(--primary-hover));
     color: #fff;
     border: none;
-    padding: 0.8rem 1.75rem;
+    padding: 0.85rem 1.75rem;
     border-radius: var(--radius-full);
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: 0 4px 12px var(--primary-light);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
 }
 
 .btn-primary:active {
-    transform: scale(0.96);
-    box-shadow: none;
+    transform: scale(0.97);
+    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 6px 18px var(--primary-light);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.35);
     transform: translateY(-2px);
 }
 
@@ -579,13 +785,13 @@ h2 {
 
 .view-section.active {
     display: block;
-    animation: slideUpFade 0.5s ease forwards;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideUpFade {
     0% {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(15px);
     }
 
     100% {
@@ -610,7 +816,7 @@ h2 {
     justify-content: flex-start;
     gap: 1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
     background: var(--bg-surface);
@@ -621,14 +827,14 @@ h2 {
 
 .surah-card:hover {
     transform: translateY(-4px);
-    border-color: var(--primary-light);
+    border-color: var(--primary);
     box-shadow: var(--shadow-lg);
 }
 
 .surah-card.playing {
     border-color: var(--primary);
     background: var(--primary-light);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 .surah-number {
@@ -1757,6 +1963,9 @@ input[type=range]::-moz-range-thumb {
 .radio-info {
     display: flex;
     flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .radio-title {
@@ -1809,8 +2018,17 @@ input[type=range]::-moz-range-thumb {
 @media (max-width: 900px) {
 
     /* Switch to mobile layout */
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     .app-layout {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
         padding-bottom: 150px;
+        overflow: visible;
     }
 
     /* Space for player + bottom nav */
@@ -1820,23 +2038,26 @@ input[type=range]::-moz-range-thumb {
     }
 
     .mobile-header {
-        display: none;
+        display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 1.5rem;
+        padding: 0.75rem 1.25rem;
         background: var(--glass-bg);
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         position: sticky;
         top: 0;
         z-index: 40;
         border-bottom: 1px solid var(--glass-border);
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.04);
     }
 
     .mobile-header h1 {
         font-family: 'Amiri', serif;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         color: var(--primary);
         margin: 0;
+        line-height: 1.2;
     }
 
     .bottom-nav {
@@ -1856,11 +2077,12 @@ input[type=range]::-moz-range-thumb {
 
     .bottom-nav .nav-btn {
         flex-direction: column;
-        gap: 0.25rem;
-        padding: 0.5rem;
+        gap: 0.2rem;
+        padding: 0.4rem 0.25rem;
         width: 20%;
         border-radius: 0;
         border: none;
+        font-size: calc(0.95rem * var(--font-scale));
     }
 
     .bottom-nav .nav-btn span {
@@ -1889,6 +2111,8 @@ input[type=range]::-moz-range-thumb {
     .main-content {
         padding: 1rem;
         padding-bottom: 100px;
+        overflow-y: visible;
+        height: auto;
     }
 
     .dashboard-grid {
@@ -1907,14 +2131,15 @@ input[type=range]::-moz-range-thumb {
     }
 
     .player-content {
-        height: 90px;
-        padding: 0 1rem;
+        height: 70px;
+        padding: 0 0.75rem;
         flex-wrap: nowrap !important;
         flex-direction: row !important;
         gap: 0.5rem;
         justify-content: space-between;
         align-items: center;
         overflow: hidden;
+        margin: 10px;
     }
 
     .track-info {
@@ -2144,13 +2369,14 @@ input[type=range]::-moz-range-thumb {
     font-size: 2.2rem;
     color: var(--text-main);
     opacity: 0.3;
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    display: inline;
+    transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.4s ease;
+    display: inline-block;
     line-height: inherit;
     margin-left: 1rem;
     position: relative;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    transform-origin: center;
 }
 
 /* Graduated opacity states */
@@ -2172,9 +2398,8 @@ input[type=range]::-moz-range-thumb {
 .fp-cc-verse.active {
     color: var(--primary);
     opacity: 1;
-    font-weight: bold;
-    text-shadow: 0 0 20px rgba(4, 120, 87, 0.15);
-    filter: drop-shadow(0 0 2px rgba(4, 120, 87, 0.1));
+    transform: scale(1.02);
+    text-shadow: 0 4px 24px rgba(16, 185, 129, 0.25);
 }
 
 [data-theme="dark"] .fp-cc-verse.active {
@@ -2499,11 +2724,16 @@ input[type=range]::-moz-range-thumb {
 .azkar-toolbar-btn {
     display: flex;
     align-items: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
     justify-content: center;
-    border-radius: var(--radius-md, 8px);
-    font-weight: 600;
+    border-radius: var(--radius-md, 8px) !important;
+    font-weight: 700;
+    gap: 0.35rem;
+    height: 36px;
+    box-shadow: none !important;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .azkar-toolbar-btn .azkar-toolbar-icon {
@@ -3795,7 +4025,7 @@ input[type=range]::-moz-range-thumb {
 }
 
 @media (max-width: 425px) {
-    .text-muted {
+    .global-player .text-muted {
         display: none;
     }
 
@@ -3954,5 +4184,649 @@ input[type=range]::-moz-range-thumb {
 
     .fp-offset-value {
         font-size: 0.75rem;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE "MORE" BOTTOM SHEET DRAWER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.more-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 199;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+    display: none;
+}
+
+.more-drawer-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.more-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: var(--bg-surface);
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0.75rem 1.25rem 2rem;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: none;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.more-drawer.active {
+    transform: translateY(0);
+}
+
+.more-drawer-handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--border-color);
+    margin: 0 auto 1rem;
+}
+
+.more-drawer-title {
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 800;
+}
+
+.more-drawer-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.more-drawer-item {
+    display: flex !important;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: right;
+}
+
+.more-drawer-item svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    color: var(--primary);
+}
+
+.more-drawer-item:hover,
+.more-drawer-item:active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+/* Desktop: hide drawer completely */
+@media (min-width: 901px) {
+
+    .more-drawer,
+    .more-drawer-overlay {
+        display: none !important;
+    }
+}
+
+/* Mobile: show drawer */
+@media (max-width: 900px) {
+    .more-drawer-overlay {
+        display: block;
+    }
+
+    .more-drawer {
+        display: block;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ENHANCED MOBILE RESPONSIVENESS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* App layout mobile padding fix - account for header + player + bottom nav */
+@media (max-width: 900px) {
+    .app-layout {
+        flex-direction: column;
+        height: auto;
+        padding-bottom: 140px;
+        overflow: visible;
+    }
+
+    .main-content {
+        padding: 1rem 0.75rem;
+        padding-bottom: 20px;
+        overflow-y: visible;
+        height: auto;
+    }
+
+    /* Section header improvements */
+    .section-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .section-header h2 {
+        font-size: calc(1.3rem * var(--font-scale));
+    }
+
+    /* Surah cards - more compact on mobile */
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(calc(50% - 0.75rem), 1fr));
+        gap: 0.75rem;
+    }
+
+    .surah-card {
+        height: 80px;
+        padding: 0 0.75rem;
+        gap: 0.6rem;
+    }
+
+    .surah-number {
+        width: 38px;
+        height: 38px;
+        font-size: 0.95rem;
+    }
+
+    .surah-name-ar {
+        font-size: 1.2rem;
+    }
+
+    .surah-name-en {
+        font-size: 0.75rem;
+    }
+
+    .surah-card:hover {
+        transform: none;
+    }
+
+    /* Azkar improvements for mobile */
+    .azkar-tabs-wrapper {
+        margin-bottom: 1.25rem;
+    }
+
+    .azkar-tabs {
+        padding: 0.35rem;
+        gap: 0.35rem;
+    }
+
+    .azkar-tab {
+        padding: 0.55rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .zekr-card {
+        padding: 1.25rem;
+    }
+
+    .zekr-text {
+        font-size: calc(1.25rem * var(--font-scale));
+        line-height: 2;
+        margin-bottom: 1rem;
+    }
+
+    .counter-wrapper {
+        width: 80px;
+        height: 80px;
+    }
+
+    .counter-btn {
+        width: 62px;
+        height: 62px;
+        font-size: 1.4rem;
+    }
+
+    .zekr-footer {
+        padding-top: 1rem;
+    }
+
+    /* Azkar toolbar improvements */
+    .azkar-toolbar {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .azkar-toolbar-btn {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.82rem;
+    }
+
+    /* Prayer hero responsive */
+    .prayer-hero {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .prayer-date-card,
+    .prayer-countdown-card {
+        padding: 1rem;
+    }
+
+    .prayer-date-hijri,
+    .prayer-date-gregorian {
+        font-size: 1rem;
+    }
+
+    .countdown-timer {
+        font-size: 1.75rem;
+    }
+
+    .countdown-prayer-name {
+        font-size: 1.3rem;
+    }
+
+    .prayer-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    .prayer-card {
+        padding: 0.9rem 0.5rem;
+    }
+
+    .prayer-card-name {
+        font-size: 0.95rem;
+    }
+
+    .prayer-card-time {
+        font-size: 1.4rem;
+    }
+
+    .prayer-location-settings {
+        padding: 1rem;
+        margin-top: 1.25rem;
+    }
+
+    .prayer-location-row {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    /* Radio grid mobile */
+    .radio-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .radio-card {
+        padding: 0.9rem 1rem;
+    }
+
+    /* Hadith improvements */
+    .hadith-featured {
+        padding: 1.25rem;
+    }
+
+    .hadith-featured-text {
+        font-size: 1.1rem;
+    }
+
+    .hadith-pagination {
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Quotes grid */
+    .quotes-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .quote-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .quote-text {
+        font-size: calc(1.25rem * var(--font-scale));
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Settings - improved mobile layout */
+    .settings-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .settings-group {
+        padding: 1.25rem;
+    }
+
+    .setting-item {
+        padding: 0.6rem 0;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .picker-group {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .picker-btn {
+        flex: 1 1 auto;
+        min-width: calc(33% - 0.5rem);
+        padding: 0.7rem 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    input[type=range] {
+        width: 100%;
+    }
+
+    /* Werd dashboard */
+    .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .badge-card {
+        padding: 1rem 0.75rem;
+    }
+
+    /* Search box full width on mobile */
+    .search-box {
+        max-width: 100%;
+    }
+
+    /* Premium reciter select */
+    .premium-reciter-select {
+        max-width: 100%;
+    }
+
+    /* Tafsir improvements */
+    .tafsir-content-area {
+        padding: 1.25rem;
+        min-height: 300px;
+    }
+
+    .tafsir-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tafsir-actions .custom-select {
+        max-width: 100%;
+    }
+
+    .aya-block {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .aya-actions {
+        opacity: 1;
+        position: relative;
+        margin-bottom: 0.5rem;
+    }
+
+    .quran-text {
+        font-size: calc(1.5rem * var(--font-scale));
+        line-height: 2.2;
+    }
+
+    .tafsir-text {
+        font-size: calc(1rem * var(--font-scale));
+        padding: 1rem;
+    }
+}
+
+/* Very small screens - extra fixes */
+@media (max-width: 400px) {
+    .main-content {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prayer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bottom-nav .nav-btn span {
+        font-size: 0.65rem;
+    }
+
+    .bottom-nav .nav-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    /* Fix the text-muted visibility issue on small screens */
+    .text-muted {
+        display: inline;
+    }
+
+    /* Player text on mobile should not hide */
+    .track-info .text-muted {
+        display: block;
+        font-size: 0.7rem;
+    }
+
+    .player-content {
+        height: 65px;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   STAGGER CARD ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+@keyframes cardEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.surah-card,
+.zekr-card,
+.prayer-card,
+.radio-card,
+.quote-card,
+.badge-card {
+    animation: cardEnter 0.4s ease forwards;
+    animation-delay: calc(var(--card-index, 0) * 30ms);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ENHANCED GLOBAL PLAYER - MOBILE
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .global-player {
+        bottom: 56px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .progress-bar-container {
+        height: 4px;
+    }
+
+    .progress-fill::after {
+        width: 12px;
+        height: 12px;
+        left: -6px;
+        top: -4px;
+    }
+
+    /* expand-hint: visibility controlled by JS based on radio mode */
+
+    .track-text h3 {
+        font-size: 0.95rem;
+    }
+
+    .player-live-badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOTTOM NAV ENHANCEMENT — MOBILE
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .bottom-nav {
+        padding: 0.35rem 0;
+        padding-bottom: calc(0.35rem + env(safe-area-inset-bottom));
+        gap: 0;
+        height: 56px;
+        box-sizing: content-box;
+    }
+
+    .bottom-nav .nav-btn {
+        position: relative;
+        transition: color 0.2s ease;
+    }
+
+    .bottom-nav .nav-btn svg {
+        width: 22px;
+        height: 22px;
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+    }
+
+    .bottom-nav .nav-btn span {
+        font-size: 0.68rem;
+        font-weight: 600;
+        transition: color 0.2s ease;
+    }
+
+    .bottom-nav .nav-btn.active {
+        background: transparent;
+        color: var(--primary);
+    }
+
+    .bottom-nav .nav-btn.active svg {
+        color: var(--primary);
+        transform: translateY(-2px) scale(1.1);
+        filter: drop-shadow(0 2px 4px rgba(45, 122, 79, 0.3));
+    }
+
+    .bottom-nav .nav-btn.active span {
+        color: var(--primary);
+        font-weight: 800;
+    }
+
+    /* Active indicator dot */
+    .bottom-nav .nav-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 50%;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOADING & EMPTY STATE POLISH
+   ═══════════════════════════════════════════════════════════════════ */
+.loading-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.loading-state::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   SMOOTH SCROLLBAR EVERYWHERE (Mobile)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .main-content {
+        scrollbar-width: none;
+    }
+
+    .main-content::-webkit-scrollbar {
+        display: none;
     }
 }

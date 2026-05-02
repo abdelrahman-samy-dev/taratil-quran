@@ -6,6 +6,38 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
+    // 0. Utility Functions
+    // ==========================================
+
+    /**
+     * Arabic text normalization for fuzzy search.
+     * Normalizes hamza variants, taa marbuta, alef maqsura,
+     * and strips diacritical marks (tashkeel).
+     */
+    function normalizeArabic(text) {
+        if (!text) return '';
+        return text
+            .replace(/[إأآٱ]/g, 'ا')    // Hamza variants → Alef
+            .replace(/ة/g, 'ه')           // Taa Marbuta → Ha
+            .replace(/ى/g, 'ي')           // Alef Maqsura → Ya
+            .replace(/ؤ/g, 'و')           // Hamza on Waw → Waw
+            .replace(/ئ/g, 'ي')           // Hamza on Ya → Ya
+            .replace(/[ًٌٍَُِّْٰٓٔ]/g, '')  // Strip tashkeel/diacritics
+            .replace(/\s+/g, ' ')          // Collapse whitespace
+            .trim()
+            .toLowerCase();
+    }
+
+    /** Debounce utility */
+    function debounce(fn, delay = 300) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    // ==========================================
     // 1. Storage & Preferences Engine
     // ==========================================
     const htmlObj = document.documentElement;
@@ -118,8 +150,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     allNavBtns.forEach(btn => {
-        btn.addEventListener('click', () => switchView(btn.dataset.target));
+        btn.addEventListener('click', () => {
+            if (btn.dataset.target) {
+                switchView(btn.dataset.target);
+                // Close the more drawer if it's open
+                closeMoreDrawer();
+            }
+        });
     });
+
+    // ==========================================
+    // 2b. Mobile "More" Drawer
+    // ==========================================
+    const moreBtn = document.getElementById('btnMoreMenu');
+    const moreDrawer = document.getElementById('moreDrawer');
+    const moreOverlay = document.getElementById('moreDrawerOverlay');
+
+    function openMoreDrawer() {
+        if (!moreDrawer || !moreOverlay) return;
+        moreDrawer.classList.add('active');
+        moreOverlay.classList.add('active');
+    }
+
+    function closeMoreDrawer() {
+        if (!moreDrawer || !moreOverlay) return;
+        moreDrawer.classList.remove('active');
+        moreOverlay.classList.remove('active');
+    }
+
+    if (moreBtn) {
+        moreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (moreDrawer.classList.contains('active')) {
+                closeMoreDrawer();
+            } else {
+                openMoreDrawer();
+            }
+        });
+    }
+
+    if (moreOverlay) {
+        moreOverlay.addEventListener('click', closeMoreDrawer);
+    }
+
+    // Mobile settings shortcut button
+    const btnMobileSettings = document.getElementById('btnMobileSettings');
+    if (btnMobileSettings) {
+        btnMobileSettings.addEventListener('click', () => {
+            switchView('view-settings');
+        });
+    }
 
 
     // ==========================================
@@ -306,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'surah-card glass-card';
             card.id = `surah-card-${idx}`;
+            card.style.setProperty('--card-index', Math.min(idx, 20));
             card.innerHTML = `
                 <div class="surah-number">${s.number}</div>
                 <div class="surah-titles">
@@ -383,7 +464,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerBottom = document.querySelector('.global-player');
     playerBottom.addEventListener('click', (e) => {
         if (e.target.closest('button') || e.target.closest('input') || e.target.closest('.progress-bar-container')) return;
-        if (audioEl.src) {
+        // Don't open full player in radio mode - it's a live stream with no verse data
+        if (window.isRadioMode) return;
+        if (audioEl.src && playingIndex >= 0) {
             fullPlayerOverlay.classList.add('active');
             updateFullPlayerInfo();
             if (!fpCCContainer.dataset.surahId || fpCCContainer.dataset.surahId !== currentSurahs[playingIndex].number.toString()) {
@@ -1323,40 +1406,125 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 10. Radio (Feature 3)
+    // 10. Radio (Feature 3) — Enhanced with MP3Quran API
     // ==========================================
     window.isRadioMode = false;
     let radioData = [];
+    let filteredRadioData = [];
+
+    // Featured / Pinned stations (always shown at top)
+    const featuredStations = [
+        { name: 'إذاعة القرآن الكريم - مصر', url: 'https://stream.radiojar.com/8s5u5tpdtwzuv', category: 'featured', countryCode: 'EG' },
+        { name: 'إذاعة القرآن الكريم - السعودية', url: 'https://stream.radiojar.com/0tpy1h0kxtzuv', category: 'featured', countryCode: 'SA' },
+        { name: 'إذاعة السنة النبوية - السعودية', url: 'https://stream.radiojar.com/4wqre23fytzuv', category: 'featured', countryCode: 'SA' },
+    ];
+
+    // Category mapping for radios from MP3Quran API
+    const sunnaCategoryIds = [109066, 109067, 109073, 10903, 10904, 21114, 21115, 21116, 21117, 109069, 109083, 109076];
+    const specialCategoryIds = [108, 109, 110, 113, 114, 115, 116, 10906, 10907, 109060, 109061];
+
+    function categorizeRadio(radio) {
+        const id = radio.id;
+        if (sunnaCategoryIds.includes(id)) return 'sunnah';
+        if (specialCategoryIds.includes(id)) return 'special';
+        if (id >= 109038 && id <= 109059) return 'translation'; // translations
+        return 'quran';
+    }
 
     async function loadRadio() {
+        const grid = document.getElementById('radioGrid');
+        grid.innerHTML = '<div class="loading-state">جاري تحميل الإذاعات...</div>';
         try {
-            const res = await fetch('https://data-rosy.vercel.app/radio.json');
-            radioData = await res.json();
-            const grid = document.getElementById('radioGrid');
-            grid.innerHTML = '';
+            const res = await fetch('https://www.mp3quran.net/api/v3/radios?language=ar');
+            const data = await res.json();
+            radioData = (data.radios || []).map(r => ({
+                ...r,
+                category: categorizeRadio(r)
+            }));
 
-            const radios = radioData.radios || radioData;
-
-            Array.from(radios).forEach((r, idx) => {
-                const card = document.createElement('div');
-                card.className = 'radio-card glass-card';
-                card.id = `radio-card-${idx}`;
-                card.innerHTML = `
-                    <div class="radio-info">
-                        <div class="radio-title">${r.name || r.title || 'إذاعة القرآن'}</div>
-                    </div>
-                    <button class="radio-btn" aria-label="تشغيل الإذاعة">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                    </button>
-                `;
-                card.querySelector('.radio-btn').addEventListener('click', () => {
-                    playRadioStation(idx, r);
-                });
-                grid.appendChild(card);
+            // Prepend featured stations
+            featuredStations.forEach((fs, i) => {
+                radioData.unshift({ ...fs, id: `featured-${i}`, isFeatured: true });
             });
+
+            filteredRadioData = radioData;
+            renderRadioGrid(filteredRadioData);
+            setupRadioSearch();
         } catch (e) {
-            document.getElementById('radioGrid').innerHTML = '<div class="loading-state text-error">تعذر تحميل الإذاعات.</div>';
+            // Fallback to the old API
+            try {
+                const res2 = await fetch('https://data-rosy.vercel.app/radio.json');
+                const fallback = await res2.json();
+                radioData = (fallback.radios || fallback).map(r => ({ ...r, category: 'quran' }));
+                featuredStations.forEach((fs, i) => {
+                    radioData.unshift({ ...fs, id: `featured-${i}`, isFeatured: true });
+                });
+                filteredRadioData = radioData;
+                renderRadioGrid(filteredRadioData);
+                setupRadioSearch();
+            } catch (e2) {
+                grid.innerHTML = '<div class="loading-state text-error">تعذر تحميل الإذاعات. تحقق من اتصال الإنترنت.</div>';
+            }
         }
+    }
+
+    function renderRadioGrid(radios) {
+        const grid = document.getElementById('radioGrid');
+        grid.innerHTML = '';
+
+        if (radios.length === 0) {
+            grid.innerHTML = '<div class="loading-state">لا توجد نتائج</div>';
+            return;
+        }
+
+        radios.forEach((r, idx) => {
+            const card = document.createElement('div');
+            card.className = `radio-card glass-card ${r.isFeatured ? 'radio-card--featured' : ''}`;
+            card.id = `radio-card-${r.id}`;
+            card.style.setProperty('--card-index', Math.min(idx, 20));
+
+            const icon = r.isFeatured && r.countryCode ? `<span class="radio-country-badge">${r.countryCode}</span>` : (r.isFeatured ? `<svg class="radio-icon-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>` : '');
+            const liveTag = r.isFeatured ? '<span class="radio-live-tag">بث مباشر</span>' : '';
+
+            card.innerHTML = `
+                <div class="radio-info">
+                    ${icon}
+                    <div class="radio-title">${r.name || 'إذاعة القرآن'}</div>
+                    ${liveTag}
+                </div>
+                <button class="radio-btn" aria-label="تشغيل الإذاعة">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </button>
+            `;
+            card.querySelector('.radio-btn').addEventListener('click', () => {
+                playRadioStation(r.id, r);
+            });
+            grid.appendChild(card);
+        });
+    }
+
+    function setupRadioSearch() {
+        const searchEl = document.getElementById('radioSearch');
+        if (!searchEl) return;
+        let debounceTimer;
+
+        searchEl.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const val = normalizeArabic(e.target.value.trim());
+                const activeTab = document.querySelector('[data-radio-cat].active');
+                const cat = activeTab ? activeTab.dataset.radioCat : 'all';
+
+                let filtered = radioData;
+                if (cat !== 'all') {
+                    filtered = filtered.filter(r => r.category === cat || (cat === 'featured' && r.isFeatured));
+                }
+                if (val) {
+                    filtered = filtered.filter(r => normalizeArabic(r.name || '').includes(val));
+                }
+                renderRadioGrid(filtered);
+            }, 250);
+        });
     }
 
     function playRadioStation(idx, station) {
@@ -1377,7 +1545,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audioEl.play().catch(e => console.error("Radio autoplay blocked"));
 
         document.getElementById('nowPlayingTitle').textContent = station.name || station.title || 'إذاعة القرآن';
-        document.getElementById('nowPlayingReciter').textContent = 'بث مباشر 🔴';
+        document.getElementById('nowPlayingReciter').innerHTML = '<span class="live-indicator" style="display:inline-block;width:8px;height:8px;margin-left:6px;"></span> بث مباشر';
 
         const pb = document.getElementById('progressBarContainer');
         if (pb) pb.style.display = 'none';
@@ -1387,6 +1555,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const lb = document.getElementById('playerLiveBadge');
         if (lb) lb.style.display = 'flex';
+
+        // Hide expand hint in radio mode
+        const eh = document.querySelector('.expand-hint');
+        if (eh) eh.style.display = 'none';
 
         updatePlayBtn(true);
     }
@@ -1410,6 +1582,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('nowPlayingTitle').textContent = 'جاهز للاستماع';
         document.getElementById('nowPlayingReciter').textContent = 'اختر سورة للبدء';
+
+        // Show expand hint again
+        const eh = document.querySelector('.expand-hint');
+        if (eh) eh.style.display = 'flex';
     }
 
     // ==========================================
@@ -1437,26 +1613,93 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedView = localStorage.getItem('active_view') || 'view-player';
     switchView(savedView);
 
-    // Arabic normalization helper for better search
-    function normalizeArabic(text) {
-        if (!text) return '';
-        return text
-            // Remove Quranic marks, Tashkeel, and small letters
-            .replace(/[\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E8]/g, '')
-            .replace(/[أإآ]/g, 'ا') // Normalize Alifs
-            .replace(/ة/g, 'ه')     // Normalize Ta Marbuta
-            .replace(/ى/g, 'ي')     // Normalize Alif Maksura
-            .toLowerCase();
+    // Enhanced Surah Search with debouncing + dropdown suggestions
+    const surahSearchInput = document.getElementById('surahSearch');
+    const surahSearchContainer = surahSearchInput?.closest('.search-box');
+    let surahDropdown = null;
+
+    if (surahSearchContainer) {
+        // Create dropdown container
+        surahDropdown = document.createElement('div');
+        surahDropdown.className = 'search-dropdown';
+        surahDropdown.id = 'surahSearchDropdown';
+        surahSearchContainer.style.position = 'relative';
+        surahSearchContainer.appendChild(surahDropdown);
     }
 
-    // Quick focus test for search
-    document.getElementById('surahSearch').addEventListener('input', function (e) {
-        const val = normalizeArabic(e.target.value);
-        document.querySelectorAll('.surah-card').forEach(card => {
-            let nameEl = card.querySelector('.surah-titles');
-            let name = nameEl ? normalizeArabic(nameEl.textContent) : '';
-            // Match against standardized string
-            card.style.display = name.includes(val) ? 'flex' : 'none';
+    const debouncedSurahSearch = debounce(function (val) {
+        const normalizedVal = normalizeArabic(val);
+        const cards = document.querySelectorAll('.surah-card');
+        const matches = [];
+
+        cards.forEach((card, idx) => {
+            const nameEl = card.querySelector('.surah-titles');
+            const name = nameEl ? normalizeArabic(nameEl.textContent) : '';
+            const isMatch = !normalizedVal || name.includes(normalizedVal);
+            card.style.display = isMatch ? 'flex' : 'none';
+            if (isMatch && normalizedVal && matches.length < 8) {
+                const arName = card.querySelector('.surah-name-ar')?.textContent || '';
+                const enName = card.querySelector('.surah-name-en')?.textContent || '';
+                const num = card.querySelector('.surah-number')?.textContent || '';
+                matches.push({ arName, enName, num, idx });
+            }
+        });
+
+        // Show dropdown suggestions
+        if (surahDropdown) {
+            if (normalizedVal && matches.length > 0 && matches.length < 20) {
+                surahDropdown.innerHTML = matches.map(m =>
+                    `<div class="search-dropdown-item" data-idx="${m.idx}">
+                        <span class="search-dropdown-num">${m.num}</span>
+                        <span class="search-dropdown-name">${m.arName}</span>
+                        <span class="search-dropdown-en">${m.enName}</span>
+                    </div>`
+                ).join('');
+                surahDropdown.style.display = 'block';
+
+                // Handle dropdown clicks
+                surahDropdown.querySelectorAll('.search-dropdown-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const idx = parseInt(item.dataset.idx);
+                        playSurah(idx);
+                        surahSearchInput.value = '';
+                        surahDropdown.style.display = 'none';
+                        cards.forEach(c => c.style.display = 'flex');
+                    });
+                });
+            } else {
+                surahDropdown.style.display = 'none';
+            }
+        }
+    }, 200);
+
+    if (surahSearchInput) {
+        surahSearchInput.addEventListener('input', (e) => debouncedSurahSearch(e.target.value));
+        surahSearchInput.addEventListener('focus', (e) => { if (e.target.value) debouncedSurahSearch(e.target.value); });
+        // Close dropdown on click outside
+        document.addEventListener('click', (e) => {
+            if (surahDropdown && !surahSearchContainer.contains(e.target)) {
+                surahDropdown.style.display = 'none';
+            }
+        });
+    }
+
+    // Radio category tab filtering
+    const radioTabs = document.querySelectorAll('[data-radio-cat]');
+    radioTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            radioTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const cat = tab.dataset.radioCat;
+            const searchVal = normalizeArabic(document.getElementById('radioSearch')?.value || '');
+            let filtered = radioData;
+            if (cat !== 'all') {
+                filtered = radioData.filter(r => r.category === cat || (cat === 'featured' && r.isFeatured));
+            }
+            if (searchVal) {
+                filtered = filtered.filter(r => normalizeArabic(r.name || '').includes(searchVal));
+            }
+            renderRadioGrid(filtered);
         });
     });
 
