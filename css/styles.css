@@ -4650,6 +4650,7 @@ input[type=range]::-moz-range-thumb {
     .track-info .text-muted {
         display: block;
         font-size: 0.7rem;
+        display: none;
     }
 
     .player-content {
