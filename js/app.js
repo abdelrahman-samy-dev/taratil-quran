@@ -1263,12 +1263,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const nextPrayerObj = prayersList[nextPrayerIdx];
                     document.getElementById('nextPrayerName').textContent = nextPrayerObj.name;
 
+                    function format12HourTime(time24) {
+                        const [h, m] = time24.split(':').map(Number);
+                        const hr12 = h % 12 || 12;
+                        const ampm = h >= 12 ? 'مساءً' : 'صباحاً';
+                        return hr12.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ' ' + ampm;
+                    }
+
                     prayersList.forEach((p, idx) => {
                         const card = document.createElement('div');
                         card.className = `prayer-card glass-card ${idx === nextPrayerIdx ? 'prayer-card--active' : ''}`;
                         card.innerHTML = `
                         <div class="prayer-card-name">${p.name}</div>
-                        <div class="prayer-card-time">${p.time}</div>
+                        <div class="prayer-card-time">${format12HourTime(p.time)}</div>
                     `;
                         document.getElementById('prayerGrid').appendChild(card);
                     });
@@ -1298,14 +1305,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.geolocation && !localStorage.getItem('prayer_city_manual')) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    fetchPrayerAPI(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=8`);
+                    fetchPrayerAPI(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=5`);
                 },
                 (err) => {
-                    fetchPrayerAPI(`https://api.aladhan.com/v1/timingsByCity?city=${sCity}&country=${sCountry}&method=8`);
+                    fetchPrayerAPI(`https://api.aladhan.com/v1/timingsByCity?city=${sCity}&country=${sCountry}&method=5`);
                 }
             );
         } else {
-            fetchPrayerAPI(`https://api.aladhan.com/v1/timingsByCity?city=${sCity}&country=${sCountry}&method=8`);
+            fetchPrayerAPI(`https://api.aladhan.com/v1/timingsByCity?city=${sCity}&country=${sCountry}&method=5`);
         }
 
         document.getElementById('btnSaveLocation').addEventListener('click', () => {
@@ -1314,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('prayer_city', c);
             localStorage.setItem('prayer_country', cnt);
             localStorage.setItem('prayer_city_manual', 'true'); // bypass GPS
-            fetchPrayerAPI(`https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${cnt}&method=8`);
+            fetchPrayerAPI(`https://api.aladhan.com/v1/timingsByCity?city=${c}&country=${cnt}&method=5`);
         });
     }
 

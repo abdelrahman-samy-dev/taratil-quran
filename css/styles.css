@@ -1759,46 +1759,67 @@ input[type=range]::-moz-range-thumb {
 }
 
 /* Feature 1: Prayer */
-.prayer-hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+.prayer-hero-unified {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--bg-surface) 0%, var(--primary-light) 100%);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
 }
 
-.prayer-date-card,
-.prayer-countdown-card {
-    padding: 1.5rem;
+.prayer-date-info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 1rem;
+}
+
+.prayer-date-hijri {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.prayer-date-hijri,
 .prayer-date-gregorian {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: bold;
+}
+
+.prayer-countdown-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .countdown-label {
     color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .countdown-prayer-name {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 2.2rem;
+    font-weight: 800;
     color: var(--primary);
+    font-family: 'Amiri', serif;
 }
 
 .countdown-timer {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-family: 'Cairo', sans-serif;
     font-weight: 800;
+    color: var(--text-main);
 }
 
 .prayer-grid {
@@ -1832,11 +1853,12 @@ input[type=range]::-moz-range-thumb {
 }
 
 .prayer-card-time {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 800;
     font-family: 'Cairo', sans-serif;
     color: var(--text-main);
     margin-top: 0.5rem;
+    white-space: nowrap;
 }
 
 .prayer-card--active .prayer-card-name {
@@ -1861,6 +1883,12 @@ input[type=range]::-moz-range-thumb {
     flex-direction: column;
     flex: 1;
     min-width: 150px;
+}
+
+@media (max-width: 1024px) {
+    .prayer-input-group {
+        min-width: 100%;
+    }
 }
 
 .prayer-input-group label {
@@ -4418,28 +4446,33 @@ input[type=range]::-moz-range-thumb {
     }
 
     /* Prayer hero responsive */
-    .prayer-hero {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        margin-bottom: 1.25rem;
+    .prayer-hero-unified {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1.5rem;
+        gap: 1.5rem;
     }
 
-    .prayer-date-card,
-    .prayer-countdown-card {
-        padding: 1rem;
+    .prayer-countdown-info {
+        align-items: center;
+    }
+
+    .prayer-date-info {
+        align-items: center;
     }
 
     .prayer-date-hijri,
     .prayer-date-gregorian {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .countdown-timer {
-        font-size: 1.75rem;
+        font-size: 2rem;
     }
 
     .countdown-prayer-name {
-        font-size: 1.3rem;
+        font-size: 1.6rem;
     }
 
     .prayer-grid {
@@ -4456,7 +4489,8 @@ input[type=range]::-moz-range-thumb {
     }
 
     .prayer-card-time {
-        font-size: 1.4rem;
+        font-size: 1.15rem;
+        /* prevent wrapping issue on small screens */
     }
 
     .prayer-location-settings {
