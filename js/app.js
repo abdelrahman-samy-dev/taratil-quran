@@ -1235,13 +1235,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('hijriDate').textContent = d.hijri.date;
                     document.getElementById('gregorianDate').textContent = d.readable;
 
+                    // Strip timezone suffix like "(EET)" from API times
+                    function cleanTime(timeStr) {
+                        return timeStr ? timeStr.replace(/\s*\(.*\)\s*$/, '').trim() : '00:00';
+                    }
+
                     const prayersList = [
-                        { id: 'Fajr', name: 'الفجر', time: t.Fajr },
-                        { id: 'Sunrise', name: 'الشروق', time: t.Sunrise },
-                        { id: 'Dhuhr', name: 'الظهر', time: t.Dhuhr },
-                        { id: 'Asr', name: 'العصر', time: t.Asr },
-                        { id: 'Maghrib', name: 'المغرب', time: t.Maghrib },
-                        { id: 'Isha', name: 'العشاء', time: t.Isha }
+                        { id: 'Fajr', name: 'الفجر', time: cleanTime(t.Fajr) },
+                        { id: 'Sunrise', name: 'الشروق', time: cleanTime(t.Sunrise) },
+                        { id: 'Dhuhr', name: 'الظهر', time: cleanTime(t.Dhuhr) },
+                        { id: 'Asr', name: 'العصر', time: cleanTime(t.Asr) },
+                        { id: 'Maghrib', name: 'المغرب', time: cleanTime(t.Maghrib) },
+                        { id: 'Isha', name: 'العشاء', time: cleanTime(t.Isha) }
                     ];
 
                     document.getElementById('prayerGrid').innerHTML = '';
@@ -1280,19 +1285,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('prayerGrid').appendChild(card);
                     });
 
-                    // Set Up Countdown
+                    // Set Up Countdown — accurate seconds-based calculation
                     if (window.prayerInterval) clearInterval(window.prayerInterval);
                     window.prayerInterval = setInterval(() => {
                         const dNow = new Date();
-                        let [nH, nM] = nextPrayerObj.time.split(':').map(Number);
-                        let targetMinutes = nH * 60 + nM;
-                        let cMinutes = dNow.getHours() * 60 + dNow.getMinutes();
-                        let diff = targetMinutes - cMinutes;
-                        if (diff < 0) diff += 24 * 60; // Next day
+                        const [nH, nM] = nextPrayerObj.time.split(':').map(Number);
+                        // Build target time for today
+                        const target = new Date(dNow);
+                        target.setHours(nH, nM, 0, 0);
+                        // If target already passed, it's tomorrow
+                        if (target <= dNow) target.setDate(target.getDate() + 1);
 
-                        let mins = diff % 60;
-                        let hrs = Math.floor(diff / 60);
-                        let secs = 59 - dNow.getSeconds(); // approximate
+                        let diffSec = Math.max(0, Math.floor((target - dNow) / 1000));
+                        const hrs = Math.floor(diffSec / 3600);
+                        diffSec %= 3600;
+                        const mins = Math.floor(diffSec / 60);
+                        const secs = diffSec % 60;
 
                         document.getElementById('prayerCountdown').textContent = `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                     }, 1000);
