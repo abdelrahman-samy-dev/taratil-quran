@@ -1251,9 +1251,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     document.getElementById('prayerGrid').innerHTML = '';
 
+                    // Use the city's timezone from the API to get the correct "now"
+                    // This fixes the bug where a user's device timezone differs from
+                    // the prayer city's timezone, causing wrong next prayer detection.
+                    const cityTimezone = data.data.meta.timezone; // e.g. "Africa/Cairo"
+
+                    function getCityTime() {
+                        try {
+                            const formatter = new Intl.DateTimeFormat('en-US', {
+                                timeZone: cityTimezone,
+                                hour: 'numeric', minute: 'numeric', second: 'numeric',
+                                hour12: false
+                            });
+                            const parts = formatter.formatToParts(new Date());
+                            const hh = parseInt(parts.find(p => p.type === 'hour').value);
+                            const mm = parseInt(parts.find(p => p.type === 'minute').value);
+                            const ss = parseInt(parts.find(p => p.type === 'second').value);
+                            return { hours: hh, minutes: mm, seconds: ss, totalMinutes: hh * 60 + mm };
+                        } catch (e) {
+                            // Fallback to device time if timezone is invalid
+                            const now = new Date();
+                            return { hours: now.getHours(), minutes: now.getMinutes(), seconds: now.getSeconds(), totalMinutes: now.getHours() * 60 + now.getMinutes() };
+                        }
+                    }
+
                     let nextPrayerIdx = -1;
-                    const now = new Date();
-                    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                    const cityNow = getCityTime();
+                    const currentMinutes = cityNow.totalMinutes;
 
                     for (let i = 0; i < prayersList.length; i++) {
                         const [h, m] = prayersList[i].time.split(':').map(Number);
@@ -1285,24 +1309,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('prayerGrid').appendChild(card);
                     });
 
-                    // Set Up Countdown — accurate seconds-based calculation
+                    // Set Up Countdown — timezone-aware seconds-based calculation
                     if (window.prayerInterval) clearInterval(window.prayerInterval);
                     window.prayerInterval = setInterval(() => {
-                        const dNow = new Date();
+                        const cityTime = getCityTime();
                         const [nH, nM] = nextPrayerObj.time.split(':').map(Number);
-                        // Build target time for today
-                        const target = new Date(dNow);
-                        target.setHours(nH, nM, 0, 0);
-                        // If target already passed, it's tomorrow
-                        if (target <= dNow) target.setDate(target.getDate() + 1);
 
-                        let diffSec = Math.max(0, Math.floor((target - dNow) / 1000));
+                        // Calculate difference in seconds using city timezone
+                        const nowTotalSec = cityTime.hours * 3600 + cityTime.minutes * 60 + cityTime.seconds;
+                        const targetTotalSec = nH * 3600 + nM * 60;
+
+                        let diffSec = targetTotalSec - nowTotalSec;
+                        // If target already passed (next is tomorrow's Fajr), add 24 hours
+                        if (diffSec <= 0) diffSec += 24 * 3600;
+
                         const hrs = Math.floor(diffSec / 3600);
-                        diffSec %= 3600;
-                        const mins = Math.floor(diffSec / 60);
-                        const secs = diffSec % 60;
+                        const remainAfterHrs = diffSec % 3600;
+                        const mins = Math.floor(remainAfterHrs / 60);
+                        const secs = remainAfterHrs % 60;
 
                         document.getElementById('prayerCountdown').textContent = `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                        // Auto-refresh when countdown reaches zero
+                        if (diffSec <= 0) {
+                            clearInterval(window.prayerInterval);
+                            window.prayerLoaded = false;
+                            loadPrayerTimes();
+                        }
                     }, 1000);
                 })
                 .catch(err => {

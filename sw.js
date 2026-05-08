@@ -1,6 +1,6 @@
-const CACHE_NAME = 'taratil-pwa-v8';
+const CACHE_NAME = 'taratil-pwa-v9';
 const MUSHAF_CACHE = 'mushaf-pages-v1';
-const API_CACHE = 'taratil-api-cache-v8';
+const API_CACHE = 'taratil-api-cache-v9';
 const MAX_MUSHAF_PAGES = 160;
 
 const CORE_ASSETS = [
