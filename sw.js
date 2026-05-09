@@ -1,6 +1,6 @@
-const CACHE_NAME = 'taratil-pwa-v10';
+const CACHE_NAME = 'taratil-pwa-v11';
 const MUSHAF_CACHE = 'mushaf-pages-v1';
-const API_CACHE = 'taratil-api-cache-v10';
+const API_CACHE = 'taratil-api-cache-v11';
 const MAX_MUSHAF_PAGES = 160;
 
 const CORE_ASSETS = [
@@ -81,6 +81,10 @@ self.addEventListener('fetch', (event) => {
     if (url.pathname.endsWith('.mp3')) return;
     if (url.hostname.includes('qurango.net')) return;
     if (url.hostname.includes('radiojar.com')) return;
+
+    // ── Skip time-sync APIs (must always hit network for fresh time) ──
+    if (url.hostname.includes('timeapi.io')) return;
+    if (url.hostname.includes('worldtimeapi.org')) return;
 
     // ── Core assets (Cache-first) ─────────────────────────────────
     event.respondWith(
