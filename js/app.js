@@ -1251,12 +1251,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     document.getElementById('prayerGrid').innerHTML = '';
 
-                    // Use the city's timezone from the API to get the correct "now"
-                    // This fixes the bug where a user's device timezone differs from
-                    // the prayer city's timezone, causing wrong next prayer detection.
+                    // ── Server-synced timezone-correct time ──────────────
+                    // Old Android devices (e.g. Android 11) have outdated timezone
+                    // databases that don't know about Egypt's DST. Intl.DateTimeFormat
+                    // uses the same broken DB, so it gives wrong results.
+                    //
+                    // Fix: We fetch the actual current time for the city's timezone
+                    // from a server API, compare it to what the device reports,
+                    // and store the correction offset in seconds. This offset is
+                    // applied every time we calculate "now" in the city timezone.
                     const cityTimezone = data.data.meta.timezone; // e.g. "Africa/Cairo"
 
-                    function getCityTime() {
+                    // Correction offset (in seconds) — positive means device is behind
+                    let _dstCorrectionSec = 0;
+
+                    // Get device's idea of city time (may be wrong on old phones)
+                    function _getDeviceCityTime() {
                         try {
                             const formatter = new Intl.DateTimeFormat('en-US', {
                                 timeZone: cityTimezone,
@@ -1267,13 +1277,115 @@ document.addEventListener('DOMContentLoaded', () => {
                             const hh = parseInt(parts.find(p => p.type === 'hour').value);
                             const mm = parseInt(parts.find(p => p.type === 'minute').value);
                             const ss = parseInt(parts.find(p => p.type === 'second').value);
-                            return { hours: hh, minutes: mm, seconds: ss, totalMinutes: hh * 60 + mm };
+                            return { hours: hh, minutes: mm, seconds: ss };
                         } catch (e) {
-                            // Fallback to device time if timezone is invalid
                             const now = new Date();
-                            return { hours: now.getHours(), minutes: now.getMinutes(), seconds: now.getSeconds(), totalMinutes: now.getHours() * 60 + now.getMinutes() };
+                            return { hours: now.getHours(), minutes: now.getMinutes(), seconds: now.getSeconds() };
                         }
                     }
+
+                    // Corrected city time — applies server-sync offset
+                    function getCityTime() {
+                        const dev = _getDeviceCityTime();
+                        let totalSec = dev.hours * 3600 + dev.minutes * 60 + dev.seconds + _dstCorrectionSec;
+                        // Wrap around midnight
+                        if (totalSec < 0) totalSec += 86400;
+                        if (totalSec >= 86400) totalSec -= 86400;
+                        const hh = Math.floor(totalSec / 3600);
+                        const mm = Math.floor((totalSec % 3600) / 60);
+                        const ss = totalSec % 60;
+                        return { hours: hh, minutes: mm, seconds: ss, totalMinutes: hh * 60 + mm };
+                    }
+
+                    // Try to sync with server time to detect DST mismatch
+                    // We try TimeAPI.io first (more reliable), then WorldTimeAPI as fallback
+                    async function syncWithServerTime() {
+                        const apis = [
+                            {
+                                url: `https://timeapi.io/api/time/current/zone?timeZone=${cityTimezone}`,
+                                parse: (json) => {
+                                    if (json.hour !== undefined) {
+                                        return { hours: json.hour, minutes: json.minute, seconds: json.seconds };
+                                    }
+                                    return null;
+                                }
+                            },
+                            {
+                                url: `https://worldtimeapi.org/api/timezone/${cityTimezone}`,
+                                parse: (json) => {
+                                    // datetime format: "2026-05-09T16:02:57.123456+03:00"
+                                    const match = json.datetime.match(/T(\d{2}):(\d{2}):(\d{2})/);
+                                    if (match) {
+                                        return { hours: parseInt(match[1]), minutes: parseInt(match[2]), seconds: parseInt(match[3]) };
+                                    }
+                                    return null;
+                                }
+                            }
+                        ];
+
+                        for (const api of apis) {
+                            try {
+                                const res = await fetch(api.url, { cache: 'no-store' });
+                                if (!res.ok) continue;
+                                const json = await res.json();
+                                const serverTime = api.parse(json);
+                                if (!serverTime) continue;
+
+                                // Compare with device's Intl time
+                                const devTime = _getDeviceCityTime();
+                                const serverSec = serverTime.hours * 3600 + serverTime.minutes * 60 + serverTime.seconds;
+                                const devSec = devTime.hours * 3600 + devTime.minutes * 60 + devTime.seconds;
+
+                                let diff = serverSec - devSec;
+                                // Normalize to [-12h, +12h] to handle midnight wrap
+                                if (diff > 43200) diff -= 86400;
+                                if (diff < -43200) diff += 86400;
+
+                                // Only apply correction if the difference is significant (> 10 min)
+                                // Small differences are just network latency
+                                if (Math.abs(diff) > 600) {
+                                    // Round to nearest hour (DST offsets are always in whole hours)
+                                    _dstCorrectionSec = Math.round(diff / 3600) * 3600;
+                                    console.log(`[تراتيل] DST correction applied: ${_dstCorrectionSec / 3600} hour(s). Device timezone DB appears outdated.`);
+                                } else {
+                                    console.log('[تراتيل] Device timezone is correct, no DST correction needed.');
+                                }
+                                return; // Success — stop trying APIs
+                            } catch (e) {
+                                console.warn('[تراتيل] Time sync API failed:', api.url, e.message);
+                                continue;
+                            }
+                        }
+                        console.warn('[تراتيل] Could not sync with any time server. Using device time as-is.');
+                    }
+
+                    // Fire-and-forget sync — countdown starts immediately with device time,
+                    // then self-corrects when the server responds (usually < 1 second)
+                    syncWithServerTime().then(() => {
+                        // Re-detect next prayer with corrected time
+                        const correctedNow = getCityTime();
+                        const correctedMinutes = correctedNow.totalMinutes;
+                        let correctedNextIdx = -1;
+                        for (let i = 0; i < prayersList.length; i++) {
+                            const [h, m] = prayersList[i].time.split(':').map(Number);
+                            if (h * 60 + m > correctedMinutes && correctedNextIdx === -1) {
+                                correctedNextIdx = i;
+                            }
+                        }
+                        if (correctedNextIdx === -1) correctedNextIdx = 0;
+
+                        if (correctedNextIdx !== nextPrayerIdx) {
+                            // Next prayer changed after correction — update UI
+                            nextPrayerIdx = correctedNextIdx;
+                            nextPrayerObj = prayersList[nextPrayerIdx];
+                            document.getElementById('nextPrayerName').textContent = nextPrayerObj.name;
+
+                            // Update active card styling
+                            document.querySelectorAll('.prayer-card').forEach((card, idx) => {
+                                card.classList.toggle('prayer-card--active', idx === nextPrayerIdx);
+                            });
+                        }
+                    });
 
                     let nextPrayerIdx = -1;
                     const cityNow = getCityTime();
@@ -1289,7 +1401,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // if all passed, next is Fajr tomorrow
                     if (nextPrayerIdx === -1) nextPrayerIdx = 0;
 
-                    const nextPrayerObj = prayersList[nextPrayerIdx];
+                    let nextPrayerObj = prayersList[nextPrayerIdx];
                     document.getElementById('nextPrayerName').textContent = nextPrayerObj.name;
 
                     function format12HourTime(time24) {
@@ -1315,7 +1427,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const cityTime = getCityTime();
                         const [nH, nM] = nextPrayerObj.time.split(':').map(Number);
 
-                        // Calculate difference in seconds using city timezone
+                        // Calculate difference in seconds using corrected city timezone
                         const nowTotalSec = cityTime.hours * 3600 + cityTime.minutes * 60 + cityTime.seconds;
                         const targetTotalSec = nH * 3600 + nM * 60;
 
