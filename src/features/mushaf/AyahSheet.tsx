@@ -7,7 +7,8 @@ import { fetchJSON } from '../../lib/net';
 import { chapter, parseKey, surahText } from '../../quran/data';
 import { bookmarks } from '../../state/progress';
 import { Icon } from '../../ui/Icon';
-import { Sheet } from '../../ui/Sheet';
+import { navigateAfterSheets, Sheet } from '../../ui/Sheet';
+import { useLocation } from 'preact-iso';
 import { toast } from '../../ui/toast';
 
 const LABELS = ['حفظ', 'تدبر', 'مراجعة', 'عام'];
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export function AyahSheet({ ayahKey, page, onClose }: Props) {
+  const { route } = useLocation();
   const text = useSignal('');
   const tafsir = useSignal<string | null>(null);
   const tafsirFailed = useSignal(false);
@@ -83,8 +85,8 @@ export function AyahSheet({ ayahKey, page, onClose }: Props) {
           <button
             class="ayah-action"
             onClick={() => {
-              if (playingThisSurah) loopAyah(a, 3);
-              else void playSurah(s, { ayah: a }).then(() => loopAyah(a, 3));
+              if (playingThisSurah) loopAyah(a, 3, s);
+              else void playSurah(s, { ayah: a }).then((ok) => ok && loopAyah(a, 3, s));
               onClose();
             }}
           >
@@ -127,9 +129,15 @@ export function AyahSheet({ ayahKey, page, onClose }: Props) {
               <div class="skeleton-line" style={{ width: '70%' }} />
             </div>
           )}
-          <a class="btn btn-ghost btn-sm" href={`/tafsir/${s}?a=${a}`}>
+          <button
+            class="btn btn-ghost btn-sm"
+            onClick={() => {
+              onClose();
+              navigateAfterSheets(() => route(`/tafsir/${s}?a=${a}`));
+            }}
+          >
             تفاسير أخرى للآية
-          </a>
+          </button>
         </section>
       </div>
     </Sheet>

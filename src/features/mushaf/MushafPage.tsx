@@ -1,7 +1,8 @@
 import { useComputed, useSignal, useSignalEffect } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
-import { useRoute } from 'preact-iso';
+import { useLocation, useRoute } from 'preact-iso';
 import { currentAyah, isPlaying, playSurah, toggle, track } from '../../audio/player';
+import { loadRecitations } from '../../audio/reciters';
 import meta from '../../data/quran-meta.json';
 import { arNum } from '../../lib/arabic';
 import { holdWakeLock } from '../../lib/device';
@@ -11,7 +12,7 @@ import { prefs, setPref } from '../../state/prefs';
 import { bookmarks, dayLog, lastRead, markPageRead, werdTarget, todayLog } from '../../state/progress';
 import { Icon } from '../../ui/Icon';
 import { Switch } from '../../ui/kit';
-import { Sheet } from '../../ui/Sheet';
+import { Sheet, sheetOpen } from '../../ui/Sheet';
 import { toast } from '../../ui/toast';
 import { AyahSheet } from './AyahSheet';
 import { IndexSheet } from './IndexSheet';
@@ -36,10 +37,12 @@ function useWide() {
 
 export default function MushafPage() {
   const { params, query } = useRoute();
+  const { route } = useLocation();
   const initial = params.page ? clampPage(Number(params.page)) : lastRead.value.page || 1;
   const page = useSignal(initial);
   const selected = useSignal<string | null>(query.k ?? null);
   const sheetKey = useSignal<string | null>(null);
+  const sheetPage = useSignal(initial);
   const indexOpen = useSignal(false);
   const settingsOpen = useSignal(false);
   const chrome = useSignal(true);
@@ -62,11 +65,21 @@ export default function MushafPage() {
     if (query.k) selected.value = query.k;
   }, [params.page, query.k]);
 
+  // Keep the URL in sync through the router (replace), so its state and the address bar
+  // never disagree. While a sheet owns the top history entry, wait until it closes.
+  const syncUrl = () => {
+    const url = `/mushaf/${page.peek()}`;
+    if (!sheetOpen() && location.pathname !== url) route(url, true);
+  };
+  useEffect(() => {
+    window.addEventListener('sheetsclosed', syncUrl);
+    return () => window.removeEventListener('sheetsclosed', syncUrl);
+  }, []);
+
   // Keep the URL, last-read position and neighbours in sync with the page.
   useSignalEffect(() => {
     const p = page.value;
-    const url = `/mushaf/${p}`;
-    if (location.pathname !== url) history.replaceState(history.state, '', url + location.search.replace(/([?&])k=[^&]*/, '$1').replace(/\?$/, ''));
+    syncUrl();
     const t = setTimeout(() => (lastRead.value = { page: p, at: Date.now() }), 1500);
     const step = spread.value ? 2 : 1;
     const idle = (window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 300))) as (cb: () => void) => number;
@@ -105,6 +118,10 @@ export default function MushafPage() {
   useSignalEffect(() => {
     if (prefs.value.keepAwake) return holdWakeLock();
   });
+  useEffect(() => {
+    const idle = (window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 1200))) as (cb: () => void) => number;
+    idle(() => void loadRecitations().catch(() => {}));
+  }, []);
   useEffect(() => () => document.documentElement.classList.remove('reading-focus'), []);
   useSignalEffect(() => {
     document.documentElement.classList.toggle('reading-focus', !chrome.value);
@@ -213,6 +230,7 @@ export default function MushafPage() {
 
   const onAyah = (key: string, p: number) => {
     selected.value = key;
+    sheetPage.value = p;
     sheetKey.value = key;
     if (p !== page.value && !shown.value.includes(p)) page.value = p;
   };
@@ -238,9 +256,14 @@ export default function MushafPage() {
     }
   };
 
+  // Is the ayah being recited (or paused on) one of the pages on screen?
+  const t0 = track.value;
+  const vp0 = versePages.value;
+  const audioPage = t0?.kind === 'surah' && vp0?.surah === t0.surah && currentAyah.value ? vp0.p[currentAyah.value - 1] : 0;
+  const audioHere = !!audioPage && shown.value.includes(audioPage);
+
   const listenFromPage = () => {
-    const t = track.value;
-    if (t?.kind === 'surah' && versePages.value?.surah === t.surah && versePages.value.p.includes(first)) {
+    if (audioHere) {
       toggle();
       return;
     }
@@ -252,7 +275,7 @@ export default function MushafPage() {
   };
 
   return (
-    <div class={`mushaf tone-${prefs.value.mushafTone}${chrome.value ? '' : ' chrome-off'}`}>
+    <div class={`mushaf mp-tone tone-${prefs.value.mushafTone}${chrome.value ? '' : ' chrome-off'}`}>
       <header class="mushaf-bar">
         <button class="mushaf-title" onClick={() => (indexOpen.value = true)} title="فهرس المصحف" aria-haspopup="dialog">
           <span class="mushaf-surah display">سورة {c.ar}</span>
@@ -263,12 +286,12 @@ export default function MushafPage() {
         </button>
         <div class="mushaf-tools">
           <button
-            class={`icon-btn${isPlaying.value ? ' on' : ''}`}
+            class={`icon-btn${audioHere && isPlaying.value ? ' on' : ''}`}
             onClick={listenFromPage}
-            aria-label={isPlaying.value ? 'إيقاف التلاوة' : 'استمع لهذه الصفحة'}
+            aria-label={audioHere && isPlaying.value ? 'إيقاف التلاوة' : 'استمع لهذه الصفحة'}
             title="استمع"
           >
-            <Icon name={isPlaying.value ? 'pause' : 'headphones'} size={20} />
+            <Icon name={audioHere && isPlaying.value ? 'pause' : 'headphones'} size={20} />
           </button>
           <button
             class={`icon-btn${pageMarked ? ' on' : ''}`}
@@ -349,7 +372,7 @@ export default function MushafPage() {
         </span>
       </footer>
 
-      <AyahSheet ayahKey={sheetKey.value} page={page.value} onClose={() => (sheetKey.value = null)} />
+      <AyahSheet ayahKey={sheetKey.value} page={sheetPage.value} onClose={() => (sheetKey.value = null)} />
       <IndexSheet open={indexOpen.value} onClose={() => (indexOpen.value = false)} onGo={go} page={first} />
 
       <Sheet open={settingsOpen.value} onClose={() => (settingsOpen.value = false)} title="إعدادات القراءة">

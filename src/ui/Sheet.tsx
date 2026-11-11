@@ -16,6 +16,27 @@ interface Props {
 const stack: (() => void)[] = [];
 /** Set when we call history.back() ourselves, so other open sheets ignore that popstate. */
 let selfPop = false;
+let afterClose: (() => void) | null = null;
+
+/** Runs once every sheet is closed and its history entry is gone. */
+function settle() {
+  const run = afterClose;
+  afterClose = null;
+  window.dispatchEvent(new Event('sheetsclosed'));
+  run?.();
+}
+
+/**
+ * Navigate away from inside a sheet: close it first, then run `go` once its history
+ * entry is removed, so Back never lands on an orphaned sheet entry.
+ */
+export function navigateAfterSheets(go: () => void): void {
+  if (!stack.length) return go();
+  afterClose = go;
+}
+
+/** True while any sheet is open. */
+export const sheetOpen = () => stack.length > 0;
 
 /** Accessible modal: focus trap, Esc / back button to close, scroll lock. */
 export function Sheet({ open, onClose, title, children, variant = 'sheet', class: cls }: Props) {
@@ -75,14 +96,20 @@ export function Sheet({ open, onClose, title, children, variant = 'sheet', class
       const i = stack.indexOf(close);
       if (i >= 0) stack.splice(i, 1);
       if (!stack.length) document.documentElement.classList.remove('modal-open');
+      const last = stack.length === 0;
       if (!poppedByUs && history.state?.sheet) {
-        // If the page changed its URL while the sheet was open (e.g. the mushaf moved to
-        // another page), going back would restore the old URL — keep the new one instead.
+        // If the page changed its URL while the sheet was open, going back would restore
+        // the old URL — keep the new one instead.
         if (location.href === openedAt) {
-          selfPop = stack.length > 0;
+          selfPop = !last;
+          if (last) window.addEventListener('popstate', () => setTimeout(settle), { once: true });
           history.back();
+        } else {
+          history.replaceState(null, '', location.href);
+          if (last) setTimeout(settle);
         }
-        else history.replaceState(null, '', location.href);
+      } else if (last) {
+        setTimeout(settle);
       }
       prevFocus?.focus?.({ preventScroll: true });
     };

@@ -1,6 +1,3 @@
-// Must run first: moves v3 data into the v4 store before anything reads it.
-import './state/migrate';
-
 import '@fontsource-variable/cairo/wght.css';
 import '@fontsource/amiri/arabic-400.css';
 import '@fontsource/amiri/arabic-700.css';
@@ -22,6 +19,16 @@ initAchievements();
 // Prayer reminders run app-wide once the user has turned them on.
 if (localStorage.getItem('taratil:prayer:settings')?.includes('"notify":true')) {
   void import('./features/prayer/reminders').then((m) => m.startPrayerReminders());
+}
+
+if ('serviceWorker' in navigator) {
+  // The service worker asks us to open a screen (e.g. a tapped prayer reminder).
+  navigator.serviceWorker.addEventListener('message', (e: MessageEvent) => {
+    if (e.data?.type === 'NAVIGATE' && typeof e.data.url === 'string' && e.data.url.startsWith('/')) {
+      history.pushState(null, '', e.data.url);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }
+  });
 }
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {

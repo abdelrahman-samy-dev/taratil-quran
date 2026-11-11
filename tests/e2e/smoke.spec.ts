@@ -45,3 +45,30 @@ test.describe('core screens', () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe('upgrade from v3', () => {
+  test('keeps the last page, bookmarks, theme and werd of a v3 user', async ({ page }) => {
+    await page.addInitScript(() => {
+      if (sessionStorage.getItem('seeded')) return;
+      sessionStorage.setItem('seeded', '1');
+      localStorage.clear();
+      localStorage.setItem('prefs_theme', 'dark');
+      localStorage.setItem('mushaf_last_page', '250');
+      localStorage.setItem('mushaf_bookmarks', JSON.stringify([{ page: 100, label: 'حفظ', date: '1' }]));
+      localStorage.setItem('mushaf_werd_2026-11-10', JSON.stringify({ goal: 10, pagesRead: ['5', '6'], completed: false }));
+      localStorage.setItem('mushaf_werd_2026-11-09', 'null'); // malformed legacy value must not break anything
+      localStorage.setItem('gami_data', JSON.stringify({ azkarTotal: 120, unlockedBadges: ['azkar_100'] }));
+    });
+    await page.goto('/mushaf');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(page.locator('.mp-page[data-page="250"]').first()).toBeVisible({ timeout: 20_000 });
+    const stored = await page.evaluate(() => ({
+      lastRead: JSON.parse(localStorage.getItem('taratil:lastRead') || '{}').page,
+      marks: JSON.parse(localStorage.getItem('taratil:bookmarks') || '[]').map((b: { page: number }) => b.page),
+      log: Object.keys(JSON.parse(localStorage.getItem('taratil:log') || '{}')),
+      azkar: JSON.parse(localStorage.getItem('taratil:stats') || '{}').azkarTotal,
+      done: !!localStorage.getItem('taratil:migrated:v3'),
+    }));
+    expect(stored).toEqual({ lastRead: 250, marks: [100], log: ['2026-11-10'], azkar: 120, done: true });
+  });
+});

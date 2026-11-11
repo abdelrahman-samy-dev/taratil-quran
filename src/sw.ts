@@ -51,9 +51,12 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   const target = (event.notification.data as { url?: string } | null)?.url ?? '/prayer';
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+    self.clients.matchAll({ type: 'window' }).then(async (clients) => {
       const c = clients[0];
-      return c ? c.focus().then((w) => w.navigate(target)) : self.clients.openWindow(target);
+      if (!c) return self.clients.openWindow(target).then(() => undefined);
+      // Navigate inside the running app (no reload, so a recitation keeps playing).
+      await c.focus();
+      c.postMessage({ type: 'NAVIGATE', url: target });
     }),
   );
 });
@@ -67,11 +70,12 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html'), { deny
 
 const ok = new CacheableResponsePlugin({ statuses: [0, 200] });
 
-// Static Quran data shipped with the app.
+// Static Quran data shipped with the app: instant from cache, refreshed in the
+// background so corrections reach installed apps.
 registerRoute(
   ({ url }) => url.origin === self.location.origin && url.pathname.startsWith('/data/'),
-  new CacheFirst({
-    cacheName: 'taratil-quran-data-v1',
+  new StaleWhileRevalidate({
+    cacheName: 'taratil-quran-data-v2',
     plugins: [new CacheableResponsePlugin({ statuses: [200] }), new ExpirationPlugin({ maxEntries: 1000 })],
   }),
 );
@@ -83,6 +87,12 @@ registerRoute(
     cacheName: 'taratil-mushaf-fonts-v1',
     plugins: [ok, new ExpirationPlugin({ maxEntries: 640, purgeOnQuotaError: true })],
   }),
+);
+
+// The list of recitations that have timings changes over time.
+registerRoute(
+  ({ url }) => url.hostname.endsWith('mp3quran.net') && url.pathname.endsWith('/ayat_timing/reads'),
+  new StaleWhileRevalidate({ cacheName: 'taratil-api-v1', plugins: [ok] }),
 );
 
 // Verse timings never change for a given recitation.

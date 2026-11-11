@@ -1,4 +1,6 @@
 import { effect, signal, type Signal } from '@preact/signals';
+// Runs the one-time v3 → v4 data migration before anything below can read storage.
+import './migrate-v3';
 
 /** All keys live under one namespace so backup/restore and reset are trivial. */
 export const NS = 'taratil:';

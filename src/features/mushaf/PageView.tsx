@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 import { arNum } from '../../lib/arabic';
 import { chapter, mushafPage, type MushafPageData } from '../../quran/data';
 import { fontFamily, isFontReady, loadPageFont } from './fonts';
+import './page.css';
 
 interface Props {
   page: number;

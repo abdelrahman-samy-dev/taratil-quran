@@ -28,26 +28,30 @@ export async function downloadSurah(url: string, title: string): Promise<void> {
     const res = await fetch(url, { mode: 'cors' });
     if (!res.ok || !res.body) throw new Error(String(res.status));
     const total = Number(res.headers.get('content-length')) || 0;
-    const reader = res.body.getReader();
-    const chunks: Uint8Array[] = [];
+    // Stream straight into the cache (long surahs can be 100+ MB): one branch is stored,
+    // the other only counts bytes for the progress ring.
+    const [toCache, toCount] = res.body.tee();
+    const cache = await caches.open(AUDIO_CACHE);
+    const stored = cache.put(
+      url,
+      new Response(toCache, {
+        headers: { 'Content-Type': 'audio/mpeg', ...(total ? { 'Content-Length': String(total) } : {}) },
+      }),
+    );
+    const reader = toCount.getReader();
     let got = 0;
     let lastPaint = 0;
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
-      chunks.push(value);
       got += value.length;
       if (total && Date.now() - lastPaint > 150) {
         lastPaint = Date.now();
         setState(url, got / total);
       }
     }
-    const blob = new Blob(chunks as BlobPart[], { type: 'audio/mpeg' });
-    const cache = await caches.open(AUDIO_CACHE);
-    await cache.put(
-      url,
-      new Response(blob, { headers: { 'Content-Type': 'audio/mpeg', 'Content-Length': String(blob.size) } }),
-    );
+    await stored;
+    const blob = { size: got || total };
     downloads.value = [...downloads.value.filter((d) => d.url !== url), { url, title, size: blob.size, at: Date.now() }];
     setState(url, 'done');
     toast(`تم تحميل ${title}`);

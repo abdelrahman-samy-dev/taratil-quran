@@ -2,6 +2,7 @@ import { useSignal } from '@preact/signals';
 import { useEffect, useRef } from 'preact/hooks';
 import {
   RATES,
+  playSurah,
   ayahLoop,
   changeRecitation,
   currentAyah,
@@ -32,7 +33,11 @@ import { styleLabel } from '../audio/reciters';
 import { downloadState, downloadSurah, removeDownload } from '../audio/offline';
 import { arNum } from '../lib/arabic';
 import { clock } from '../lib/format';
-import { BASMALA, chapter, placeLabel, surahText, type SurahText } from '../quran/data';
+import { chapter, parseKey, placeLabel, surahText, type SurahText } from '../quran/data';
+import { prefs } from '../state/prefs';
+import type { PageView } from '../features/mushaf/PageView';
+
+type PageViewType = typeof PageView;
 import { Icon } from '../ui/Icon';
 import { Sheet } from '../ui/Sheet';
 
@@ -43,25 +48,48 @@ export function FullPlayer() {
   const pickReciter = useSignal(false);
   const sleepMenu = useSignal(false);
   const loopMenu = useSignal<number | null>(null);
-  const userScrolledAt = useRef(0);
-  const listRef = useRef<HTMLDivElement>(null);
+  const viewPage = useSignal(0);
+  const PageViewC = useSignal<null | PageViewType>(null);
+  const userMovedAt = useRef(0);
+  const scroller = useRef<HTMLDivElement>(null);
   const surah = t?.kind === 'surah' ? t.surah : 0;
+
+  // The mushaf page component (and its fonts/styles) loads only when the player opens.
+  useEffect(() => {
+    if (open && !PageViewC.value) void import('../features/mushaf/PageView').then((m) => (PageViewC.value = m.PageView));
+  }, [open]);
 
   useEffect(() => {
     if (!open || !surah) return;
+    let alive = true;
     text.value = null;
+    viewPage.value = chapter(surah).pages[0];
     surahText(surah)
-      .then((d) => (text.value = d))
-      .catch(() => (text.value = null));
+      .then((d) => alive && (text.value = d))
+      .catch(() => alive && (text.value = null));
+    return () => {
+      alive = false;
+    };
   }, [open, surah]);
 
-  // Keep the recited verse in view unless the user is scrolling around.
+  // Follow the recitation: show the page of the ayah being recited, unless the user is browsing.
   const ayah = currentAyah.value;
   useEffect(() => {
-    if (!open || !ayah || Date.now() - userScrolledAt.current < 4000) return;
-    const el = listRef.current?.querySelector<HTMLElement>(`[data-ayah="${ayah}"]`);
-    el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-  }, [ayah, open]);
+    const d = text.value;
+    if (!open || !d || d.id !== surah || !ayah || Date.now() - userMovedAt.current < 8000) return;
+    const p = d.p[ayah - 1];
+    if (p && p !== viewPage.value) viewPage.value = p;
+  }, [ayah, open, text.value]);
+
+  // Keep the highlighted line in view.
+  useEffect(() => {
+    if (!open || Date.now() - userMovedAt.current < 8000) return;
+    const id = requestAnimationFrame(() => {
+      const el = scroller.current?.querySelector<HTMLElement>('.w.play');
+      el?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [ayah, open, viewPage.value, PageViewC.value]);
 
   if (!t || t.kind !== 'surah') return null;
   const c = chapter(t.surah);
@@ -103,42 +131,60 @@ export function FullPlayer() {
           </header>
 
           <div
-            class="fp-verses quran-text"
-            ref={listRef}
-            onWheel={() => (userScrolledAt.current = Date.now())}
-            onTouchMove={() => (userScrolledAt.current = Date.now())}
+            class={`fp-page mp-tone tone-${prefs.value.mushafTone}`}
+            ref={scroller}
+            onWheel={() => (userMovedAt.current = Date.now())}
+            onTouchMove={() => (userMovedAt.current = Date.now())}
           >
-            {!text.value ? (
-              <div class="fp-loading">جارٍ تحميل الآيات…</div>
+            {PageViewC.value && viewPage.value ? (
+              <PageViewC.value
+                key={viewPage.value}
+                page={viewPage.value}
+                playing={ayah ? `${t.surah}:${ayah}` : null}
+                selected={ayahLoop.value ? `${t.surah}:${ayahLoop.value.ayah}` : null}
+                onAyah={(key) => {
+                  const [s, a] = parseKey(key);
+                  userMovedAt.current = 0;
+                  if (s === t.surah) seekToAyah(a);
+                  else void playSurah(s, { ayah: a, recitationId: t.recitation.id });
+                }}
+              />
             ) : (
-              <>
-                {c.bismillah && <p class="fp-basmala">{BASMALA}</p>}
-                {text.value.v.map((v, i) => {
-                  const n = i + 1;
-                  const state = n === ayah ? 'active' : n < ayah ? 'past' : '';
-                  const looping = ayahLoop.value?.ayah === n;
-                  return (
-                    <span
-                      key={n}
-                      data-ayah={n}
-                      class={`fp-verse ${state}${looping ? ' looping' : ''}`}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => {
-                        userScrolledAt.current = 0;
-                        if (timings.value) seekToAyah(n);
-                      }}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        loopMenu.value = n;
-                      }}
-                      onKeyDown={(e) => e.key === 'Enter' && timings.value && seekToAyah(n)}
-                    >
-                      {v} <span class="ayah-num">{arNum(n)}</span>{' '}
-                    </span>
-                  );
-                })}
-              </>
+              <div class="fp-loading">جارٍ تحميل الصفحة…</div>
+            )}
+          </div>
+
+          <div class="fp-pagebar">
+            <button
+              class="icon-btn"
+              aria-label="الصفحة السابقة"
+              disabled={viewPage.value <= c.pages[0]}
+              onClick={() => {
+                userMovedAt.current = Date.now();
+                viewPage.value = Math.max(c.pages[0], viewPage.value - 1);
+              }}
+            >
+              <Icon name="chevronRight" size={20} />
+            </button>
+            <span>
+              صفحة {arNum(viewPage.value)}
+              <small> · من {arNum(c.pages[0])} إلى {arNum(c.pages[1])}</small>
+            </span>
+            <button
+              class="icon-btn"
+              aria-label="الصفحة التالية"
+              disabled={viewPage.value >= c.pages[1]}
+              onClick={() => {
+                userMovedAt.current = Date.now();
+                viewPage.value = Math.min(c.pages[1], viewPage.value + 1);
+              }}
+            >
+              <Icon name="chevronLeft" size={20} />
+            </button>
+            {Date.now() - userMovedAt.current < 8000 && ayah > 0 && (
+              <button class="chip" onClick={() => (userMovedAt.current = 0, text.value && (viewPage.value = text.value.p[ayah - 1]))}>
+                عُد للآية {arNum(ayah)}
+              </button>
             )}
           </div>
 
@@ -290,7 +336,7 @@ export function FullPlayer() {
               key={n}
               class="option"
               onClick={() => {
-                if (loopMenu.value) loopAyah(loopMenu.value, n);
+                if (loopMenu.value) loopAyah(loopMenu.value, n, t.surah);
                 loopMenu.value = null;
               }}
             >

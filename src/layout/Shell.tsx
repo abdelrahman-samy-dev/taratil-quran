@@ -4,7 +4,7 @@ import { useSignal } from '@preact/signals';
 import { useLocation } from 'preact-iso';
 import { track } from '../audio/player';
 import { Icon } from '../ui/Icon';
-import { Sheet } from '../ui/Sheet';
+import { navigateAfterSheets, Sheet } from '../ui/Sheet';
 import { Toaster } from '../ui/toast';
 import { FullPlayer } from './FullPlayer';
 import { MiniPlayer } from './MiniPlayer';
@@ -114,7 +114,7 @@ export function Shell({ children }: { children: ComponentChildren }) {
               class={`more-item${isActive(n.path, path) ? ' active' : ''}`}
               onClick={() => {
                 moreOpen.value = false;
-                route(n.path);
+                navigateAfterSheets(() => route(n.path));
               }}
             >
               <span class="more-icon">

@@ -10,7 +10,7 @@ export const APP_VERSION = '4.0.0';
 
 /** Keys tied to this device (e.g. the list of cached audio files): never exported or overwritten. */
 const DEVICE_ONLY = new Set(['downloads']);
-/** Set by state/migrate.ts; must stay set or v3 leftovers would be imported again. */
+/** Set by lib/migrate-v3.ts; must stay set or v3 leftovers would be imported again. */
 const MIGRATED = 'migrated:v3';
 const KEY_RE = /^[A-Za-z0-9_:.-]{1,120}$/;
 const MAX_KEYS = 1000;

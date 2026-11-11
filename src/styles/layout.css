@@ -803,3 +803,55 @@ html.modal-open .toaster {
     padding-inline-start: var(--sidebar-w);
   }
 }
+
+/* Full player: the real mushaf page follows the recitation */
+.fp-page {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 6px 12px 20px;
+  scroll-behavior: smooth;
+}
+
+.fp-page .mp-page {
+  width: 100%;
+  max-width: 560px;
+  flex: none;
+}
+
+.fp-page .fp-loading {
+  align-self: center;
+}
+
+.fp-pagebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 12px 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+.fp-pagebar small {
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+.fp-pagebar .icon-btn {
+  width: 36px;
+  height: 36px;
+}
+
+@media (max-height: 760px) {
+  .fp-foot {
+    gap: 6px;
+    padding-top: 6px;
+  }
+}

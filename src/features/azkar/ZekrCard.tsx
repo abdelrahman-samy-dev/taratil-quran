@@ -4,6 +4,7 @@ import { arNum, plural } from '../../lib/arabic';
 import { copyText, shareText } from '../../lib/device';
 import { Icon } from '../../ui/Icon';
 import { Ring } from '../../ui/kit';
+import { QuranPassage, passageText } from './QuranPassage';
 import type { Zekr } from './azkar-data';
 
 interface Props {
@@ -26,6 +27,17 @@ export function timesLabel(n: number): string {
 
 /** Ayah numbers inside the texts are stored as Western digits; show Arabic-Indic ones. */
 const displayText = (s: string) => arNum(s);
+
+async function shareBodyAsync(item: Zekr): Promise<string> {
+  if (item.q) {
+    try {
+      return await passageText(item.q, item.pre);
+    } catch {
+      /* offline before the text was cached: fall back to the stored text */
+    }
+  }
+  return shareBody(item);
+}
 
 function shareBody(item: Zekr): string {
   const text = displayText(item.text);
@@ -67,7 +79,11 @@ export const ZekrCard = memo(function ZekrCard({ item, index, count, title, onTa
       onMouseDown={(e) => e.detail > 1 && e.preventDefault()}
     >
       {attribution && item.virtue && <p class="zekr-by">{item.virtue.replace(/\.$/, '')}</p>}
-      <p class="zekr-text">{displayText(item.text)}</p>
+      {item.q ? (
+        <QuranPassage q={item.q} pre={item.pre} fallback={displayText(item.text)} />
+      ) : (
+        <p class="zekr-text">{displayText(item.text)}</p>
+      )}
       {!compact && !attribution && item.virtue && (
         <p class="zekr-virtue">
           <Icon name="star" size={14} />
@@ -98,10 +114,10 @@ export const ZekrCard = memo(function ZekrCard({ item, index, count, title, onTa
               <Icon name="minus" size={18} />
             </button>
           )}
-          <button type="button" class="icon-btn" aria-label="نسخ الذكر" title="نسخ" onClick={() => void copyText(shareBody(item))}>
+          <button type="button" class="icon-btn" aria-label="نسخ الذكر" title="نسخ" onClick={() => void shareBodyAsync(item).then((t) => copyText(t))}>
             <Icon name="copy" size={18} />
           </button>
-          <button type="button" class="icon-btn" aria-label="مشاركة الذكر" title="مشاركة" onClick={() => void shareText(shareBody(item), title)}>
+          <button type="button" class="icon-btn" aria-label="مشاركة الذكر" title="مشاركة" onClick={() => void shareBodyAsync(item).then((t) => shareText(t, title))}>
             <Icon name="share" size={18} />
           </button>
         </span>

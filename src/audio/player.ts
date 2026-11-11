@@ -8,7 +8,7 @@ import { chapter } from '../quran/data';
 import { addListenSeconds, bumpStat } from '../state/progress';
 import { prefs } from '../state/prefs';
 import { toast } from '../ui/toast';
-import { findRecitation, loadRecitations, surahUrl, type Recitation } from './reciters';
+import { findRecitation, loadRecitations, recitations, surahUrl, type Recitation } from './reciters';
 import { estimatedTimings, exactTimings, verseAt, type VerseTimings } from './timing';
 
 export interface SurahTrack {
@@ -67,32 +67,46 @@ let retried = false;
 
 // ── Surahs ────────────────────────────────────────────────────────────────
 
+/** Bumped only when the playing track really changes; guards async timing loads. */
+let trackToken = 0;
+
+/**
+ * Plays a surah. Resolves true when that surah is now the track (false if the
+ * reciter has no recording of it or the list couldn't load).
+ */
 export async function playSurah(
   surah: number,
   opts: { ayah?: number; recitationId?: number; at?: number; autoplay?: boolean } = {},
-): Promise<void> {
+): Promise<boolean> {
   const token = ++loadToken;
-  status.value = 'loading';
-  errorText.value = '';
-  try {
-    await loadRecitations();
-  } catch {
-    if (token !== loadToken) return;
-    status.value = 'error';
-    errorText.value = 'تعذر تحميل قائمة القراء. تأكد من الاتصال بالإنترنت.';
-    return;
+  // Keep audio.play() inside the user's tap when we can (iOS): only wait for the
+  // reciter list when it isn't loaded yet.
+  if (!recitations.value.length) {
+    const prev = status.value;
+    status.value = 'loading';
+    try {
+      await loadRecitations();
+    } catch {
+      if (token !== loadToken) return false;
+      status.value = 'error';
+      errorText.value = 'تعذر تحميل قائمة القراء. تأكد من الاتصال بالإنترنت.';
+      return false;
+    }
+    if (token !== loadToken) return false;
+    status.value = prev;
   }
-  if (token !== loadToken) return;
   const rec = findRecitation(opts.recitationId ?? prefs.value.reciter) ?? findRecitation(118);
   if (!rec) {
     status.value = 'error';
-    return;
+    return false;
   }
   if (!rec.surahs.has(surah)) {
-    status.value = track.value ? (audio.paused ? 'paused' : 'playing') : 'idle';
     toast(`${rec.name} لم يسجّل سورة ${chapter(surah).ar} في هذه الرواية`);
-    return;
+    return false;
   }
+  const tt = ++trackToken;
+  status.value = 'loading';
+  errorText.value = '';
   const url = surahUrl(rec, surah);
   retried = false;
   batch(() => {
@@ -107,23 +121,24 @@ export async function playSurah(
   audio.src = url;
   audio.playbackRate = rate.value;
   updateMediaSession();
-  void loadTimings(rec, surah, token, opts.ayah);
+  void loadTimings(rec, surah, tt, opts.ayah);
   if (opts.autoplay === false) {
     status.value = 'paused';
     audio.load();
-    return;
+    return true;
   }
   await startPlayback();
+  return true;
 }
 
 async function loadTimings(rec: Recitation, surah: number, token: number, startAyah?: number) {
   let t = rec.timed ? await exactTimings(rec.id, surah) : null;
-  if (token !== loadToken) return;
+  if (token !== trackToken) return;
   if (!t) {
     const dur = await waitForDuration();
-    if (token !== loadToken || !dur) return;
+    if (token !== trackToken || !dur) return;
     t = await estimatedTimings(surah, dur);
-    if (token !== loadToken) return;
+    if (token !== trackToken) return;
   }
   timings.value = t;
   if (startAyah && startAyah > 1) seekToAyah(startAyah);
@@ -161,9 +176,10 @@ export function seekToAyah(ayah: number): void {
   seek(t.starts[ayah - 1]);
 }
 
-/** Repeat one ayah `times` times (Infinity = until stopped). */
-export function loopAyah(ayah: number, times: number): void {
-  if (track.value?.kind !== 'surah') return;
+/** Repeat one ayah of `surah` `times` times (Infinity = until stopped). */
+export function loopAyah(ayah: number, times: number, surah?: number): void {
+  const t = track.value;
+  if (t?.kind !== 'surah' || (surah != null && t.surah !== surah)) return;
   repeat.value = 'ayah';
   ayahLoop.value = { ayah, left: times, total: times };
   seekToAyah(ayah);
@@ -200,6 +216,7 @@ let radioTimer: ReturnType<typeof setTimeout> | undefined;
 
 export function playRadio(station: RadioStation): void {
   const token = ++loadToken;
+  ++trackToken;
   batch(() => {
     track.value = { kind: 'radio', ...station };
     timings.value = null;
@@ -263,6 +280,7 @@ export function pause(): void {
 
 export function stop(): void {
   ++loadToken;
+  ++trackToken;
   audio.pause();
   audio.removeAttribute('src');
   audio.load();
@@ -355,12 +373,27 @@ function saveSession() {
   lastSession.value = { surah: t.surah, recitation: t.recitation.id, time: audio.currentTime, at: Date.now() };
 }
 
+// 'timeupdate' fires only ~4×/s; tick faster while playing so the verse highlight is crisp.
+let ticker: ReturnType<typeof setInterval> | undefined;
+function startTicker() {
+  clearInterval(ticker);
+  ticker = setInterval(() => {
+    if (!audio.paused) time.value = audio.currentTime;
+  }, 100);
+}
+function stopTicker() {
+  clearInterval(ticker);
+  ticker = undefined;
+}
+
 if (typeof window !== 'undefined') {
   audio.addEventListener('playing', () => {
     status.value = 'playing';
     lastTick = audio.currentTime;
+    if (track.value?.kind === 'surah') startTicker();
   });
   audio.addEventListener('pause', () => {
+    stopTicker();
     if (status.value !== 'error' && track.value) status.value = 'paused';
     flushListen();
     saveSession();
@@ -420,12 +453,12 @@ if (typeof window !== 'undefined') {
     if (t?.kind !== 'surah') return;
     bumpStat('surahsListened');
     lastSession.value = null;
-    if (repeat.value === 'surah') {
-      audio.currentTime = 0;
-      void startPlayback();
-    } else if (sleepEndOfSurah.value) {
+    if (sleepEndOfSurah.value) {
       sleepEndOfSurah.value = false;
       status.value = 'paused';
+    } else if (repeat.value === 'surah') {
+      audio.currentTime = 0;
+      void startPlayback();
     } else if (prefs.value.autoplay && t.surah < 114) {
       next();
     } else {

@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach } from 'vitest';
 import { arNum, normalizeArabic, parseArNum, stripDiacritics } from '../../src/lib/arabic';
 import { addDays, dayKey, read, write, keys, NS } from '../../src/lib/storage';
-import { verseAt, type VerseTimings } from '../../src/audio/timing';
+import { alignTimings, verseAt, type VerseTimings } from '../../src/audio/timing';
 import { chapterAtPage, chapters, juzAtPage, JUZ_PAGES } from '../../src/quran/data';
 
 describe('arabic helpers', () => {
@@ -54,6 +54,31 @@ describe('verse timing lookup', () => {
     expect(verseAt(t, 9)).toBe(1);
     expect(verseAt(t, 14.2)).toBe(3);
     expect(verseAt(t, 999)).toBe(3);
+  });
+});
+
+describe('aligning mp3quran timing rows to Hafs verses', () => {
+  const rows = (from: number, to: number) =>
+    Array.from({ length: to - from + 1 }, (_, i) => ({ ayah: from + i, start_time: i * 1000, end_time: i * 1000 + 900 }));
+
+  it('keeps clean 1..n numbering', () => {
+    expect(alignTimings(rows(1, 7), 7)?.starts).toEqual([0, 1, 2, 3, 4, 5, 6]);
+  });
+
+  it('drops an istiadha lead-in row numbered 0', () => {
+    expect(alignTimings(rows(0, 7), 7)?.starts).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+
+  it('treats 0..n-1 numbering as shifted by one (Al-Fatiha for some reciters)', () => {
+    const t = alignTimings(rows(0, 6), 7)!;
+    expect(t.starts).toHaveLength(7);
+    expect(t.starts[0]).toBe(0); // verse 1 starts with the first row
+    expect(verseAt(t, 6.5)).toBe(6); // last verse
+  });
+
+  it('refuses other verse counts (other riwayat)', () => {
+    expect(alignTimings(rows(1, 285), 286)).toBeNull();
+    expect(alignTimings(rows(1, 130), 129)).toBeNull();
   });
 });
 
