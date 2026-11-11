@@ -14,6 +14,8 @@ interface Props {
 }
 
 const stack: (() => void)[] = [];
+/** Set when we call history.back() ourselves, so other open sheets ignore that popstate. */
+let selfPop = false;
 
 /** Accessible modal: focus trap, Esc / back button to close, scroll lock. */
 export function Sheet({ open, onClose, title, children, variant = 'sheet', class: cls }: Props) {
@@ -28,9 +30,15 @@ export function Sheet({ open, onClose, title, children, variant = 'sheet', class
     stack.push(close);
     document.documentElement.classList.add('modal-open');
     // Let the hardware back button close the sheet instead of leaving the page.
-    history.pushState({ sheet: true }, '');
+    const openedAt = location.href;
+    history.pushState({ ...(history.state ?? {}), sheet: true }, '');
     let poppedByUs = false;
     const onPop = () => {
+      if (selfPop) {
+        selfPop = false;
+        return;
+      }
+      if (stack[stack.length - 1] !== close) return; // only the top sheet reacts to Back
       poppedByUs = true;
       close();
     };
@@ -67,7 +75,15 @@ export function Sheet({ open, onClose, title, children, variant = 'sheet', class
       const i = stack.indexOf(close);
       if (i >= 0) stack.splice(i, 1);
       if (!stack.length) document.documentElement.classList.remove('modal-open');
-      if (!poppedByUs && history.state?.sheet) history.back();
+      if (!poppedByUs && history.state?.sheet) {
+        // If the page changed its URL while the sheet was open (e.g. the mushaf moved to
+        // another page), going back would restore the old URL — keep the new one instead.
+        if (location.href === openedAt) {
+          selfPop = stack.length > 0;
+          history.back();
+        }
+        else history.replaceState(null, '', location.href);
+      }
       prevFocus?.focus?.({ preventScroll: true });
     };
   }, [open]);

@@ -22,7 +22,8 @@
     "noEmit": true,
     "types": [
       "vite/client",
-      "vite-plugin-pwa/client"
+      "vite-plugin-pwa/client",
+      "node"
     ],
     "paths": {
       "react": [

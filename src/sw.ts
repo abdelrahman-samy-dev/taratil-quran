@@ -46,6 +46,18 @@ self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') void self.skipWaiting();
 });
 
+// Tapping a prayer reminder opens the prayer screen.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const target = (event.notification.data as { url?: string } | null)?.url ?? '/prayer';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      const c = clients[0];
+      return c ? c.focus().then((w) => w.navigate(target)) : self.clients.openWindow(target);
+    }),
+  );
+});
+
 clientsClaim();
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
@@ -114,7 +126,8 @@ registerRoute(
 
 // Recitations the user downloaded: serve from cache (with Range for seeking); otherwise stream.
 registerRoute(
-  ({ url, request }) => request.destination === 'audio' || /\.mp3$/i.test(url.pathname),
+  // Only recitation files; live radio streams bypass the worker entirely.
+  ({ url }) => url.hostname.endsWith('mp3quran.net') && /\.mp3$/i.test(url.pathname),
   async ({ request }) => {
     const cache = await caches.open(AUDIO_CACHE);
     const hit = await cache.match(request.url);

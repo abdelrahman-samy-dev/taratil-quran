@@ -11,10 +11,18 @@ import './styles/components.css';
 
 import { render } from 'preact';
 import { App } from './app';
+import { initAchievements } from './features/werd/achievements';
 import { updateReady } from './layout/UpdateBanner';
 import './state/prefs';
 
 render(<App />, document.getElementById('app')!);
+
+initAchievements();
+
+// Prayer reminders run app-wide once the user has turned them on.
+if (localStorage.getItem('taratil:prayer:settings')?.includes('"notify":true')) {
+  void import('./features/prayer/reminders').then((m) => m.startPrayerReminders());
+}
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   void import('workbox-window').then(({ Workbox }) => {

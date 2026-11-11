@@ -350,6 +350,10 @@
   font-size: 1rem;
 }
 
+.search-field input:focus-visible {
+  box-shadow: none;
+}
+
 .search-field input::-webkit-search-cancel-button {
   display: none;
 }

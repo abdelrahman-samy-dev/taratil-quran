@@ -1,0 +1,107 @@
+/* ── Next-prayer widget (Home) ───────────────────────────────────────────── */
+.npw {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 12px 14px;
+  color: inherit;
+  background: linear-gradient(135deg, var(--primary-soft), transparent 70%), var(--surface);
+  border-color: color-mix(in srgb, var(--primary) 25%, var(--border));
+  transition: border-color var(--fast);
+}
+
+.npw:hover {
+  border-color: var(--primary);
+}
+
+.npw-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.npw-main {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.npw-kicker {
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.npw-line {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 10px;
+}
+
+.npw-name {
+  font-family: var(--font-display);
+  font-size: calc(1.5rem * var(--font-scale));
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.npw-time {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.npw-time small {
+  margin-inline-start: 3px;
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+.npw-count {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.npw-count-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.npw-count-value {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+[data-theme='dark'] .npw-count-value,
+[data-theme='amoled'] .npw-count-value {
+  color: var(--primary);
+}
+
+.npw-chev {
+  flex: none;
+  color: var(--text-3);
+}
+
+@media (max-width: 360px) {
+  .npw-chev {
+    display: none;
+  }
+}
