@@ -516,3 +516,7 @@ export function resumeLast(): void {
   if (!s) return;
   void playSurah(s.surah, { recitationId: s.recitation, at: Math.max(0, s.time - 2) });
 }
+
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as unknown as Record<string, unknown>).__player = { audio, time, timings, currentAyah, track, status };
+}

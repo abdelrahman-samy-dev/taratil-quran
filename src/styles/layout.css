@@ -608,21 +608,14 @@
   background: var(--verse-hl-strong);
 }
 
+/* The KFGQPC Hafs font draws Arabic-Indic digits as ornamented ayah markers. */
 .ayah-num {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.55em;
-  height: 1.55em;
-  padding: 0 0.2em;
-  margin: 0 0.1em;
-  font-family: var(--font-ui);
-  font-size: 0.5em;
-  font-weight: 800;
+  font-family: var(--font-quran);
+  font-size: 0.95em;
+  font-weight: 400;
   color: var(--accent);
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  vertical-align: middle;
-  line-height: 1;
+  margin-inline: 0.12em;
+  white-space: nowrap;
 }
 
 .fp-foot {
@@ -679,6 +672,8 @@
 }
 
 .fp-time {
+  direction: ltr;
+  unicode-bidi: isolate;
   font-size: 0.8rem;
   color: var(--text-3);
   min-width: 3.2em;

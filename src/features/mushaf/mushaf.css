@@ -1,0 +1,633 @@
+/* ── Mushaf reader ─────────────────────────────────────────────────────── */
+.mushaf {
+  --pg: var(--paper);
+  --ink: var(--paper-ink);
+  --frame: var(--paper-frame);
+  --marker: #9a6b12;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--bottombar-h) - var(--safe-b) - 16px);
+}
+
+.mushaf.tone-white {
+  --pg: var(--surface);
+  --ink: var(--text);
+  --frame: var(--border-strong);
+}
+
+.mushaf.tone-sepia {
+  --pg: #f3e6c9;
+  --ink: #33261a;
+  --frame: #c4a771;
+}
+
+[data-theme='dark'] .mushaf,
+[data-theme='amoled'] .mushaf {
+  --marker: #d9b25c;
+}
+
+[data-theme='dark'] .mushaf.tone-sepia,
+[data-theme='amoled'] .mushaf.tone-sepia {
+  --pg: #1c1610;
+  --ink: #ead9b8;
+  --frame: #6a5634;
+}
+
+/* Phones: the reader owns the screen; the app top bar steps aside. */
+@media (max-width: 1023px) {
+  .app.immersive .topbar {
+    display: none;
+  }
+
+  .app.immersive .main {
+    padding: 0 0 calc(var(--bottombar-h) + var(--safe-b) + 8px);
+  }
+
+  .app.immersive.has-player .main {
+    padding-bottom: calc(var(--bottombar-h) + var(--mini-h) + var(--safe-b) + 16px);
+  }
+
+  html.reading-focus .bottombar,
+  html.reading-focus .mini-player {
+    transform: translateY(calc(100% + 24px));
+  }
+
+  html.reading-focus .app.immersive .main {
+    padding-bottom: 12px;
+  }
+
+  .bottombar,
+  .mini-player {
+    transition: transform var(--med) var(--ease);
+  }
+}
+
+.mushaf-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: calc(6px + var(--safe-t)) 8px 6px 4px;
+  background: var(--glass);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid var(--border);
+  transition:
+    transform var(--med) var(--ease),
+    opacity var(--med);
+}
+
+@media (min-width: 1024px) {
+  .mushaf-bar {
+    top: -28px;
+    margin: -28px -36px 0;
+    padding: 10px 36px;
+  }
+}
+
+.mushaf-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 4px 10px;
+  border-radius: var(--r-md);
+  text-align: start;
+}
+
+.mushaf-title:hover {
+  background: var(--surface-2);
+}
+
+.mushaf-surah {
+  font-size: 1.35rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mushaf-meta {
+  font-size: 0.78rem;
+  color: var(--text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mushaf-tools {
+  display: flex;
+  gap: 2px;
+}
+
+.mushaf.chrome-off .mushaf-bar {
+  transform: translateY(-110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mushaf.chrome-off .mushaf-foot {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Stage */
+.mushaf-stage-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px 6px 4px;
+}
+
+.mushaf-stage {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  max-width: 600px;
+  touch-action: pan-y pinch-zoom;
+  transition: transform 0.18s var(--ease);
+  filter: brightness(calc(1 - var(--dim, 0)));
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mushaf-stage.spread {
+  max-width: 1120px;
+}
+
+.mushaf-stage.turn-next .mp-page {
+  animation: turnNext 0.32s var(--ease);
+}
+
+.mushaf-stage.turn-prev .mp-page {
+  animation: turnPrev 0.32s var(--ease);
+}
+
+@keyframes turnNext {
+  from {
+    transform: translateX(-28px);
+    opacity: 0.2;
+  }
+}
+
+@keyframes turnPrev {
+  from {
+    transform: translateX(28px);
+    opacity: 0.2;
+  }
+}
+
+.mushaf-nav {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .mushaf-nav {
+    display: grid;
+    place-items: center;
+    position: sticky;
+    top: 45%;
+    flex: none;
+    width: 44px;
+    height: 88px;
+    margin-top: 30vh;
+    border-radius: var(--r-md);
+    color: var(--text-3);
+    transition:
+      background var(--fast),
+      color var(--fast);
+  }
+
+  .mushaf-nav:hover:not(:disabled) {
+    background: var(--surface-2);
+    color: var(--primary);
+  }
+}
+
+/* Page */
+.mp-page {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  background: var(--pg);
+  color: var(--ink);
+  border-radius: var(--r-md);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 10px 30px -14px rgba(60, 40, 10, 0.35);
+  padding: 10px clamp(10px, 3.4vw, 22px) 8px;
+  border: 1px solid color-mix(in srgb, var(--frame) 45%, transparent);
+}
+
+.mp-page.mp-right {
+  border-start-end-radius: 4px;
+  border-end-end-radius: 4px;
+  box-shadow:
+    inset 14px 0 18px -16px rgba(60, 40, 10, 0.4),
+    0 10px 30px -14px rgba(60, 40, 10, 0.35);
+}
+
+.mp-page.mp-left {
+  border-start-start-radius: 4px;
+  border-end-start-radius: 4px;
+  box-shadow:
+    inset -14px 0 18px -16px rgba(60, 40, 10, 0.4),
+    0 10px 30px -14px rgba(60, 40, 10, 0.35);
+}
+
+[data-theme='amoled'] .mp-page {
+  box-shadow: none;
+}
+
+.mp-page-head,
+.mp-page-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-family: var(--font-display);
+  color: color-mix(in srgb, var(--ink) 62%, transparent);
+  min-height: 1.6em;
+  padding: 0 4px;
+}
+
+.mp-page-foot {
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.mp-page-num {
+  min-width: 2.4em;
+  text-align: center;
+  padding: 0 10px;
+  border-top: 1px solid color-mix(in srgb, var(--frame) 70%, transparent);
+}
+
+.mp-lines {
+  --fs: 22px;
+  font-size: var(--fs);
+  direction: rtl;
+  padding-inline: 0;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.ln {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--fs) * 1.86);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.ln-a.j {
+  justify-content: space-between;
+}
+
+.mp-lines.measuring .ln-a {
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+.w {
+  flex: none;
+  cursor: pointer;
+  border-radius: 0.18em;
+  padding: 0.12em 0.01em;
+  transition:
+    background-color 0.25s,
+    color 0.25s;
+}
+
+.w.end {
+  color: var(--marker);
+}
+
+@media (hover: hover) {
+  .w:hover {
+    background: color-mix(in srgb, var(--primary) 9%, transparent);
+  }
+}
+
+.w.play {
+  background: color-mix(in srgb, var(--primary) 16%, transparent);
+}
+
+.w.sel {
+  background: var(--verse-hl-strong);
+}
+
+.ln-s {
+  height: calc(var(--fs) * 1.86);
+}
+
+.surah-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 82%;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.82em;
+  border: 1.5px solid var(--frame);
+  outline: 1px solid color-mix(in srgb, var(--frame) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--frame) 14%, transparent);
+  color: var(--ink);
+}
+
+.ln-b {
+  font-family: var(--font-quran);
+  font-size: 0.86em;
+}
+
+.mp-page.opening .mp-lines {
+  padding-block: 8%;
+}
+
+.mp-page.opening .ln {
+  height: calc(var(--fs) * 2.1);
+}
+
+.mp-skeleton {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 14px;
+  padding: 18px 0;
+  min-height: min(140vw, 760px);
+}
+
+.mp-skeleton .skeleton-line {
+  height: 16px;
+  opacity: 0.7;
+}
+
+.mp-failed {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+  text-align: center;
+  font-family: var(--font-ui);
+  color: var(--text-3);
+  padding: 20px;
+}
+
+/* Footer */
+.mushaf-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 4px;
+  max-width: 1120px;
+  width: 100%;
+  margin: 0 auto;
+  transition: opacity var(--med);
+}
+
+.mushaf-werd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.mushaf-werd .icon {
+  color: var(--primary);
+}
+
+.mushaf-werd-bar {
+  width: 54px;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.mushaf-werd-bar > div {
+  height: 100%;
+  background: var(--primary);
+}
+
+.mushaf-scrub {
+  flex: 1;
+}
+
+.mushaf-pageno {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .mushaf-werd span {
+    display: none;
+  }
+}
+
+/* Ayah sheet */
+.ayah-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ayah-sheet-text {
+  text-align: center;
+  font-size: calc(1.5rem * var(--quran-scale));
+  line-height: 2.1;
+  padding: 6px 4px;
+  max-height: 34vh;
+  overflow-y: auto;
+}
+
+.ayah-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.ayah-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+.ayah-action .icon {
+  color: var(--primary);
+}
+
+.ayah-action:hover {
+  background: var(--primary-soft);
+}
+
+.ayah-marks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ayah-marks-icon {
+  color: var(--accent-bright);
+}
+
+.ayah-tafsir {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.ayah-tafsir h3 {
+  font-size: 0.9rem;
+  color: var(--primary);
+}
+
+.ayah-tafsir p {
+  line-height: 1.9;
+}
+
+.ayah-tafsir .skeleton-block {
+  width: 100%;
+}
+
+/* Index sheet */
+.ix-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ix-jump {
+  display: flex;
+  gap: 6px;
+}
+
+.ix-jump .input {
+  width: 110px;
+  min-height: 36px;
+}
+
+.ix-search {
+  margin-bottom: 8px;
+  min-height: 42px;
+}
+
+.ix-page {
+  margin-inline-start: auto;
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-weight: 700;
+}
+
+.ix-juz-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  text-align: start;
+}
+
+.ix-juz-item:hover {
+  background: var(--surface-2);
+}
+
+.ix-juz-item.selected {
+  background: var(--primary-soft);
+}
+
+.ix-juz-num {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.ix-empty {
+  padding: 28px 12px;
+}
+
+/* Reading settings */
+.setting-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tone-picker {
+  display: flex;
+  gap: 10px;
+}
+
+.tone-swatch {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--r-md);
+  border: 2px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tone-swatch span {
+  width: 100%;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.tone-swatch.tone-paper span {
+  background: #fdfaf2;
+}
+
+.tone-swatch.tone-white span {
+  background: #ffffff;
+}
+
+.tone-swatch.tone-sepia span {
+  background: #f3e6c9;
+}
+
+.tone-swatch.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}

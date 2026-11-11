@@ -23,8 +23,9 @@ const P: Record<string, string> = {
   grid: 'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z',
   play: 'M7 4.5v15a1 1 0 0 0 1.5.9l12-7.5a1 1 0 0 0 0-1.8l-12-7.5A1 1 0 0 0 7 4.5z',
   pause: 'M7 4h3v16H7zM14 4h3v16h-3z',
-  next: 'M19 20 9 12l10-8zM5 19V5',
-  prev: 'M5 4l10 8-10 8zM19 5v14',
+  // RTL: "next" points left, "prev" points right.
+  next: 'M19 4v16L8 12zM5 4h2.6v16H5z',
+  prev: 'M5 4v16l11-8zM16.4 4H19v16h-2.6z',
   repeat: 'M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3',
   repeatOne: 'M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3M11 10h1v4',
   timer: 'M10 2h4M12 14l3-3M12 6a8 8 0 1 0 0 16 8 8 0 0 0 0-16',

@@ -10,7 +10,7 @@
  *
  * Outputs
  *   src/data/chapters.json            114 surahs metadata (bundled)
- *   public/data/quran/text/{n}.json   { v: [uthmani text per ayah], p: [page per ayah], j: [juz per ayah] }
+ *   public/data/quran/text/{n}.json   { v: [QPC Hafs uthmani text per ayah], p: [page per ayah], j: [juz per ayah] }
  *   public/data/quran/search.json     [[surah, ayah, imlaei text]] for full-text search
  *   src/data/quran-meta.json          juz / hizb-quarter / sajdah / page index (bundled)
  *   public/data/mushaf/{p}.json       QCF v2 line layout for page p (1..604)
@@ -61,11 +61,14 @@ async function save(rel, data, base = OUT) {
 const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 
 // ── Chapters ──────────────────────────────────────────────────────────────
+// Common printed spellings (the API drops some hamzas).
+const NAME_FIX = { 14: 'إبراهيم', 34: 'سبأ', 76: 'الإنسان', 78: 'النبأ', 82: 'الانفطار', 84: 'الانشقاق' };
+
 async function buildChapters() {
   const { chapters } = await get(`${API}/chapters?language=ar`);
   const out = chapters.map((c) => ({
     id: c.id,
-    ar: c.name_arabic,
+    ar: NAME_FIX[c.id] ?? c.name_arabic,
     en: c.name_simple,
     place: c.revelation_place === 'madinah' ? 'madinah' : 'makkah',
     order: c.revelation_order,
@@ -178,10 +181,11 @@ async function buildText(chapters, verseInfo) {
   const search = [];
   await pool(chapters, 6, async (c) => {
     const [u, im] = await Promise.all([
-      get(`${API}/quran/verses/uthmani?chapter_number=${c.id}`),
+      get(`${API}/quran/verses/qpc_hafs?chapter_number=${c.id}`),
       get(`${API}/quran/verses/imlaei?chapter_number=${c.id}`),
     ]);
-    const v = u.verses.map((x) => x.text_uthmani);
+    // QPC Hafs text matches the KFGQPC Uthmanic Hafs font we ship; drop the trailing ayah number.
+    const v = u.verses.map((x) => x.text_qpc_hafs.replace(/[\s ]*[٠-٩]+\s*$/, '').trim());
     const p = u.verses.map((x) => verseInfo.get(x.verse_key)?.page ?? 0);
     const j = u.verses.map((x) => verseInfo.get(x.verse_key)?.juz ?? 0);
     await save(`quran/text/${c.id}.json`, { id: c.id, v, p, j });

@@ -21,14 +21,18 @@ export function chapter(id: number): Chapter {
 
 export const placeLabel = (c: Chapter) => (c.place === 'madinah' ? 'مدنية' : 'مكية');
 
-/** Surah whose range contains `page` (the last one that starts on or before it). */
+/** Surah of the first verse on `page` (the first surah whose page range contains it). */
 export function chapterAtPage(page: number): Chapter {
-  let found = chapters[0];
-  for (const c of chapters) {
-    if (c.pages[0] <= page) found = c;
-    else break;
-  }
-  return found;
+  return chapters.find((c) => c.pages[0] <= page && c.pages[1] >= page) ?? chapters[113];
+}
+
+/** First page of each juz (1..30). */
+export const JUZ_PAGES = [1,22,42,62,82,102,121,142,162,182,201,222,242,262,282,302,322,342,362,382,402,422,442,462,482,502,522,542,562,582];
+
+export function juzAtPage(page: number): number {
+  let j = 1;
+  for (let i = 0; i < JUZ_PAGES.length; i++) if (JUZ_PAGES[i] <= page) j = i + 1;
+  return j;
 }
 
 export interface SurahText {
@@ -66,4 +70,4 @@ export function parseKey(key: string): [surah: number, ayah: number] {
   return [s, a];
 }
 
-export const BASMALA = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
+export const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';

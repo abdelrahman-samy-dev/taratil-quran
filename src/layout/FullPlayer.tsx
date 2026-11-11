@@ -32,7 +32,7 @@ import { styleLabel } from '../audio/reciters';
 import { downloadState, downloadSurah, removeDownload } from '../audio/offline';
 import { arNum } from '../lib/arabic';
 import { clock } from '../lib/format';
-import { chapter, placeLabel, surahText, type SurahText } from '../quran/data';
+import { BASMALA, chapter, placeLabel, surahText, type SurahText } from '../quran/data';
 import { Icon } from '../ui/Icon';
 import { Sheet } from '../ui/Sheet';
 
@@ -112,7 +112,7 @@ export function FullPlayer() {
               <div class="fp-loading">جارٍ تحميل الآيات…</div>
             ) : (
               <>
-                {c.bismillah && <p class="fp-basmala">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</p>}
+                {c.bismillah && <p class="fp-basmala">{BASMALA}</p>}
                 {text.value.v.map((v, i) => {
                   const n = i + 1;
                   const state = n === ayah ? 'active' : n < ayah ? 'past' : '';
@@ -134,7 +134,7 @@ export function FullPlayer() {
                       }}
                       onKeyDown={(e) => e.key === 'Enter' && timings.value && seekToAyah(n)}
                     >
-                      {v} <span class="ayah-num">{arNum(n)}</span>{' '}
+                      {v} <span class="ayah-num">{arNum(n)}</span>{' '}
                     </span>
                   );
                 })}
@@ -178,20 +178,20 @@ export function FullPlayer() {
               >
                 <Icon name="repeat" size={20} />
               </button>
-              <button class="icon-btn" onClick={next} aria-label="السورة التالية">
-                <Icon name="next" size={22} />
+              <button class="icon-btn" onClick={prev} aria-label="السورة السابقة">
+                <Icon name="prev" size={22} />
               </button>
-              <button class="icon-btn" onClick={() => skip(10)} aria-label="تقديم ١٠ ثوانٍ">
-                <span class="skip-label">+١٠</span>
+              <button class="icon-btn" onClick={() => skip(-10)} aria-label="رجوع ١٠ ثوانٍ">
+                <span class="skip-label ltr-num">-١٠</span>
               </button>
               <button class={`play-btn lg${status.value === 'loading' ? ' loading' : ''}`} onClick={toggle} aria-label={status.value === 'playing' ? 'إيقاف مؤقت' : 'تشغيل'}>
                 <Icon name={status.value === 'playing' ? 'pause' : 'play'} size={28} />
               </button>
-              <button class="icon-btn" onClick={() => skip(-10)} aria-label="رجوع ١٠ ثوانٍ">
-                <span class="skip-label">-١٠</span>
+              <button class="icon-btn" onClick={() => skip(10)} aria-label="تقديم ١٠ ثوانٍ">
+                <span class="skip-label ltr-num">+١٠</span>
               </button>
-              <button class="icon-btn" onClick={prev} aria-label="السورة السابقة">
-                <Icon name="prev" size={22} />
+              <button class="icon-btn" onClick={next} aria-label="السورة التالية">
+                <Icon name="next" size={22} />
               </button>
               <button
                 class={`icon-btn${sleepAt.value || sleepEndOfSurah.value ? ' on' : ''}`}
@@ -294,7 +294,7 @@ export function FullPlayer() {
                 loopMenu.value = null;
               }}
             >
-              {Number.isFinite(n) ? `${arNum(n)} مرات` : 'بدون توقف'}
+              {n === 2 ? 'مرتان' : Number.isFinite(n) ? `${arNum(n)} مرات` : 'بدون توقف'}
             </button>
           ))}
         </div>

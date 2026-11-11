@@ -150,3 +150,11 @@ ol {
     scroll-behavior: auto !important;
   }
 }
+
+/* Clock values (٠:١١) must keep their left-to-right order inside Arabic text. */
+.ltr-num,
+time {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}

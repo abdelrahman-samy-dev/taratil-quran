@@ -15,8 +15,9 @@ export default defineConfig({
       manifest: false, // public/manifest.webmanifest is hand-written
       injectManifest: {
         globPatterns: [
-          '**/*.{js,css,html,svg,webmanifest}',
-          'icons/*.png',
+          '**/*.{js,css,html,webmanifest}',
+          'icons/icon.svg',
+          'icons/icon-192.png',
           'fonts/*.woff2',
           'assets/cairo-arabic-*.woff2',
           'assets/cairo-latin-wght-*.woff2',
@@ -36,5 +37,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['tests/unit/**/*.test.{ts,tsx}'],
+    exclude: ['tests/e2e/**', 'node_modules/**'],
   },
 });
