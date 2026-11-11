@@ -158,3 +158,9 @@ time {
   unicode-bidi: isolate;
   display: inline-block;
 }
+
+@media (min-width: 1024px) {
+  html {
+    scroll-padding-top: 12px;
+  }
+}

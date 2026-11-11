@@ -1,0 +1,671 @@
+/* ── Tafsir & Hifz ─────────────────────────────────────────────────────── */
+.tf-page {
+  --tf-top: calc(var(--topbar-h) + var(--safe-t));
+  /* Extra room under the sticky toolbar; html's scroll-padding already covers the topbar. */
+  --tf-snap: 70px;
+  --tf-snap-hifz: 124px;
+  max-width: 860px;
+  margin-inline: auto;
+}
+
+.tf-page .flip {
+  transform: rotate(180deg);
+}
+
+/* Surah header */
+.tf-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) 58px;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 6px 14px;
+  margin: 4px 0 12px;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(120% 150% at 50% -45%, color-mix(in srgb, var(--primary) 20%, transparent), transparent 62%),
+    var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.tf-hero::before {
+  /* faint eight-point star ornament */
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23059669' stroke-width='1.2'%3E%3Crect x='16' y='16' width='24' height='24'/%3E%3Crect x='16' y='16' width='24' height='24' transform='rotate(45 28 28)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, #000, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 85%);
+}
+
+.tf-hero > * {
+  position: relative;
+}
+
+.tf-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 56px;
+  min-width: 44px;
+  padding: 6px 2px;
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  transition:
+    background var(--fast),
+    color var(--fast);
+}
+
+a.tf-nav:hover {
+  background: var(--surface-2);
+  color: var(--primary);
+}
+
+.tf-nav-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.tf-title-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: var(--r-lg);
+  transition: background var(--fast);
+}
+
+.tf-title-btn:hover {
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+}
+
+.tf-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.tf-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  color: var(--primary-ink);
+}
+
+.tf-title .display {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.45;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tf-title .icon {
+  flex: none;
+  color: var(--text-3);
+}
+
+.tf-meta {
+  font-size: 0.82rem;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* Sticky toolbar */
+.tf-bar {
+  position: sticky;
+  top: var(--tf-top);
+  z-index: 20;
+  margin: 0 -16px 14px;
+  padding: 8px 16px;
+  background: var(--glass);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.tf-bar-row,
+.tf-hifz-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tf-hifz-row {
+  margin-top: 8px;
+  gap: 6px;
+}
+
+.tf-bar .segmented {
+  flex: none;
+}
+
+.tf-edition {
+  min-height: 44px;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.tf-edition-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tf-size {
+  display: flex;
+  flex: none;
+  margin-inline-start: auto;
+  padding: 0;
+  border-radius: var(--r-full);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.tf-size-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 44px;
+  height: 42px;
+  border-radius: var(--r-full);
+  color: var(--text-2);
+  transition:
+    background var(--fast),
+    color var(--fast);
+}
+
+.tf-size-btn:hover:not(:disabled) {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.tf-size-a {
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.tf-size-a.sm {
+  font-size: 0.9rem;
+}
+
+.tf-count {
+  flex: none;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.tf-hifz-row .progress {
+  flex: 1;
+  min-width: 16px;
+}
+
+.tf-hint {
+  min-height: 44px;
+  flex: none;
+  padding: 0 10px;
+}
+
+.tf-reset {
+  width: 44px;
+  height: 44px;
+}
+
+.tf-next {
+  flex: none;
+  gap: 6px;
+  padding: 0 12px;
+}
+
+/* Banners */
+.tf-banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.tf-banner > span:not(.tf-spinner) {
+  flex: 1 1 200px;
+}
+
+.tf-banner.error {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.tf-spinner {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-3);
+  border-top-color: var(--primary);
+  animation: spin 0.9s linear infinite;
+}
+
+/* Ayat */
+.tf-basmala {
+  margin: 4px 0 14px;
+  text-align: center;
+  color: var(--primary-ink);
+  font-size: calc(1.45rem * var(--quran-scale));
+}
+
+.tf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tf-ayah {
+  padding: 10px 16px 16px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  scroll-margin-top: var(--tf-snap);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+  transition:
+    border-color var(--med),
+    background var(--med);
+}
+
+.tf-list.hifz .tf-ayah {
+  content-visibility: visible;
+  scroll-margin-top: var(--tf-snap-hifz);
+}
+
+.tf-ghost {
+  padding: 18px 16px;
+}
+
+.tf-ayah-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tf-ayah-ref {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.tf-ayah-no {
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--primary-ink);
+}
+
+.tf-ayah-meta {
+  font-size: 0.74rem;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.tf-actions {
+  display: flex;
+  flex: none;
+  gap: 0;
+  margin-inline-end: -8px;
+}
+
+.tf-actions .icon-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.tf-verse {
+  margin: 6px 0 12px;
+  color: var(--text);
+  border-radius: var(--r-sm);
+  transition: background var(--med);
+}
+
+.tf-body {
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: calc(1rem * (0.6 + 0.4 * var(--quran-scale)));
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+.tf-body p + p {
+  margin-top: 0.7em;
+}
+
+.tf-body .skeleton-block {
+  padding: 4px 0;
+}
+
+.tf-quote {
+  font-family: var(--font-quran);
+  font-size: 1.12em;
+  color: var(--primary-ink);
+}
+
+.tf-missing {
+  color: var(--text-3);
+  font-size: 0.9rem;
+}
+
+.tf-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 0 4px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+}
+
+.tf-more:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.tf-ayah.playing {
+  border-color: color-mix(in srgb, var(--accent-bright) 55%, transparent);
+}
+
+.tf-ayah.playing .tf-verse {
+  background: var(--verse-hl);
+}
+
+.tf-ayah.flash {
+  animation: tf-flash 2.6s ease-out;
+}
+
+@keyframes tf-flash {
+  0%,
+  50% {
+    border-color: var(--accent-bright);
+    box-shadow:
+      0 0 0 3px var(--verse-hl-strong),
+      var(--shadow-md);
+    background: color-mix(in srgb, var(--accent-bright) 7%, var(--surface));
+  }
+}
+
+/* Hifz (تسميع) */
+.tf-hifz-help {
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.tf-ayah.hz {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  padding-inline-end: 42px;
+  text-align: start;
+  cursor: pointer;
+}
+
+.tf-ayah.hz:hover {
+  border-color: var(--border-strong);
+}
+
+.tf-ayah.hz:focus-visible {
+  border-radius: var(--r-lg);
+}
+
+.tf-ayah.hz .tf-verse {
+  display: block;
+  margin: 0;
+}
+
+.tf-ayah.hz.open {
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.tf-ayah.hz.open .tf-verse {
+  animation: hz-in var(--med) var(--ease);
+}
+
+@keyframes hz-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+.hz-w {
+  --tf-mask: color-mix(in srgb, var(--text) 13%, transparent);
+  color: transparent;
+  border-radius: 6px;
+  background: linear-gradient(
+    to bottom,
+    transparent 22%,
+    var(--tf-mask) 22%,
+    var(--tf-mask) 82%,
+    transparent 82%
+  );
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.hz-mark {
+  background: none;
+}
+
+.hz-hint {
+  color: var(--primary-ink);
+}
+
+.hz-tap {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--text-3);
+}
+
+.tf-done {
+  font-weight: 800;
+  color: var(--primary-ink);
+}
+
+/* Load more / end */
+.tf-earlier {
+  margin-bottom: 12px;
+}
+
+.tf-sentinel {
+  display: flex;
+  justify-content: center;
+  padding: 18px 0 6px;
+}
+
+.tf-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.tf-next-surah {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--r-lg);
+  background: var(--primary-soft);
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+  color: var(--primary-ink);
+  transition: background var(--fast);
+}
+
+.tf-next-surah:hover {
+  background: color-mix(in srgb, var(--primary) 16%, var(--surface));
+}
+
+.tf-next-surah .icon {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.tf-next-kicker {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.tf-next-name {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* Edition sheet */
+.tf-editions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tf-edition-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  padding: 10px 14px;
+  text-align: start;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  transition: background var(--fast);
+}
+
+.tf-edition-opt:hover {
+  background: var(--surface-3);
+}
+
+.tf-edition-opt.on {
+  background: var(--primary-soft);
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+  color: var(--primary-ink);
+}
+
+.tf-edition-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.5;
+}
+
+.tf-edition-name {
+  font-weight: 800;
+}
+
+.tf-edition-desc {
+  font-size: 0.82rem;
+  color: var(--text-3);
+}
+
+.tf-editions-note {
+  margin-top: 12px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .tf-edition-icon {
+    display: none;
+  }
+  .tf-edition {
+    padding: 0 12px;
+  }
+}
+
+/* Narrow phones: keep every control on one line */
+@media (max-width: 380px) {
+  .tf-bar .segmented button {
+    padding: 0 10px;
+  }
+  .tf-hint {
+    padding: 0 10px;
+  }
+  .tf-next span {
+    display: none;
+  }
+}
+
+@media (min-width: 720px) {
+  .tf-hero {
+    grid-template-columns: 110px minmax(0, 1fr) 110px;
+    padding: 22px 12px 18px;
+  }
+  .tf-nav-name {
+    font-size: 0.85rem;
+  }
+  .tf-title .display {
+    font-size: 2.4rem;
+  }
+  .tf-ayah {
+    padding: 12px 22px 20px;
+  }
+  .tf-verse {
+    font-size: calc(1.75rem * var(--quran-scale));
+  }
+  .tf-ayah.hz {
+    padding: 14px 22px;
+    padding-inline-end: 50px;
+  }
+  .tf-body {
+    padding: 14px 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tf-page {
+    --tf-top: 12px;
+    --tf-snap: 14px;
+    --tf-snap-hifz: 66px;
+  }
+  .tf-bar {
+    margin-inline: 0;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+}
