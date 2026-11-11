@@ -218,6 +218,11 @@
   box-shadow: var(--shadow-sm);
 }
 
+a.card:focus-visible,
+button.card:focus-visible {
+  box-shadow: var(--ring);
+}
+
 .page-head {
   display: flex;
   align-items: flex-end;

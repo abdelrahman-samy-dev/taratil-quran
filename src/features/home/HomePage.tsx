@@ -11,7 +11,7 @@ import { lastRead, streak, todayLog, werdTarget } from '../../state/progress';
 import { Icon, type IconName } from '../../ui/Icon';
 import { Ring } from '../../ui/kit';
 import { ayahOfTheDay } from './ayat';
-import { HomeWidgets } from './widgets';
+import { HadithWidget, HomeWidgets } from './widgets';
 import './home.css';
 
 const QUICK: { path: string; label: string; icon: IconName }[] = [
@@ -47,6 +47,12 @@ export default function HomePage() {
       .catch(() => {});
     if (lastSession.value) void loadRecitations().catch(() => {});
   }, [key]);
+
+  useEffect(() => {
+    // When idle, fetch the reader and the last-read page so "افتح المصحف" opens instantly.
+    const idle = (window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 1500))) as (cb: () => void) => number;
+    idle(() => void import('../mushaf/PageView').then((m) => m.prefetchPage(lastRead.peek().page || 1)));
+  }, []);
 
   const session = lastSession.value;
   const sessionRec = session ? findRecitation(session.recitation) : undefined;
@@ -87,7 +93,7 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-        <a href="/werd" class="hero-ring" aria-label={`ورد اليوم: ${arNum(read)} من ${arNum(target)} صفحات`}>
+        <a href="/werd" class="hero-ring" title={`ورد اليوم: ${arNum(read)} من ${arNum(target)} صفحات`}>
           <Ring value={read} max={target} size={112} stroke={9}>
             <span class="ring-num">
               {werdDone ? <Icon name="check" size={30} /> : read ? arNum(read) : <small class="ring-start">ابدأ</small>}
@@ -113,16 +119,16 @@ export default function HomePage() {
         </button>
       )}
 
-      <section class="daily-ayah card" aria-labelledby="daily-ayah-title">
-        <div class="daily-head">
-          <h2 id="daily-ayah-title">
+      <section class="home-ayah card" aria-labelledby="home-ayah-title">
+        <div class="home-ayah-head">
+          <h2 id="home-ayah-title">
             <Icon name="feather" size={18} /> آية اليوم
           </h2>
           <span class="tag">
             سورة {chapter(s).ar} · {arNum(a)}
           </span>
         </div>
-        <p class="quran-text daily-text">
+        <p class="quran-text home-ayah-text">
           {ayah.value ? (
             <>
               {ayah.value} <span class="ayah-num">{arNum(a)}</span>
@@ -131,7 +137,7 @@ export default function HomePage() {
             <span class="skeleton-line" style={{ display: 'block', height: '1.4em' }} />
           )}
         </p>
-        <div class="daily-actions">
+        <div class="home-ayah-actions">
           <button class="chip" onClick={() => playSurah(s, { ayah: a })}>
             <Icon name="headphones" size={14} /> استمع
           </button>
@@ -143,6 +149,8 @@ export default function HomePage() {
           </button>
         </div>
       </section>
+
+      <HadithWidget />
 
       <h2 class="section-title">الأقسام</h2>
       <nav class="quick-grid" aria-label="الوصول السريع">

@@ -26,6 +26,8 @@
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://static.qurancdn.com" crossorigin />
+    <link rel="preconnect" href="https://www.mp3quran.net" />
     <link rel="preload" href="/fonts/UthmanicHafs.woff2" as="font" type="font/woff2" crossorigin />
     <script>
       // Apply saved theme before first paint (no flash).
@@ -38,6 +40,18 @@
           d.dataset.theme = t;
           d.dataset.shape = p.shape || 'rounded';
           if (p.fontScale) d.style.setProperty('--font-scale', p.fontScale);
+          // Opening the mushaf directly: fetch its page layout right away (it is tiny).
+          var m = /^\/mushaf(?:\/(\d+))?/.exec(location.pathname);
+          if (m) {
+            var last = JSON.parse(localStorage.getItem('taratil:lastRead') || '{}');
+            var pg = Math.min(604, Math.max(1, +(m[1] || last.page || 1)));
+            var l = document.createElement('link');
+            l.rel = 'preload';
+            l.href = '/data/mushaf/' + pg + '.json';
+            l.as = 'fetch';
+            l.crossOrigin = 'anonymous';
+            document.head.appendChild(l);
+          }
         } catch (e) {}
       })();
     </script>

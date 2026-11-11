@@ -27,7 +27,9 @@ export function MiniPlayer() {
       : radio
         ? status.value === 'loading'
           ? 'جارٍ الاتصال…'
-          : 'بث مباشر'
+          : t.id.startsWith('live-')
+            ? 'بث مباشر'
+            : 'بث متواصل'
         : `${t.recitation.name}${currentAyah.value ? ` · الآية ${arNum(currentAyah.value)}` : ''}`;
   const pct = !radio && duration.value ? (time.value / duration.value) * 100 : 0;
 

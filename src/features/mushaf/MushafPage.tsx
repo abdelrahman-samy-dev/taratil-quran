@@ -254,7 +254,7 @@ export default function MushafPage() {
   return (
     <div class={`mushaf tone-${prefs.value.mushafTone}${chrome.value ? '' : ' chrome-off'}`}>
       <header class="mushaf-bar">
-        <button class="mushaf-title" onClick={() => (indexOpen.value = true)} aria-label="فهرس المصحف">
+        <button class="mushaf-title" onClick={() => (indexOpen.value = true)} title="فهرس المصحف" aria-haspopup="dialog">
           <span class="mushaf-surah display">سورة {c.ar}</span>
           <span class="mushaf-meta">
             الجزء {arNum(juz)} · {hizbLabel}

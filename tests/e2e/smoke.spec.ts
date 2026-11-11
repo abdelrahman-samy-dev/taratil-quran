@@ -4,8 +4,8 @@ test.describe('core screens', () => {
   test('home shows the reading card and ayah of the day', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.home-hero')).toBeVisible();
-    await expect(page.locator('.daily-text')).not.toBeEmpty();
-    await expect(page.locator('.daily-text .ayah-num')).toBeVisible();
+    await expect(page.locator('.home-ayah-text')).not.toBeEmpty();
+    await expect(page.locator('.home-ayah-text .ayah-num')).toBeVisible();
   });
 
   test('mushaf renders a full page with its font and opens ayah actions', async ({ page }) => {

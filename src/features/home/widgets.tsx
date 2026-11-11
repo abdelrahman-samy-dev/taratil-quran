@@ -1,3 +1,5 @@
+import { useSignal } from '@preact/signals';
+import { useEffect } from 'preact/hooks';
 import { arNum } from '../../lib/arabic';
 import { Icon } from '../../ui/Icon';
 import { Progress } from '../../ui/kit';
@@ -35,6 +37,36 @@ function AzkarWidget() {
         </span>
       </span>
       <Icon name="chevronLeft" size={20} />
+    </a>
+  );
+}
+
+/** Loaded after the page is up; placed below the fold so it never shifts content. */
+export function HadithWidget() {
+  const h = useSignal<null | { text: string; number: number; bookName: string; href: string }>(null);
+  useEffect(() => {
+    let alive = true;
+    import('../hadith/daily')
+      .then((m) => m.hadithOfTheDay())
+      .then((d) => alive && (h.value = d))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+  if (!h.value) return null;
+  return (
+    <a href={h.value.href} class="home-hadith card">
+      <span class="home-hadith-head">
+        <Icon name="library" size={18} /> حديث اليوم
+        <span class="tag">
+          {h.value.bookName} · {arNum(h.value.number)}
+        </span>
+      </span>
+      <span class="home-hadith-text">{h.value.text}</span>
+      <span class="home-hadith-more">
+        اقرأ الحديث كاملًا <Icon name="chevronLeft" size={16} />
+      </span>
     </a>
   );
 }

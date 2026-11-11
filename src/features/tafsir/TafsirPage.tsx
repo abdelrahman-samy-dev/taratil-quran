@@ -90,6 +90,7 @@ export default function TafsirPage() {
 
   return (
     <div class="tf-page">
+      <h1 class="sr-only">تفسير سورة {c.ar}</h1>
       <section class="tf-hero" aria-label="السورة">
         {prev ? (
           <a class="tf-nav" href={`/tafsir/${prev.id}`} aria-label={`السورة السابقة: ${prev.ar}`}>

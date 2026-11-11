@@ -237,7 +237,7 @@
   color: var(--text-3);
 }
 
-.daily-ayah {
+.home-ayah {
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -248,14 +248,14 @@
   border: 1px solid transparent;
 }
 
-.daily-head {
+.home-ayah-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.daily-head h2 {
+.home-ayah-head h2 {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -263,13 +263,13 @@
   color: var(--accent);
 }
 
-.daily-text {
+.home-ayah-text {
   text-align: center;
   font-size: calc(1.55rem * var(--quran-scale));
   line-height: 2.2;
 }
 
-.daily-actions {
+.home-ayah-actions {
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -337,7 +337,7 @@
     grid-column: 1;
   }
 
-  .home > .daily-ayah {
+  .home > .home-ayah {
     grid-column: 2;
     grid-row: 2 / span 3;
   }
@@ -365,5 +365,54 @@
   .home > .azkar-widget,
   .home > .resume {
     grid-column: 1;
+  }
+}
+
+.home-hadith {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  transition: border-color var(--fast);
+}
+
+.home-hadith:hover {
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+}
+
+.home-hadith-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.home-hadith-head .tag {
+  margin-inline-start: auto;
+}
+
+.home-hadith-text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 2;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-hadith-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+@media (min-width: 1024px) {
+  .home > .home-hadith {
+    grid-column: 1 / -1;
   }
 }
