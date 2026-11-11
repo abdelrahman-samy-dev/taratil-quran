@@ -1,0 +1,50 @@
+{
+  "name": "taratil",
+  "private": true,
+  "version": "4.0.0",
+  "description": "تراتيل — تطبيق إسلامي شامل: المصحف، الاستماع بتظليل الآيات، التفسير، الأذكار، المواقيت والقبلة",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5180 --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 5181 --host",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "data:quran": "node scripts/build-quran-data.mjs",
+    "icons": "node scripts/build-icons.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/cairo": "5.3.0",
+    "@fontsource/amiri": "5.3.0",
+    "@preact/signals": "2.11.3",
+    "adhan": "4.4.6",
+    "preact": "10.29.8",
+    "preact-iso": "2.12.2",
+    "workbox-cacheable-response": "7.4.1",
+    "workbox-core": "7.4.1",
+    "workbox-expiration": "7.4.1",
+    "workbox-precaching": "7.4.1",
+    "workbox-range-requests": "7.4.1",
+    "workbox-routing": "7.4.1",
+    "workbox-strategies": "7.4.1",
+    "workbox-window": "7.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.28.5",
+    "@playwright/test": "1.64.0",
+    "@preact/preset-vite": "2.10.6",
+    "@types/node": "^22.20.5",
+    "jsdom": "30.1.2",
+    "preact-render-to-string": "6.8.1",
+    "typescript": "6.0.3",
+    "vite": "8.3.5",
+    "vite-plugin-pwa": "2.0.0",
+    "vitest": "5.0.5",
+    "workbox-build": "7.4.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

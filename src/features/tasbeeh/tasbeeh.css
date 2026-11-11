@@ -1,0 +1,410 @@
+/* ── Tasbeeh ───────────────────────────────────────────────────────────── */
+.tb {
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+.tb .page-head {
+  margin-bottom: 12px;
+}
+
+.tb-mode {
+  margin-bottom: 14px;
+}
+
+.tb-mode .segmented {
+  width: 100%;
+}
+
+.tb-mode .segmented button {
+  flex: 1;
+  min-height: 44px;
+}
+
+.tb-layout {
+  display: grid;
+  gap: 14px;
+}
+
+/* Stage: dhikr, steps, counter, controls */
+.tb-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 16px 18px;
+  background:
+    radial-gradient(120% 70% at 50% 0%, var(--primary-soft), transparent 70%),
+    var(--surface);
+}
+
+.tb-dhikr {
+  min-height: 2.6em;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(1.75rem * var(--quran-scale));
+  line-height: 1.5;
+  color: var(--primary-ink);
+  animation: tb-fade 0.35s var(--ease);
+  overflow-wrap: anywhere;
+}
+
+.tb-dhikr.is-long {
+  font-size: calc(1.2rem * var(--quran-scale));
+  line-height: 1.9;
+  max-width: 34ch;
+}
+
+@keyframes tb-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/* Guided steps */
+.tb-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  max-width: 460px;
+}
+
+.tb-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tb-step-bar {
+  height: 5px;
+  border-radius: 5px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.tb-step-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  transform-origin: right;
+  transition: transform 0.2s var(--ease);
+}
+
+.tb-step-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tb-step.current .tb-step-label {
+  color: var(--text);
+}
+
+.tb-step.done .tb-step-label {
+  color: var(--primary-ink);
+}
+
+/* Counter */
+.tb-orb-wrap {
+  display: grid;
+  place-items: center;
+}
+
+.tb-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(74vw, 300px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  transition: transform 120ms var(--ease);
+}
+
+.tb-orb:active {
+  transform: scale(0.975);
+}
+
+.tb-orb:focus-visible {
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--primary);
+}
+
+.tb-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tb-ring-bg,
+.tb-ring-fg {
+  fill: none;
+  stroke-width: 5;
+}
+
+.tb-ring-bg {
+  stroke: var(--surface-3);
+}
+
+.tb-ring-fg {
+  stroke: var(--primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.2s var(--ease);
+}
+
+.tb-glow {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tb-face {
+  position: absolute;
+  inset: 9%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 28%, var(--surface), var(--surface-2) 80%);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 0 0 1px var(--border);
+  color: var(--text);
+}
+
+.tb-num {
+  font-size: clamp(3.4rem, 17vw, 4.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  animation: tb-pop 160ms var(--ease);
+}
+
+@keyframes tb-pop {
+  from {
+    transform: scale(0.9);
+  }
+}
+
+.tb-of {
+  color: var(--text-3);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tb-rounds {
+  margin-top: 4px;
+  padding: 0 10px;
+  border-radius: var(--r-full);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.tb-orb.is-complete .tb-face {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.tb-orb.is-complete .tb-of {
+  color: var(--on-primary);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+
+.tb-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.tb-controls .btn {
+  min-width: 120px;
+}
+
+.tb-kbd {
+  display: none;
+  color: var(--text-3);
+  font-size: 0.8rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tb-kbd {
+    display: block;
+  }
+}
+
+/* Side panel */
+.tb-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.tb-card {
+  padding: 16px;
+}
+
+.tb-h {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.tb-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tb-presets .chip {
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 0.9rem;
+}
+
+.tb-custom-chip span {
+  max-width: 16ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tb-card .segmented {
+  width: 100%;
+}
+
+.tb-card .segmented button {
+  flex: 1;
+  min-height: 44px;
+}
+
+.tb-note {
+  color: var(--text-2);
+  font-size: 0.92rem;
+}
+
+.tb-source {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  line-height: 1.9;
+}
+
+.tb-source .tag {
+  background: var(--surface);
+}
+
+.tb-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tb-stats .stat {
+  padding: 12px;
+  min-width: 0;
+}
+
+.tb-stats .stat-value {
+  font-size: 1.35rem;
+  overflow-wrap: anywhere;
+}
+
+/* Custom dhikr sheet */
+.tb-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tb-label {
+  font-weight: 700;
+}
+
+.tb-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tb-form-actions .btn {
+  flex: 1;
+}
+
+[data-theme='dark'] .tb-dhikr,
+[data-theme='amoled'] .tb-dhikr,
+[data-theme='dark'] .tb-step.done .tb-step-label,
+[data-theme='amoled'] .tb-step.done .tb-step-label {
+  color: var(--primary);
+}
+
+[data-theme='amoled'] .tb-stage {
+  background: var(--surface);
+}
+
+@media (min-width: 900px) {
+  .tb-layout {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: start;
+  }
+
+  .tb-stage {
+    padding: 28px 24px 22px;
+  }
+
+  .tb-orb {
+    width: 320px;
+  }
+
+  .tb-mode .segmented {
+    width: fit-content;
+  }
+}
+
+.tb-start {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-ink);
+  line-height: 1.6;
+}
+
+[data-theme='dark'] .tb-start,
+[data-theme='amoled'] .tb-start {
+  color: var(--primary);
+}
+
+.tb-kbd kbd {
+  unicode-bidi: isolate;
+  direction: ltr;
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+}

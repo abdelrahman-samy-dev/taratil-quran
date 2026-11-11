@@ -1,0 +1,882 @@
+/* ── Werd & achievements ─────────────────────────────────────────────────── */
+.werd {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.werd .page-head {
+  margin-bottom: 2px;
+}
+
+.werd-top,
+.werd-row {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+.werd-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .werd-top {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .werd-row {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+/* Today hero */
+.werd-today {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, color-mix(in srgb, var(--primary) 11%, transparent), transparent 60%),
+    var(--surface);
+}
+
+/* Faint eight-point star (۞) as a quiet identity mark. */
+.werd-today::before,
+.werd-today::after {
+  content: '';
+  position: absolute;
+  top: -34px;
+  inset-inline-start: -34px;
+  width: 128px;
+  height: 128px;
+  border: 1.5px solid color-mix(in srgb, var(--primary) 16%, transparent);
+  border-radius: var(--r-sm);
+  pointer-events: none;
+}
+
+.werd-today::after {
+  transform: rotate(45deg);
+}
+
+.werd-today-main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.werd-ring {
+  flex: none;
+}
+
+.werd-ring .ring-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
+}
+
+.werd-ring-num {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.werd-ring-of {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.werd-today.done .ring-fg {
+  stroke: var(--accent-bright);
+}
+
+.werd-today-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.werd-today-title {
+  font-size: 1.75rem;
+  line-height: 1.3;
+  color: var(--primary-ink);
+}
+
+[data-theme='dark'] .werd-today-title,
+[data-theme='amoled'] .werd-today-title {
+  color: var(--primary);
+}
+
+.werd-today-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--text-2);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.werd-today-status .icon {
+  flex: none;
+  margin-top: 3px;
+  color: var(--accent);
+}
+
+.werd-continue {
+  margin-top: 6px;
+}
+
+.werd-continue-hint {
+  color: var(--text-3);
+  font-size: 0.8rem;
+}
+
+.werd-streaks {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.werd-streak {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  min-width: 0;
+}
+
+.werd-streak-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-3);
+}
+
+.werd-streak.hot .werd-streak-icon {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.werd-streak-icon.best {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.werd-streak-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.werd-streak-num {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.werd-streak-num small {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+.werd-streak-label {
+  font-size: 0.78rem;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+/* Stats */
+.werd-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.werd-stats .stat {
+  justify-content: center;
+}
+
+/* Generic card */
+.werd-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+  min-width: 0;
+}
+
+.werd-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.werd-card-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.werd-card-titles h2 {
+  font-size: 1.1rem;
+}
+
+.werd-card-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.werd-inline-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
+.werd-inline-input .input {
+  max-width: 140px;
+  text-align: center;
+  font-weight: 800;
+}
+
+/* Goal */
+.werd-goal-note {
+  color: var(--text-2);
+  font-size: 0.9rem;
+}
+
+.werd-goal-plan,
+.werd-plan-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.werd-goal-plan .icon,
+.werd-plan-preview .icon {
+  flex: none;
+  margin-top: 4px;
+  color: var(--primary);
+}
+
+.werd-plan-preview b {
+  color: var(--text);
+}
+
+/* Plan */
+.werd-day-tag {
+  align-self: center;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.werd-from .choice-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.werd-from .choice-item {
+  align-items: flex-start;
+  text-align: start;
+  padding: 12px 14px;
+  padding-inline-end: 34px;
+}
+
+.werd-portion {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent-bright) 13%, transparent), transparent 70%),
+    var(--surface-2);
+  border: 1px solid color-mix(in srgb, var(--accent-bright) 26%, transparent);
+}
+
+.werd-portion-kicker {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.werd-portion-range {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.werd-portion-surahs {
+  color: var(--text-2);
+  font-size: 0.92rem;
+  margin-bottom: 6px;
+}
+
+.werd-portion-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  font-size: 0.88rem;
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+.werd-portion-foot > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.werd-portion.done .werd-portion-foot > span {
+  color: var(--primary-ink);
+}
+
+[data-theme='dark'] .werd-portion.done .werd-portion-foot > span,
+[data-theme='amoled'] .werd-portion.done .werd-portion-foot > span {
+  color: var(--primary);
+}
+
+.werd-portion-foot .btn {
+  min-height: 44px;
+}
+
+.werd-plan-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.werd-plan-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  font-size: 0.92rem;
+}
+
+.werd-plan-row b {
+  color: var(--text);
+}
+
+.werd-pace {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.werd-pace .icon {
+  flex: none;
+  margin-top: 3px;
+}
+
+.werd-pace.ahead,
+.werd-pace.on {
+  color: var(--primary-ink);
+}
+
+[data-theme='dark'] .werd-pace.ahead,
+[data-theme='dark'] .werd-pace.on,
+[data-theme='amoled'] .werd-pace.ahead,
+[data-theme='amoled'] .werd-pace.on {
+  color: var(--primary);
+}
+
+.werd-pace.behind {
+  color: var(--accent);
+}
+
+.werd-plan-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.werd-plan-foot .btn {
+  min-height: 44px;
+}
+
+/* Celebration */
+.werd-celebrate {
+  align-items: center;
+  text-align: center;
+  padding: 28px 20px;
+  background:
+    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--accent-bright) 18%, transparent), transparent 70%),
+    var(--surface);
+  border-color: color-mix(in srgb, var(--accent-bright) 35%, var(--border));
+}
+
+.werd-celebrate-badge {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(
+    140deg,
+    var(--accent-bright),
+    color-mix(in srgb, var(--accent-bright) 55%, var(--primary))
+  );
+  color: #fff;
+  box-shadow: 0 12px 28px -12px var(--accent-bright);
+}
+
+.werd-celebrate-title {
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+.werd-celebrate p {
+  color: var(--text-2);
+  max-width: 44ch;
+}
+
+.werd-celebrate-ayah {
+  font-size: 1.3rem;
+  line-height: 2;
+  color: var(--primary-ink) !important;
+}
+
+[data-theme='dark'] .werd-celebrate-ayah,
+[data-theme='amoled'] .werd-celebrate-ayah {
+  color: var(--primary) !important;
+}
+
+.werd-celebrate-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Chart */
+.werd-chart .werd-card-head {
+  align-items: center;
+}
+
+.wc {
+  margin: 0;
+}
+
+.wc-plot {
+  width: 100%;
+}
+
+.wc svg {
+  overflow: visible;
+}
+
+.wc-base {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.wc-bar {
+  fill: color-mix(in srgb, var(--primary) 45%, var(--surface-3));
+  transition: fill var(--fast);
+}
+
+.wc-bar.met {
+  fill: var(--primary);
+}
+
+.wc-bar.today {
+  fill: var(--accent-bright);
+}
+
+.wc-bar.zero {
+  fill: var(--surface-3);
+}
+
+.wc-hit {
+  fill: transparent;
+}
+
+.wc-hit:hover {
+  fill: color-mix(in srgb, var(--text) 5%, transparent);
+}
+
+.wc-goal {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  pointer-events: none;
+}
+
+.wc-label {
+  fill: var(--text-3);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: var(--font-ui);
+}
+
+.wc-label.today {
+  fill: var(--accent);
+  font-weight: 800;
+}
+
+.wc-val {
+  fill: var(--text-2);
+  font-size: 11.5px;
+  font-weight: 800;
+  font-family: var(--font-ui);
+}
+
+.werd-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+.werd-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.werd-legend .sw {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.werd-legend .sw.today {
+  background: var(--accent-bright);
+}
+
+.werd-legend .sw.met {
+  background: var(--primary);
+}
+
+.werd-legend .sw.goal {
+  height: 0;
+  width: 18px;
+  border-radius: 0;
+  border-top: 2px dashed var(--accent);
+}
+
+.werd-chart-sum {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.werd-chart-sum div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.werd-chart-sum dt {
+  font-size: 0.76rem;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+.werd-chart-sum dd {
+  margin: 0;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+/* Sections */
+.werd-section .section-title {
+  justify-content: flex-start;
+  margin: 12px 0 12px;
+}
+
+/* Achievements */
+.werd-badges {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 720px) {
+  .werd-badges {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .werd-badges {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.werd-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px;
+  min-width: 0;
+}
+
+.werd-badge-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-3);
+  border: 1.5px dashed var(--border-strong);
+}
+
+.werd-badge.on .werd-badge-icon {
+  border: 0;
+  background: linear-gradient(
+    140deg,
+    var(--accent-bright),
+    color-mix(in srgb, var(--accent-bright) 50%, var(--primary))
+  );
+  color: #fff;
+  box-shadow: 0 8px 18px -10px var(--accent-bright);
+}
+
+[data-theme='dark'] .werd-badge.on .werd-badge-icon,
+[data-theme='amoled'] .werd-badge.on .werd-badge-icon {
+  color: #1d1300;
+}
+
+.werd-badge.on {
+  border-color: color-mix(in srgb, var(--accent-bright) 35%, var(--border));
+}
+
+.werd-badge-title {
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.werd-badge:not(.on) .werd-badge-title {
+  color: var(--text-2);
+}
+
+.werd-badge-desc {
+  font-size: 0.8rem;
+  color: var(--text-3);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.werd-badge-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.werd-badge-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.werd-badge-progress .progress {
+  height: 6px;
+}
+
+.werd-badge-count {
+  font-size: 0.76rem;
+  color: var(--text-3);
+  font-weight: 700;
+}
+
+/* Bookmarks */
+.werd-bm-groups {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .werd-bm-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.werd-bm-group {
+  padding: 6px 8px 8px;
+}
+
+.werd-bm-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 6px;
+  font-size: 1rem;
+}
+
+.werd-bm-head .icon {
+  color: var(--accent-bright);
+}
+
+.werd-bm-count {
+  margin-inline-start: auto;
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-weight: 700;
+}
+
+.werd-bm {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.werd-bm + .werd-bm {
+  border-top: 1px solid var(--border);
+}
+
+.werd-bm-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  min-width: 0;
+  transition: background var(--fast);
+}
+
+.werd-bm-link:hover {
+  background: var(--surface-2);
+}
+
+.werd-bm-num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.werd-bm-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.45;
+}
+
+.werd-bm-name {
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+}
+
+.werd-bm-meta {
+  color: var(--text-3);
+  font-size: 0.8rem;
+}
+
+.werd-bm-del {
+  width: 44px;
+  height: 44px;
+}
+
+.werd-bm-del:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+@media (max-width: 380px) {
+  .werd-today-main {
+    gap: 12px;
+  }
+  .werd-today-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Goal presets: one even row, also at 390px. */
+.werd-goal-choice .choice-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+  gap: 6px;
+}
+
+.werd-goal-choice .choice-item {
+  min-width: 0;
+  padding: 0 4px;
+}
+
+.werd-goal-choice .choice-item:last-child {
+  padding: 0 14px;
+}
+
+.werd-days .choice-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+}
+
+.werd-days .choice-item {
+  min-width: 0;
+  padding: 0 6px;
+}
+
+@media (min-width: 1024px) {
+  .werd-goal-choice .choice-row {
+    gap: 8px;
+  }
+}
