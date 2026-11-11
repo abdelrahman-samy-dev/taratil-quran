@@ -1,30 +1,21 @@
-# OS files
+# deps & builds
+node_modules/
+dist/
+dev-dist/
+coverage/
+test-results/
+playwright-report/
+.vercel
+
+# OS / editor
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Editor files
 .vscode/
 .idea/
 *.swp
-*.swo
 *~
 
-# Logs
+# logs
 *.log
 npm-debug.log*
-
-# Temporary files
-*.tmp
-*.temp
-
-# Audio files (large, should be added manually)
-# Uncomment if you don't want to track audio files in Git
-# audio/*.mp3
-# audio/*.ogg
-# audio/*.wav
-
-# Icons (if generated)
-# icons/*.png
-# icons/*.ico
-

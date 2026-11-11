@@ -1,0 +1,161 @@
+/* ── Design tokens ─────────────────────────────────────────────────────────
+   Same identity as Taratil v3 (emerald + amber, Cairo / Amiri), tuned for
+   contrast (WCAG AA) and three themes. */
+:root {
+  --font-scale: 1;
+  --quran-scale: 1;
+
+  --font-ui: 'Cairo Variable', 'Cairo', system-ui, 'Segoe UI', Tahoma, sans-serif;
+  --font-display: 'Amiri', 'Cairo Variable', serif;
+  --font-quran: 'Uthmanic Hafs', 'Amiri', serif;
+
+  --primary: #059669;
+  --primary-strong: #047857;
+  --primary-soft: #ecfdf5;
+  --primary-ink: #065f46;
+  --on-primary: #ffffff;
+  --accent: #b45309;
+  --accent-bright: #d97706;
+  --accent-soft: #fef3c7;
+
+  --bg: #f6f8f7;
+  --surface: #ffffff;
+  --surface-2: #f1f5f4;
+  --surface-3: #e7edeb;
+  --text: #0f172a;
+  --text-2: #475569;
+  --text-3: #64748b;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --live: #e11d48;
+
+  --glass: rgba(255, 255, 255, 0.78);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 6px 20px -6px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 24px 48px -16px rgba(15, 23, 42, 0.22);
+  --ring: 0 0 0 3px rgba(5, 150, 105, 0.28);
+
+  --paper: #fdfaf2;
+  --paper-ink: #1c1917;
+  --paper-frame: #d6c7a1;
+  --verse-hl: rgba(217, 119, 6, 0.16);
+  --verse-hl-strong: rgba(217, 119, 6, 0.28);
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --r-full: 999px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fast: 140ms;
+  --med: 240ms;
+
+  --sidebar-w: 264px;
+  --topbar-h: 58px;
+  --bottombar-h: 64px;
+  --mini-h: 68px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --primary: #10b981;
+  --primary-strong: #34d399;
+  --primary-soft: rgba(16, 185, 129, 0.14);
+  --primary-ink: #6ee7b7;
+  --on-primary: #04130d;
+  --accent: #fbbf24;
+  --accent-bright: #fbbf24;
+  --accent-soft: rgba(251, 191, 36, 0.14);
+
+  --bg: #0b0d0c;
+  --surface: #141816;
+  --surface-2: #1b201e;
+  --surface-3: #252b28;
+  --text: #f1f5f4;
+  --text-2: #b6c2be;
+  --text-3: #8b9792;
+  --border: #252b28;
+  --border-strong: #34403b;
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.12);
+  --live: #fb7185;
+
+  --glass: rgba(20, 24, 22, 0.8);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 48px -16px rgba(0, 0, 0, 0.7);
+  --ring: 0 0 0 3px rgba(16, 185, 129, 0.35);
+
+  --paper: #16130e;
+  --paper-ink: #ece5d3;
+  --paper-frame: #5b4f33;
+  --verse-hl: rgba(251, 191, 36, 0.14);
+  --verse-hl-strong: rgba(251, 191, 36, 0.26);
+
+  color-scheme: dark;
+}
+
+[data-theme='amoled'] {
+  --primary: #00d97e;
+  --primary-strong: #34e89e;
+  --primary-soft: rgba(0, 217, 126, 0.1);
+  --primary-ink: #7cf3c0;
+  --on-primary: #00140b;
+  --accent: #ffd54a;
+  --accent-bright: #ffd54a;
+  --accent-soft: rgba(255, 213, 74, 0.12);
+
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --surface-2: #111111;
+  --surface-3: #1a1a1a;
+  --text: #ececec;
+  --text-2: #b0b0b0;
+  --text-3: #8a8a8a;
+  --border: #1f1f1f;
+  --border-strong: #2e2e2e;
+  --danger: #ff6b6b;
+  --danger-soft: rgba(255, 107, 107, 0.1);
+  --live: #ff5c7a;
+
+  --glass: rgba(0, 0, 0, 0.86);
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 0 0 1px #222;
+  --ring: 0 0 0 3px rgba(0, 217, 126, 0.35);
+
+  --paper: #000000;
+  --paper-ink: #e8e2d0;
+  --paper-frame: #3d3523;
+  --verse-hl: rgba(255, 213, 74, 0.13);
+  --verse-hl-strong: rgba(255, 213, 74, 0.24);
+
+  color-scheme: dark;
+}
+
+[data-shape='sharp'] {
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 10px;
+}
+
+[data-shape='minimal'] {
+  --r-sm: 0;
+  --r-md: 0;
+  --r-lg: 0;
+  --r-xl: 0;
+  --r-full: 0;
+}
+
+@font-face {
+  font-family: 'Uthmanic Hafs';
+  src: url('/fonts/UthmanicHafs.woff2') format('woff2');
+  font-display: swap;
+}
