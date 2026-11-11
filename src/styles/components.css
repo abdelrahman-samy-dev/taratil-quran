@@ -300,7 +300,7 @@
 
 .segmented button {
   flex: none;
-  min-height: 36px;
+  min-height: 40px;
   padding: 0 14px;
   border-radius: var(--r-full);
   font-weight: 700;
@@ -556,7 +556,7 @@ input[type='range']::-moz-range-thumb {
   flex: none;
 }
 
-.ring svg {
+.ring > svg {
   position: absolute;
   inset: 0;
 }

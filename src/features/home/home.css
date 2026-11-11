@@ -347,3 +347,23 @@
   font-size: 1rem;
   font-weight: 800;
 }
+
+.azkar-widget-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.azkar-widget-progress .progress {
+  flex: 1;
+  height: 6px;
+}
+
+@media (min-width: 1024px) {
+  .home > .home-prayer,
+  .home > .azkar-widget,
+  .home > .resume {
+    grid-column: 1;
+  }
+}

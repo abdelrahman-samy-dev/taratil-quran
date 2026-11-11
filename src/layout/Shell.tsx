@@ -16,12 +16,16 @@ export function Shell({ children }: { children: ComponentChildren }) {
   const moreOpen = useSignal(false);
   const immersive = path.startsWith('/mushaf');
 
+  const section = path.split('/')[1] ?? '';
   useEffect(() => {
     moreOpen.value = false;
-    // New page: start at the top and move focus for screen readers.
+  }, [path]);
+  useEffect(() => {
+    // New section: start at the top and move focus for screen readers. Sub-routes
+    // (e.g. azkar tabs) keep focus where it is.
     window.scrollTo(0, 0);
     document.getElementById('main')?.focus({ preventScroll: true });
-  }, [path]);
+  }, [section]);
 
   const primary = NAV.filter((n) => n.primary);
   const secondary = NAV.filter((n) => !n.primary);

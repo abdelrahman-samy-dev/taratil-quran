@@ -4,7 +4,7 @@ import { useRoute } from 'preact-iso';
 import { currentAyah, isPlaying, playSurah, toggle, track } from '../../audio/player';
 import meta from '../../data/quran-meta.json';
 import { arNum } from '../../lib/arabic';
-import { setWakeLockWanted } from '../../lib/device';
+import { holdWakeLock } from '../../lib/device';
 import { persisted } from '../../lib/storage';
 import { chapterAtPage, mushafPage, parseKey, surahText, TOTAL_PAGES } from '../../quran/data';
 import { prefs, setPref } from '../../state/prefs';
@@ -102,13 +102,10 @@ export default function MushafPage() {
   });
 
   // Screen stays on while reading; immersive chrome on phones.
-  useEffect(() => {
-    setWakeLockWanted(prefs.value.keepAwake);
-    return () => {
-      setWakeLockWanted(false);
-      document.documentElement.classList.remove('reading-focus');
-    };
-  }, []);
+  useSignalEffect(() => {
+    if (prefs.value.keepAwake) return holdWakeLock();
+  });
+  useEffect(() => () => document.documentElement.classList.remove('reading-focus'), []);
   useSignalEffect(() => {
     document.documentElement.classList.toggle('reading-focus', !chrome.value);
   });
@@ -407,10 +404,7 @@ export default function MushafPage() {
         <Switch
           label="إبقاء الشاشة مضاءة"
           checked={prefs.value.keepAwake}
-          onChange={(v) => {
-            setPref('keepAwake', v);
-            setWakeLockWanted(v);
-          }}
+          onChange={(v) => setPref('keepAwake', v)}
         />
       </Sheet>
     </div>

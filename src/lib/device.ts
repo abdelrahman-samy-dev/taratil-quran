@@ -43,15 +43,17 @@ export async function shareText(text: string, title = 'تراتيل'): Promise<v
 }
 
 let wakeLock: WakeLockSentinel | null = null;
-let wakeLockWanted = false;
+let holders = 0;
 
-/** Keep the screen on while reading (Mushaf, Azkar). */
-export async function keepAwake(on: boolean): Promise<void> {
+async function applyWakeLock(): Promise<void> {
+  const want = holders > 0 && document.visibilityState === 'visible';
   try {
-    if (on && !wakeLock && 'wakeLock' in navigator) {
+    if (want && !wakeLock && 'wakeLock' in navigator) {
       wakeLock = await navigator.wakeLock.request('screen');
       wakeLock.addEventListener('release', () => (wakeLock = null));
-    } else if (!on && wakeLock) {
+      // Released while the request was in flight.
+      if (holders === 0) void wakeLock.release();
+    } else if (!want && wakeLock && holders === 0) {
       await wakeLock.release();
       wakeLock = null;
     }
@@ -60,12 +62,21 @@ export async function keepAwake(on: boolean): Promise<void> {
   }
 }
 
-document.addEventListener('visibilitychange', () => {
-  // The browser drops the lock when hidden; re-acquire when we come back.
-  if (document.visibilityState === 'visible' && wakeLockWanted) void keepAwake(true);
-});
+// The browser drops the lock when the page is hidden; take it again on return.
+document.addEventListener('visibilitychange', () => void applyWakeLock());
 
-export function setWakeLockWanted(on: boolean): void {
-  wakeLockWanted = on;
-  void keepAwake(on);
+/**
+ * Keep the screen on while a reading screen is open. Returns a release function;
+ * the lock stays while at least one screen holds it (so screen changes never race).
+ */
+export function holdWakeLock(): () => void {
+  holders++;
+  void applyWakeLock();
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    holders = Math.max(0, holders - 1);
+    void applyWakeLock();
+  };
 }
